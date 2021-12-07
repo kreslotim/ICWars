@@ -11,7 +11,7 @@ import ch.epfl.cs107.play.window.Button;
 import ch.epfl.cs107.play.window.Keyboard;
 
 public class RealPlayer extends ICWarsPlayer {
-    private final static int MOVE_DURATION = 0;
+    private final static int MOVE_DURATION = 1;
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
 //    private ICWarsActor player;
 
@@ -55,6 +55,7 @@ public class RealPlayer extends ICWarsPlayer {
     private void moveIfPressed(Orientation orientation, Button b) {
         if (b.isDown()) {
             if (!isDisplacementOccurs()) {
+                System.out.println(orientation);
                 orientate(orientation);
                 move(MOVE_DURATION);
             }

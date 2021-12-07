@@ -60,9 +60,7 @@ public class ICWars extends AreaGame {
 
         ICWarsArea area = (ICWarsArea) setCurrentArea(areaKey, true);
         DiscreteCoordinates coords = area.getPlayerSpawnPosition();
-        player = new RealPlayer(area, coords, ICWarsActor.Faction.ALLY,
-                 new Tank(area, new DiscreteCoordinates(2,5), ICWarsActor.Faction.ALLY),
-                 new Soldier(area, new DiscreteCoordinates(3,5), ICWarsActor.Faction.ALLY));
+        player = new RealPlayer(area, coords, ICWarsActor.Faction.ALLY);
         player.enterArea(area, coords);
         player.centerCamera();
     }
@@ -72,6 +70,9 @@ public class ICWars extends AreaGame {
         Keyboard keyboard = getWindow().getKeyboard();
         if (keyboard.get(Keyboard.N).isReleased()) {
             switchArea();
+            if (getCurrentArea().getTitle().equals("icwars/Level0") && keyboard.get(Keyboard.N).isReleased()) {
+                end();
+            };
         }
 
         super.update(deltaTime);
@@ -79,6 +80,8 @@ public class ICWars extends AreaGame {
         if (keyboard.get(Keyboard.R).isReleased()) {
             reset();
         }
+
+
 
     }
 
@@ -95,6 +98,7 @@ public class ICWars extends AreaGame {
     @Override
     public void end() {
         System.out.println("Game Over");
+
     }
 
     protected void switchArea() {

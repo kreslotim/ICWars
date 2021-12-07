@@ -19,7 +19,8 @@ public class Level0 extends ICWarsArea {
         Tank tank1 = new Tank(this,new DiscreteCoordinates(2,5), ICWarsActor.Faction.ALLY);
         Soldier soldier1 = new Soldier(this, new DiscreteCoordinates(3,5), ICWarsActor.Faction.ALLY);
         RealPlayer player = new RealPlayer( this, getPlayerSpawnPosition(), ICWarsActor.Faction.ALLY, tank1, soldier1);
-        registerActor(player);
+        //registerActor(player);  //enregistrement deux fois
+        //unregisterActor(player);
     }
 
     @Override

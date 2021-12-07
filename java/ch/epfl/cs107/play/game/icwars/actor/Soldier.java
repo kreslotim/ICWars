@@ -25,7 +25,7 @@ public class Soldier extends Unit {
     public Soldier(Area area, DiscreteCoordinates position, Faction faction) {
         super(area, position, 4, 7, 10, faction);
         spriteName = factionImage[faction.ordinal()];
-        sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(3, 5));
+        sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.setSprite(sprite);}
 
 
