@@ -16,14 +16,20 @@ public class Unit extends ICWarsActor {
     private int currentHp;
     private int maxHp;
     private int damage;
-    private int rayon;
+    private int radius;
     private Faction faction;
     private Sprite sprite;
     private ICWarsRange range;
     private int fromX;
     private int fromY;
 
-    private
+//    private void edge(){
+//        for
+//            for
+//    }
+
+
+
     /**
      * Default Unit constructor
      *
@@ -31,15 +37,13 @@ public class Unit extends ICWarsActor {
      * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-    Unit(Area area, DiscreteCoordinates position, int rayon, int damage, int maxHp, Faction faction) {
+    Unit(Area area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction) {
         super(area, position, faction);
         this.maxHp = maxHp;
         this.currentHp = maxHp;
         this.damage = damage;
-        this.rayon = rayon;
+        this.radius = radius;
         this.faction = faction;
-//        this.sprite = sprite;
-        ICWarsRange range = new ICWarsRange().addNode((fromX,fromY),true, true, true, true)
     }
 
     int getDamage() {
