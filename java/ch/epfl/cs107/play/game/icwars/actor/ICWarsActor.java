@@ -3,6 +3,7 @@ package ch.epfl.cs107.play.game.icwars.actor;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.MovableAreaEntity;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
+import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -12,28 +13,46 @@ import java.util.Collections;
 import java.util.List;
 
 public class ICWarsActor extends MovableAreaEntity {
-    public enum Faction {
-        ALLY,
 
-        ENEMY,
-
-    }
-
-
+    private Faction faction;
+    private Sprite sprite;
 
     /**
-     * Default MovableAreaEntity constructor
+     * Default ICWarsActor constructor
      *
      * @param area        (Area): Owner area. Not null
-     * @param orientation (Orientation): Initial orientation of the entity. Not null
      * @param position    (Coordinate): Initial position of the entity. Not null
      */
 
-    public ICWarsActor(Area area, Orientation orientation, DiscreteCoordinates position) {
-        super(area, orientation, position);
-        Orientation up = Orientation.UP;
+    public ICWarsActor(Area area, DiscreteCoordinates position ,Faction faction ) {
+        // by default every ICWarsActor will be orientated UP
+        super(area, Orientation.UP, position);
+        this.faction = faction;
     }
 
+
+    public enum Faction {
+        ALLY(true),
+        ENEMY(false);
+        final boolean isFriendly;
+        Faction(boolean isFriendly) {this.isFriendly = isFriendly;}
+    }
+
+    protected void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        sprite.draw(canvas);
+    }
+
+    /**
+     * Center the camera on the player
+     */
+    public void centerCamera() {
+        getOwnerArea().setViewCandidate(this);
+    }
 
     /**
      * Leave an area by unregister this player
@@ -53,11 +72,6 @@ public class ICWarsActor extends MovableAreaEntity {
         setCurrentPosition(position.toVector());
     }
 
-
-    @Override
-    public void draw(Canvas canvas) {
-
-    }
 
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
