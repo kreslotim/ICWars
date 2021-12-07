@@ -26,7 +26,7 @@ public class ICWars extends AreaGame {
 
     public final static float CAMERA_SCALE_FACTOR = 10.f;
     private final String[] areas = {"icwars/Level0" , "icwars/Level1"};
-    private ICWarsActor player;
+    private RealPlayer player;
     private int areaIndex;
 
     @Override
@@ -83,6 +83,10 @@ public class ICWars extends AreaGame {
     }
 
     public boolean reset() {
+        // reinitialiser les joueurs
+        player.getPosition();
+        // les mettre au centre
+        player.centerCamera();
         createAreas();
         initArea(getCurrentArea().getTitle());
         return true;
@@ -101,6 +105,8 @@ public class ICWars extends AreaGame {
 
         ICWarsArea currentArea = (ICWarsArea)setCurrentArea(areas[areaIndex], false);
         player.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
+        player.centerCamera();
+
 
     }
 

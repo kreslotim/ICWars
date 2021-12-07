@@ -6,13 +6,12 @@ import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
-import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ICWarsActor extends MovableAreaEntity {
+public abstract class ICWarsActor extends MovableAreaEntity {
 
     private Faction faction;
     private Sprite sprite;
@@ -20,22 +19,14 @@ public class ICWarsActor extends MovableAreaEntity {
     /**
      * Default ICWarsActor constructor
      *
-     * @param area        (Area): Owner area. Not null
-     * @param position    (Coordinate): Initial position of the entity. Not null
+     * @param area     (Area): Owner area. Not null
+     * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-    public ICWarsActor(Area area, DiscreteCoordinates position ,Faction faction ) {
+    public ICWarsActor(Area area, DiscreteCoordinates position, Faction faction) {
         // by default every ICWarsActor will be orientated UP
         super(area, Orientation.UP, position);
         this.faction = faction;
-    }
-
-
-    public enum Faction {
-        ALLY(true),
-        ENEMY(false);
-        final boolean isFriendly;
-        Faction(boolean isFriendly) {this.isFriendly = isFriendly;}
     }
 
     protected void setSprite(Sprite sprite) {
@@ -44,7 +35,7 @@ public class ICWarsActor extends MovableAreaEntity {
 
     @Override
     public void draw(Canvas canvas) {
-        sprite.draw(canvas);
+        if (sprite != null) sprite.draw(canvas);
     }
 
     /**
@@ -57,21 +48,19 @@ public class ICWarsActor extends MovableAreaEntity {
     /**
      * Leave an area by unregister this player
      */
-    public void leaveArea(){
+    public void leaveArea() {
         getOwnerArea().unregisterActor(this);
     }
 
     /**
-     *
-     * @param area (Area): initial area, not null
+     * @param area     (Area): initial area, not null
      * @param position (DiscreteCoordinates): initial position, not null
      */
-    public void enterArea(Area area, DiscreteCoordinates position){
+    public void enterArea(Area area, DiscreteCoordinates position) {
         area.registerActor(this);
         setOwnerArea(area);
         setCurrentPosition(position.toVector());
     }
-
 
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
@@ -96,5 +85,15 @@ public class ICWarsActor extends MovableAreaEntity {
     @Override
     public void acceptInteraction(AreaInteractionVisitor v) {
 
+    }
+
+    public enum Faction {
+        ALLY(true),
+        ENEMY(false);
+        final boolean isFriendly;
+
+        Faction(boolean isFriendly) {
+            this.isFriendly = isFriendly;
+        }
     }
 }

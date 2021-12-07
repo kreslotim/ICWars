@@ -31,7 +31,7 @@ public class ICWarsBehavior extends AreaBehavior {
                 if (ict.type == type)
                     return ict;
             }
-            System.out.println(type);
+            // System.out.println(type);
             return NONE;
         }
     }

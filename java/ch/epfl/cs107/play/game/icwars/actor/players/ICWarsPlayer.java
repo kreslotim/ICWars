@@ -2,10 +2,10 @@ package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
-import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.window.Canvas;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,10 +19,10 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
     /**
      * Default ICWarsActor constructor
      *
-     * @param area        (Area): Owner area. Not null
-     * @param position    (Coordinate): Initial position of the entity. Not null
+     * @param area     (Area): Owner area. Not null
+     * @param position (Coordinate): Initial position of the entity. Not null
      */
-    public ICWarsPlayer(Area area, DiscreteCoordinates position, Faction faction, Unit ... units) {
+    public ICWarsPlayer(Area area, DiscreteCoordinates position, Faction faction, Unit... units) {
         super(area, position, faction);
         for (Unit unit : units) {
             area.registerActor(unit);
@@ -45,4 +45,17 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
             }
         }
     }
+
+//    /**
+//     * GhostPlayer devra évidemment avoir une méthode de dessin spécifique, laquelle se contentera
+//     * de dessiner le Sprite associé.
+//     **/
+//    @Override
+//    public void draw(Canvas canvas) {
+//        for (Unit unit : unitsList) {
+//            unit.draw(canvas); // l'affichage du sprite sur l'ecran
+//        }
+//    }
+
+
 }

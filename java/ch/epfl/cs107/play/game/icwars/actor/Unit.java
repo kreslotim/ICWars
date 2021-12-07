@@ -3,6 +3,7 @@ package ch.epfl.cs107.play.game.icwars.actor;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.window.Canvas;
 
 
 public class Unit extends ICWarsActor {
@@ -28,6 +29,7 @@ public class Unit extends ICWarsActor {
         this.damage = damage;
         this.rayon = rayon;
         this.faction = faction;
+//        this.sprite = sprite;
 
     }
 
@@ -50,4 +52,15 @@ public class Unit extends ICWarsActor {
     public int getCurrentHp() {
         return currentHp;
     }
+
+
+    /**
+     * GhostPlayer devra évidemment avoir une méthode de dessin spécifique, laquelle se contentera
+     * de dessiner le Sprite associé.
+     **/
+    @Override
+    public void draw(Canvas canvas) {
+        sprite.draw(canvas); // l'affichage du sprite sur l'ecran
+    }
+
 }
