@@ -1,9 +1,14 @@
 package ch.epfl.cs107.play.game.icwars.actor;
 
 import ch.epfl.cs107.play.game.areagame.Area;
+import ch.epfl.cs107.play.game.areagame.actor.Orientation;
+import ch.epfl.cs107.play.game.areagame.actor.Path;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsRange;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Canvas;
+
+import java.util.Queue;
 
 
 public class Unit extends ICWarsActor {
@@ -14,15 +19,19 @@ public class Unit extends ICWarsActor {
     private int rayon;
     private Faction faction;
     private Sprite sprite;
+    private ICWarsRange range;
+    private int fromX;
+    private int fromY;
 
+    private
     /**
      * Default Unit constructor
      *
-     * @param area        (Area): Owner area. Not null
-     * @param position    (Coordinate): Initial position of the entity. Not null
+     * @param area     (Area): Owner area. Not null
+     * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-    Unit (Area area, DiscreteCoordinates position, int rayon, int damage, int maxHp, Faction faction) {
+    Unit(Area area, DiscreteCoordinates position, int rayon, int damage, int maxHp, Faction faction) {
         super(area, position, faction);
         this.maxHp = maxHp;
         this.currentHp = maxHp;
@@ -30,10 +39,10 @@ public class Unit extends ICWarsActor {
         this.rayon = rayon;
         this.faction = faction;
 //        this.sprite = sprite;
-
+        ICWarsRange range = new ICWarsRange().addNode((fromX,fromY),true, true, true, true)
     }
 
-    int getDamage () {
+    int getDamage() {
         return damage;
     }
 
@@ -61,6 +70,27 @@ public class Unit extends ICWarsActor {
     @Override
     public void draw(Canvas canvas) {
         sprite.draw(canvas); // l'affichage du sprite sur l'ecran
+    }
+
+
+    /**
+     * Draw the unit's range and a path from the unit position to
+     * destination
+     *
+     * @param destination path destination
+     * @param canvas      canvas
+     */
+    public void drawRangeAndPathTo(DiscreteCoordinates destination,
+                                   Canvas canvas) {
+        range.draw(canvas);
+        Queue<Orientation> path =
+                range.shortestPath(getCurrentMainCellCoordinates(),
+                        destination);
+//Draw path only if it exists (destination inside the range)
+        if (path != null) {
+            new Path(getCurrentMainCellCoordinates().toVector(),
+                    path).draw(canvas);
+        }
     }
 
 }
