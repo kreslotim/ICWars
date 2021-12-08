@@ -35,6 +35,7 @@ public class Unit extends ICWarsActor {
         this.damage = damage;
         this.radius = radius;
         this.faction = faction;
+        addEdge(); // appel addNode
     }
 
     /**
@@ -49,20 +50,24 @@ public class Unit extends ICWarsActor {
      * this will be the case if x is strictly greater than −radius and x + fromX is greater than
      * strictly zero
      **/
+    // lis l'énoncé pour savoir où utiliser
     private void addEdge() {
         DiscreteCoordinates from = getCurrentMainCellCoordinates();
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
                 DiscreteCoordinates thisCell = new DiscreteCoordinates(from.x + x, from.y + y);
-                if (getOwnerArea().getWidth() < 0 || getOwnerArea().getHeight() < 0 ||
-                        getOwnerArea().getWidth() > thisCell.x || getOwnerArea().getHeight() > thisCell.y) {
+                int width = getOwnerArea().getWidth();
+                int heigh = getOwnerArea().getHeight();
+                if (width > 0 // left
+                        && heigh < 0 // up
+                        && width > thisCell.x // right
+                        && heigh > thisCell.y) // down {
                     // row < 0 || col < 0 || row >= image.length || col >= image[row].length
                     range.addNode(thisCell, ((x > -radius) && (x + from.x > 0)), ((x > radius) &&
                             (x + from.x < 0)), ((y > -radius) && (y + from.x > 0)), ((y > radius) && (y + from.y < 0)));
 
-                }
-
             }
+
         }
     }
 

@@ -1,19 +1,11 @@
 package ch.epfl.cs107.play.game.icwars;
 
 import ch.epfl.cs107.play.game.areagame.AreaGame;
-import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
-import ch.epfl.cs107.play.game.icwars.actor.Soldier;
-import ch.epfl.cs107.play.game.icwars.actor.Tank;
 import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
-import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.area.Level0;
 import ch.epfl.cs107.play.game.icwars.area.Level1;
-import ch.epfl.cs107.play.game.tutosSolution.actor.GhostPlayer;
-import ch.epfl.cs107.play.game.tutosSolution.area.Tuto2Area;
-import ch.epfl.cs107.play.game.tutosSolution.area.tuto2.Ferme;
-import ch.epfl.cs107.play.game.tutosSolution.area.tuto2.Village;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Keyboard;
@@ -25,7 +17,7 @@ public class ICWars extends AreaGame {
     //class equivalente à Tuto2 (copy paste?)
 
     public final static float CAMERA_SCALE_FACTOR = 10.f;
-    private final String[] areas = {"icwars/Level0" , "icwars/Level1"};
+    private final String[] areas = {"icwars/Level0", "icwars/Level1"};
     private RealPlayer player;
     private int areaIndex;
 
@@ -49,7 +41,7 @@ public class ICWars extends AreaGame {
     /**
      * Add all the areas
      */
-    private void createAreas(){
+    private void createAreas() {
 
         addArea(new Level0());
         addArea(new Level1());
@@ -72,7 +64,8 @@ public class ICWars extends AreaGame {
             switchArea();
             if (getCurrentArea().getTitle().equals("icwars/Level0") && keyboard.get(Keyboard.N).isReleased()) {
                 end();
-            };
+            }
+            ;
         }
 
         super.update(deltaTime);
@@ -81,6 +74,10 @@ public class ICWars extends AreaGame {
             reset();
         }
 
+
+//        if (keyboard.get(Keyboard.U).isReleased()) {
+//            ((RealPlayer) player).selectUnit(1); // 0, 1 ...
+//        }
 
 
     }
@@ -105,9 +102,9 @@ public class ICWars extends AreaGame {
 
         player.leaveArea();
 
-        areaIndex = (areaIndex==0) ? 1 : 0;
+        areaIndex = (areaIndex == 0) ? 1 : 0;
 
-        ICWarsArea currentArea = (ICWarsArea)setCurrentArea(areas[areaIndex], false);
+        ICWarsArea currentArea = (ICWarsArea) setCurrentArea(areas[areaIndex], false);
         player.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
         player.centerCamera();
 

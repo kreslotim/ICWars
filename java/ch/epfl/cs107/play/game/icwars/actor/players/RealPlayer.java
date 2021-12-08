@@ -5,15 +5,18 @@ import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
+import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Button;
+import ch.epfl.cs107.play.window.Canvas;
 import ch.epfl.cs107.play.window.Keyboard;
 
 public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1;
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
-//    private ICWarsActor player;
+    //    private ICWarsActor player;
+//    private ICWarsPlayerGUI selectedUnit;
 
 
     /**
@@ -29,7 +32,6 @@ public class RealPlayer extends ICWarsPlayer {
         String image_name = tab[faction.ordinal()];
         Sprite sprite = new Sprite(image_name, 1f, 1f, this, null, new Vector(0f, 0f));
         setSprite(sprite);
-
     }
 
     @Override
@@ -61,6 +63,31 @@ public class RealPlayer extends ICWarsPlayer {
             }
         }
     }
+
+
+    /**
+     * the method draw of RealPlayer will be responsible for invoking the method of drawing of his ICWarsPlayerGUI
+     **/
+    @Override
+    public void draw(Canvas canvas) {
+        if (selectedUnit != null) {
+            selectedUnit.draw(canvas);
+        }
+    }
+
+
+    /**
+     * selectUnit selects a unit
+     *
+//     * @param index (int) 0 or 1
+     */
+//    public Unit selectUnit(int index) {
+//        if (index != 0 || index != 1) {
+//            selectUnit(index);
+//        }
+//        return selectedUnit;
+//    }
+
 
     @Override
     public boolean takeCellSpace() {
