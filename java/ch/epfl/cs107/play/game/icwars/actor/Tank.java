@@ -10,9 +10,7 @@ import ch.epfl.cs107.play.window.Canvas;
 
 public class Tank extends Unit {
 
-    private String spriteName;
-    private final String[] factionImage = {"icwars/friendlyTank","icwars/enemyTank"};
-    private Sprite sprite;
+    private final static String[] factionImage = {"icwars/friendlyTank","icwars/enemyTank"};
 
     /**
      * Default Unit constructor
@@ -23,19 +21,10 @@ public class Tank extends Unit {
 
 
     public Tank (Area area, DiscreteCoordinates position, Faction faction) {
-        super(area, position,4, 7, 10, faction);
-        spriteName = factionImage[faction.ordinal()];
-        sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f,-0.25f));
-        this.setSprite(sprite);
+        super(area, position,4, 7, 10, faction, "icwars/friendlyTank");
+       // factionImage[0] = ...
+
     }
 
 
-    /**
-     * GhostPlayer devra évidemment avoir une méthode de dessin spécifique, laquelle se contentera
-     * de dessiner le Sprite associé.
-     **/
-    @Override
-    public void draw(Canvas canvas) {
-        sprite.draw(canvas); // l'affichage du sprite sur l'ecran
-    }
 }

@@ -6,6 +6,7 @@ import ch.epfl.cs107.play.game.areagame.actor.Path;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsRange;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
 
 import java.util.Queue;
@@ -16,14 +17,11 @@ public class Unit extends ICWarsActor {
     private int currentHp;
     private int maxHp;
     private int damage;
-    private int rayon;
+    private int radius;
     private Faction faction;
     private Sprite sprite;
-    private ICWarsRange range;
-    private int fromX;
-    private int fromY;
+    private ICWarsRange range = new ICWarsRange();
 
-    private
     /**
      * Default Unit constructor
      *
@@ -31,15 +29,16 @@ public class Unit extends ICWarsActor {
      * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-    Unit(Area area, DiscreteCoordinates position, int rayon, int damage, int maxHp, Faction faction) {
+    Unit(Area area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction, String spriteName) {
         super(area, position, faction);
         this.maxHp = maxHp;
         this.currentHp = maxHp;
         this.damage = damage;
-        this.rayon = rayon;
+        this.radius = radius;
         this.faction = faction;
-//        this.sprite = sprite;
-        ICWarsRange range = new ICWarsRange().addNode((fromX,fromY),true, true, true, true)
+        addEdge(); // appel addNode
+        Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f,-0.25f));
+        this.sprite = sprite;
     }
 
     int getDamage() {
@@ -62,11 +61,23 @@ public class Unit extends ICWarsActor {
         return currentHp;
     }
 
+    private void addEdge() {
+        DiscreteCoordinates from = getCurrentMainCellCoordinates();
+        for (int x = -radius; x <= radius; ++x) {
+            for (int y = -radius; y <= radius; ++y) {
+                DiscreteCoordinates thisCell = new DiscreteCoordinates(from.x + x, from.y + y);
+                if (thisCell.x >= 0 // left
+                        && thisCell.y >= 0 // up
+                        && getOwnerArea().getWidth() > thisCell.x // right
+                        && getOwnerArea().getHeight() > thisCell.y) // down {
+                    range.addNode(thisCell, ((x > -radius) && (x + from.x > 0)), ((x > radius) &&
+                            (x + from.x < 0)), ((y > -radius) && (y + from.x > 0)), ((y > radius) && (y + from.y < 0)));
 
-    /**
-     * GhostPlayer devra évidemment avoir une méthode de dessin spécifique, laquelle se contentera
-     * de dessiner le Sprite associé.
-     **/
+            }
+
+        }
+    }
+
     @Override
     public void draw(Canvas canvas) {
         sprite.draw(canvas); // l'affichage du sprite sur l'ecran
@@ -80,17 +91,14 @@ public class Unit extends ICWarsActor {
      * @param destination path destination
      * @param canvas      canvas
      */
-    public void drawRangeAndPathTo(DiscreteCoordinates destination,
-                                   Canvas canvas) {
+
+    public void drawRangeAndPathTo(DiscreteCoordinates destination, Canvas canvas) {
         range.draw(canvas);
-        Queue<Orientation> path =
-                range.shortestPath(getCurrentMainCellCoordinates(),
-                        destination);
-//Draw path only if it exists (destination inside the range)
+        Queue<Orientation> path = range.shortestPath(getCurrentMainCellCoordinates(), destination);
+
+        //Draw path only if it exists (destination inside the range)
         if (path != null) {
-            new Path(getCurrentMainCellCoordinates().toVector(),
-                    path).draw(canvas);
+            new Path(getCurrentMainCellCoordinates().toVector(), path).draw(canvas);
         }
     }
-
 }

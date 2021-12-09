@@ -6,6 +6,7 @@ import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
 
 import java.util.Collections;
@@ -14,7 +15,6 @@ import java.util.List;
 public abstract class ICWarsActor extends MovableAreaEntity {
 
     private Faction faction;
-    private Sprite sprite;
 
     /**
      * Default ICWarsActor constructor
@@ -29,14 +29,7 @@ public abstract class ICWarsActor extends MovableAreaEntity {
         this.faction = faction;
     }
 
-    protected void setSprite(Sprite sprite) {
-        this.sprite = sprite;
-    }
 
-    @Override
-    public void draw(Canvas canvas) {
-        if (sprite != null) sprite.draw(canvas);
-    }
 
     /**
      * Center the camera on the player
@@ -95,5 +88,7 @@ public abstract class ICWarsActor extends MovableAreaEntity {
         Faction(boolean isFriendly) {
             this.isFriendly = isFriendly;
         }
+
+
     }
 }

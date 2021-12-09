@@ -10,10 +10,7 @@ import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.area.Level0;
 import ch.epfl.cs107.play.game.icwars.area.Level1;
-import ch.epfl.cs107.play.game.tutosSolution.actor.GhostPlayer;
-import ch.epfl.cs107.play.game.tutosSolution.area.Tuto2Area;
-import ch.epfl.cs107.play.game.tutosSolution.area.tuto2.Ferme;
-import ch.epfl.cs107.play.game.tutosSolution.area.tuto2.Village;
+
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Keyboard;
@@ -21,8 +18,6 @@ import ch.epfl.cs107.play.window.Window;
 
 
 public class ICWars extends AreaGame {
-
-    //class equivalente à Tuto2 (copy paste?)
 
     public final static float CAMERA_SCALE_FACTOR = 10.f;
     private final String[] areas = {"icwars/Level0" , "icwars/Level1"};
@@ -60,13 +55,17 @@ public class ICWars extends AreaGame {
 
         ICWarsArea area = (ICWarsArea) setCurrentArea(areaKey, true);
         DiscreteCoordinates coords = area.getPlayerSpawnPosition();
-        player = new RealPlayer(area, coords, ICWarsActor.Faction.ALLY);
+        player = new RealPlayer(area, coords, ICWarsActor.Faction.ALLY,
+                 new Tank(area, new DiscreteCoordinates(2,5), ICWarsActor.Faction.ALLY),
+                 new Soldier(area, new DiscreteCoordinates(3,5), ICWarsActor.Faction.ALLY));
         player.enterArea(area, coords);
         player.centerCamera();
     }
 
     @Override
     public void update(float deltaTime) {
+        super.update(deltaTime);
+
         Keyboard keyboard = getWindow().getKeyboard();
         if (keyboard.get(Keyboard.N).isReleased()) {
             switchArea();
@@ -75,10 +74,12 @@ public class ICWars extends AreaGame {
             };
         }
 
-        super.update(deltaTime);
-
         if (keyboard.get(Keyboard.R).isReleased()) {
             reset();
+        }
+
+        if ( keyboard.get(Keyboard.U).isReleased ()) {
+            ((RealPlayer) player).selectUnit(1) ; // 0, 1 ...
         }
 
 

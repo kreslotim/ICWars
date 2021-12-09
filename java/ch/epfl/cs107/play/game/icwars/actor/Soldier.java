@@ -9,9 +9,7 @@ import ch.epfl.cs107.play.window.Canvas;
 
 public class Soldier extends Unit {
 
-    private final String[] factionImage = {"icwars/friendlySoldier", "icwars/enemySoldier"};
-    private String spriteName;
-    private ICWarsRange range;
+    private static final String[] factionImage = {"icwars/friendlySoldier", "icwars/enemySoldier"};
     private Sprite sprite;
 
     /**
@@ -23,20 +21,9 @@ public class Soldier extends Unit {
 
 
     public Soldier(Area area, DiscreteCoordinates position, Faction faction) {
-        super(area, position, 4, 7, 10, faction);
-        spriteName = factionImage[faction.ordinal()];
-        sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
-        this.setSprite(sprite);}
-
-
-    /**
-     * GhostPlayer devra évidemment avoir une méthode de dessin spécifique, laquelle se contentera
-     * de dessiner le Sprite associé.
-     **/
-    @Override
-    public void draw(Canvas canvas) {
-        sprite.draw(canvas); // l'affichage du sprite sur l'ecran
+        super(area, position, 4, 7, 10, faction, factionImage[faction.ordinal()]);
     }
+
 
 
 }

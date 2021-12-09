@@ -15,8 +15,8 @@ import java.util.List;
 
 abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
 
-    private List<Unit> unitsList = new ArrayList<Unit>();
-    private List<Area> areasList = new ArrayList<Area>();
+    protected List<Unit> unitsList;
+    protected List<Area> areasList = new ArrayList<>();
 
     /**
      * Default ICWarsActor constructor
@@ -28,7 +28,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
         super(area, position, faction);
         for (Unit unit : units) {
             area.registerActor(unit);
-            unitsList.add(unit);
+            unitsList = new ArrayList<>(List.of(units));
         }
 
     }
@@ -40,28 +40,15 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
 
     @Override
     public void update(float deltaTime) {
-        for (Unit unit : unitsList) {
-            if (unit.getCurrentHp() <= 0) {
-                getOwnerArea().unregisterActor(unit);
-                areasList.remove(unit);
+        if (unitsList != null) {
+            for (Unit unit : unitsList) {
+                if (unit.getCurrentHp() <= 0) {
+                    getOwnerArea().unregisterActor(unit);
+                    areasList.remove(unit);
+                }
             }
 
         }
-
         super.update(deltaTime);
-
     }
-
-//    /**
-//     * GhostPlayer devra évidemment avoir une méthode de dessin spécifique, laquelle se contentera
-//     * de dessiner le Sprite associé.
-//     **/
-//    @Override
-//    public void draw(Canvas canvas) {
-//        for (Unit unit : unitsList) {
-//            unit.draw(canvas); // l'affichage du sprite sur l'ecran
-//        }
-//    }
-
-
 }
