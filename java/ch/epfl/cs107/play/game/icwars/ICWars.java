@@ -55,9 +55,18 @@ public class ICWars extends AreaGame {
 
         ICWarsArea area = (ICWarsArea) setCurrentArea(areaKey, true);
         DiscreteCoordinates coords = area.getPlayerSpawnPosition();
+//        DiscreteCoordinates soldierSpawn;
+//
+//        if (areaIndex == 0) {
+//            soldierSpawn = new DiscreteCoordinates(2, 5);
+//        } else {
+//            soldierSpawn = new DiscreteCoordinates(5, 7);
+//
+//        }
+
         player = new RealPlayer(area, coords, ICWarsActor.Faction.ALLY,
-                 new Tank(area, new DiscreteCoordinates(2,5), ICWarsActor.Faction.ALLY),
-                 new Soldier(area, new DiscreteCoordinates(3,5), ICWarsActor.Faction.ALLY));
+                 new Tank(area, new DiscreteCoordinates(5,5), ICWarsActor.Faction.ALLY),
+                 new Soldier(area,  new DiscreteCoordinates(2, 5), ICWarsActor.Faction.ALLY));
         player.enterArea(area, coords);
         player.centerCamera();
     }

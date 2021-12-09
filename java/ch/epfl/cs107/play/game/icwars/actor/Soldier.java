@@ -21,7 +21,7 @@ public class Soldier extends Unit {
 
 
     public Soldier(Area area, DiscreteCoordinates position, Faction faction) {
-        super(area, position, 4, 7, 10, faction, factionImage[faction.ordinal()]);
+        super(area, position, 2, 2, 5, faction, factionImage[faction.ordinal()]);
     }
 
 
