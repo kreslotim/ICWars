@@ -21,6 +21,7 @@ public class Unit extends ICWarsActor {
     private Faction faction;
     private Sprite sprite;
     private ICWarsRange range = new ICWarsRange();
+    //Hello
 
     /**
      * Default Unit constructor
