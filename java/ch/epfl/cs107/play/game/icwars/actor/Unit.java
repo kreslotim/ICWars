@@ -38,7 +38,7 @@ public class Unit extends ICWarsActor {
         this.radius = radius;
         this.faction = faction;
         addEdge(); // appel addNode
-        Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f,-0.25f));
+        Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
     }
 
@@ -64,16 +64,31 @@ public class Unit extends ICWarsActor {
 
     private void addEdge() {
         DiscreteCoordinates from = getCurrentMainCellCoordinates();
+        boolean hasLeftEdge = false, hasUpEdge = false, hasRightEdge = false, hasDownEdge = false;
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
                 DiscreteCoordinates thisCell = new DiscreteCoordinates(from.x + x, from.y + y);
                 if (thisCell.x >= 0 // left
                         && thisCell.y >= 0 // up
                         && getOwnerArea().getWidth() > thisCell.x // right
-                        && getOwnerArea().getHeight() > thisCell.y) // down {
-                    range.addNode(thisCell, ((x > -radius) && (x + from.x > 0)), ((x > radius) &&
-                            (x + from.x < 0)), ((y > -radius) && (y + from.x > 0)), ((y > radius) && (y + from.y < 0)));
+                        && getOwnerArea().getHeight() > thisCell.y) { // down
 
+                    if(x+ from.x>0) {
+                        if(x>=-radius) hasLeftEdge=true;
+                        if(x<=radius) hasRightEdge=true;
+                    }
+                    if (y + from.y>0) {
+                        if(y<=radius) hasUpEdge=true;
+                        if(y>=-radius) hasDownEdge=true;
+                    }
+                    range.addNode(thisCell, hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);
+                    // largeur de la grille =  getOwnerArea().getWidth
+//                    range.addNode(thisCell,
+//                    ((x < -radius) && (x + from.x < getOwnerArea().getWidth())),
+//                            ((x > radius) && (x + from.x < 0)),
+//                            ((y > -radius) && (y + from.x > 0)),
+//                            ((y > radius) && (y + from.y < 0)));
+                }
             }
 
         }
