@@ -110,3 +110,6 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij
+*.java
+java/ch/epfl/cs107/play/game/icwars/actor/Unit.java
+java/ch/epfl/cs107/play/game/icwars/actor/Unit.java

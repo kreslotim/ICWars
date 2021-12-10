@@ -10,7 +10,6 @@ import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.area.Level0;
 import ch.epfl.cs107.play.game.icwars.area.Level1;
-
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Keyboard;
@@ -65,8 +64,8 @@ public class ICWars extends AreaGame {
 //        }
 
         player = new RealPlayer(area, coords, ICWarsActor.Faction.ALLY,
-                 new Tank(area, new DiscreteCoordinates(5,5), ICWarsActor.Faction.ALLY),
-                 new Soldier(area,  new DiscreteCoordinates(2, 5), ICWarsActor.Faction.ALLY));
+                 new Tank(area, new DiscreteCoordinates(2,5), ICWarsActor.Faction.ALLY),
+                 new Soldier(area,  new DiscreteCoordinates(3, 5), ICWarsActor.Faction.ALLY));
         player.enterArea(area, coords);
         player.centerCamera();
     }
@@ -87,9 +86,9 @@ public class ICWars extends AreaGame {
             reset();
         }
 
-        if ( keyboard.get(Keyboard.U).isReleased ()) {
-            ((RealPlayer) player).selectUnit(1) ; // 0, 1 ...
-        }
+//        if ( keyboard.get(Keyboard.U).isReleased ()) {
+//            ((RealPlayer) player).selectUnit(1) ; // 0, 1 ...
+//        }
 
 
 
