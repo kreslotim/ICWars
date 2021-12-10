@@ -14,7 +14,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
 
     protected List<Unit> unitsList;
     protected List<Area> areasList = new ArrayList<>();
+    protected Unit selectedUnit; // ap avoir fait l'interaction interactWith(Unit unit) selectedunit=unit
     private PlayerStatesEnum state;
+
 
     /**
      * Default ICWarsActor constructor
@@ -65,6 +67,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
 
     /**
      * get the state of the player
+     *
      * @return
      */
     public PlayerStatesEnum getState() {
@@ -73,6 +76,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
 
     /**
      * set the state of the player
+     *
      * @param state
      */
     public void setState(PlayerStatesEnum state) {

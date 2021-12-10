@@ -56,10 +56,13 @@ public class RealPlayer extends ICWarsPlayer {
                 }
                 break;
             case SELECT_CELL:
-                selectUnit();
+                if (selectedUnit != null) {
+                    setState(PlayerStatesEnum.MOVE_UNIT);
+                }
                 break;
             case MOVE_UNIT:
                 if (keyboard.get(Keyboard.ENTER).isReleased()) {
+                    // à compléter
                     setState(PlayerStatesEnum.NORMAL);
                 }
                 break;
