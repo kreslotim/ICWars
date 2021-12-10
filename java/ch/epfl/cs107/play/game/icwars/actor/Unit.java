@@ -21,7 +21,6 @@ public class Unit extends ICWarsActor {
     private Faction faction;
     private Sprite sprite;
     private ICWarsRange range = new ICWarsRange();
-    //Hello
 
     /**
      * Default Unit constructor
@@ -63,34 +62,23 @@ public class Unit extends ICWarsActor {
     }
 
     private void addEdge() {
-        DiscreteCoordinates from = getCurrentMainCellCoordinates();
+        DiscreteCoordinates from = getCurrentMainCellCoordinates();// position de l'unité
+
+        System.out.println(getCurrentMainCellCoordinates());
         boolean hasLeftEdge = false, hasUpEdge = false, hasRightEdge = false, hasDownEdge = false;
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
-                DiscreteCoordinates thisCell = new DiscreteCoordinates(from.x + x, from.y + y);
-                if (thisCell.x >= 0 // left
-                        && thisCell.y >= 0 // up
-                        && getOwnerArea().getWidth() > thisCell.x // right
-                        && getOwnerArea().getHeight() > thisCell.y) { // down
 
-                    if(x+ from.x>0) {
-                        if(x>=-radius) hasLeftEdge=true;
-                        if(x<=radius) hasRightEdge=true;
-                    }
-                    if (y + from.y>0) {
-                        if(y<=radius) hasUpEdge=true;
-                        if(y>=-radius) hasDownEdge=true;
-                    }
-                    range.addNode(thisCell, hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);
-                    // largeur de la grille =  getOwnerArea().getWidth
-//                    range.addNode(thisCell,
-//                    ((x < -radius) && (x + from.x < getOwnerArea().getWidth())),
-//                            ((x > radius) && (x + from.x < 0)),
-//                            ((y > -radius) && (y + from.x > 0)),
-//                            ((y > radius) && (y + from.y < 0)));
-                }
+                if (x+from.x <= getOwnerArea().getWidth() && x+ from.x >= 0 && y+ from.y <= getOwnerArea().getHeight() && y+ from.y >= 0) {
+                    hasLeftEdge = x > -radius && from.x + x > 0;
+                    hasRightEdge = x < radius && from.x + x > 0;
+                    hasUpEdge = y < radius && from.y + y > 0;
+                    hasDownEdge = y > - radius && from.y + y > 0;
+
+                    range.addNode(new DiscreteCoordinates(x+from.x,y+from.y), hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);}
+
+
             }
-
         }
     }
 
@@ -98,6 +86,7 @@ public class Unit extends ICWarsActor {
     public void draw(Canvas canvas) {
         sprite.draw(canvas); // l'affichage du sprite sur l'ecran
     }
+
 
 
     /**

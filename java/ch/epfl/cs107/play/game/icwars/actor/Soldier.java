@@ -10,7 +10,6 @@ import ch.epfl.cs107.play.window.Canvas;
 public class Soldier extends Unit {
 
     private static final String[] factionImage = {"icwars/friendlySoldier", "icwars/enemySoldier"};
-    private Sprite sprite;
 
     /**
      * Default Unit constructor
@@ -21,7 +20,7 @@ public class Soldier extends Unit {
 
 
     public Soldier(Area area, DiscreteCoordinates position, Faction faction) {
-        super(area, position, 2, 2, 5, faction, factionImage[faction.ordinal()]);
+        super(area, position, 2, 7, 10, faction, factionImage[faction.ordinal()]);
     }
 
 

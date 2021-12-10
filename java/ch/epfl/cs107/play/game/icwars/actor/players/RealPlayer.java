@@ -16,7 +16,6 @@ import ch.epfl.cs107.play.window.Keyboard;
 public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1;
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
-    private Unit selectedUnit;
     protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
     private Sprite sprite;
 
@@ -73,8 +72,8 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public void draw(Canvas canvas) {
-        sprite.draw(canvas);
-        gui.draw(canvas);
+        sprite.draw(canvas); // Cursor Draw
+        gui.draw(canvas);    // GUI Draw
     }
 
     public void selectUnit(int unitIndex) {
