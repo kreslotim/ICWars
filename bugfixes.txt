@@ -4,3 +4,4 @@ qd position du tank = (4, 4) (et centré sur selectUnit(1)), deux erreurs rencon
   2) l'autre erreur j'ai pas compris faut demander à Sylvain
 
 - les deux méthodes de types énumérés (dans ICWarsAreaBehavior et ICWarsActor) faut faire les commentaires
+- MOVE_UNIT dans switch de RealPlayer : on peut pas encore faire car faut voir §2.2.2 
