@@ -21,7 +21,7 @@ public class Tank extends Unit {
 
 
     public Tank (Area area, DiscreteCoordinates position, Faction faction) {
-        super(area, position,4, 7, 10, faction, "icwars/friendlyTank");
+        super(area, position,4, 7, 10, faction, factionImage[faction.ordinal()]);
        // factionImage[0] = ...
 
     }

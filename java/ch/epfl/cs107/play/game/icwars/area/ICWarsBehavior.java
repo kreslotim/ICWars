@@ -78,6 +78,7 @@ public class ICWarsBehavior extends AreaBehavior {
             return true;
         }
 
+
         @Override
         protected boolean canEnter(Interactable entity) {
 
