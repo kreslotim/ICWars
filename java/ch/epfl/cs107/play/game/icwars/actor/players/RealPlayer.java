@@ -5,7 +5,6 @@ import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
-import ch.epfl.cs107.play.game.icwars.area.ICWarsRange;
 import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -15,10 +14,10 @@ import ch.epfl.cs107.play.window.Keyboard;
 
 public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1;
-    private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
     protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
+    private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
     private Sprite sprite;
-
+    private ICWarsPlayer state;
 
 
     /**
@@ -38,6 +37,41 @@ public class RealPlayer extends ICWarsPlayer {
 
     }
 
+
+    /**
+     * Method that switches the states of the player
+     *
+     * @param playerStates
+     */
+    public void switchStates(PlayerStatesEnum playerStates) {
+        Keyboard keyboard = getOwnerArea().getKeyboard();
+        switch (playerStates) {
+            case IDLE:
+                break;
+            case NORMAL:
+                if (keyboard.get(Keyboard.ENTER).isReleased()) {
+                    setState(PlayerStatesEnum.SELECT_CELL);
+                } else if (keyboard.get(Keyboard.TAB).isReleased()) {
+                    setState(PlayerStatesEnum.IDLE);
+                }
+                break;
+            case SELECT_CELL:
+                selectUnit();
+                break;
+            case MOVE_UNIT:
+                if (keyboard.get(Keyboard.ENTER).isReleased()) {
+                    setState(PlayerStatesEnum.NORMAL);
+                }
+                break;
+            case ACTION_SELECTION:
+                break;
+            case ACTION:
+                break;
+
+
+        }
+    }
+
     @Override
     public void update(float deltaTime) {
 
@@ -49,6 +83,7 @@ public class RealPlayer extends ICWarsPlayer {
         moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
 
         super.update(deltaTime);
+
 
     }
 
@@ -67,7 +102,6 @@ public class RealPlayer extends ICWarsPlayer {
             }
         }
     }
-
 
 
     @Override
