@@ -1,5 +1,4 @@
 package ch.epfl.cs107.play.game.icwars.gui;
-
 import ch.epfl.cs107.play.game.actor.Graphics;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
@@ -16,9 +15,7 @@ public class ICWarsPlayerGUI implements Graphics {
         this.player = player;
     }
 
-    public void setSelectedUnit(Unit selectedUnit) {
-        this.selectedUnit = selectedUnit;
-    }
+    public void setSelectedUnit(Unit selectedUnit) { this.selectedUnit = selectedUnit; }
 
     /**
      * invoking the method
@@ -32,5 +29,7 @@ public class ICWarsPlayerGUI implements Graphics {
             selectedUnit.drawRangeAndPathTo(new DiscreteCoordinates((int) player.getPosition().x,
                                                                     (int) player.getPosition().y), canvas);
         }
+
+
     }
 }

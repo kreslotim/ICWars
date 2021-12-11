@@ -21,6 +21,7 @@ public class Unit extends ICWarsActor {
     private Faction faction;
     private Sprite sprite;
     private ICWarsRange range = new ICWarsRange();
+    private boolean usedUnit = false;
 
     /**
      * Default Unit constructor
@@ -36,9 +37,13 @@ public class Unit extends ICWarsActor {
         this.damage = damage;
         this.radius = radius;
         this.faction = faction;
-        addEdge(); // appel addNode
+        addEdge(getCurrentMainCellCoordinates()); // appel addNode
         Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
+    }
+
+    public void setUsedUnit() {
+        this.usedUnit = true;
     }
 
     int getDamage() {
@@ -61,30 +66,45 @@ public class Unit extends ICWarsActor {
         return currentHp;
     }
 
-    private void addEdge() {
-        DiscreteCoordinates from = getCurrentMainCellCoordinates();// position de l'unité
+    private void addEdge(DiscreteCoordinates from) {
 
-        System.out.println(getCurrentMainCellCoordinates());
-        boolean hasLeftEdge = false, hasUpEdge = false, hasRightEdge = false, hasDownEdge = false;
+        boolean hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge;
+
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
 
-                if (x+from.x <= getOwnerArea().getWidth() && x+ from.x >= 0 && y+ from.y <= getOwnerArea().getHeight() && y+ from.y >= 0) {
-                    hasLeftEdge = x > -radius && from.x + x > 0;
-                    hasRightEdge = x < radius && from.x + x > 0;
-                    hasUpEdge = y < radius && from.y + y > 0;
-                    hasDownEdge = y > - radius && from.y + y > 0;
+                if (x+from.x <= getOwnerArea().getWidth()-1 && x+ from.x >= 0 &&
+                        y+ from.y <= getOwnerArea().getHeight()-1 && y+ from.y >= 0) {
 
-                    range.addNode(new DiscreteCoordinates(x+from.x,y+from.y), hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);}
+                    hasLeftEdge = x > -radius && from.x + x >= 0;
+                    hasRightEdge = x < radius && from.x + x >= 0;
+                    hasUpEdge = y < radius && from.y + y >= 0;
+                    hasDownEdge = y > - radius && from.y + y >= 0;
+
+                    range.addNode(new DiscreteCoordinates(x+from.x,y+from.y),
+                            hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);}
 
 
             }
         }
     }
 
+
     @Override
     public void draw(Canvas canvas) {
         sprite.draw(canvas); // l'affichage du sprite sur l'ecran
+    }
+
+    @Override
+    public boolean changePosition(DiscreteCoordinates newPosition) {
+        if (!range.nodeExists(newPosition) || !super.changePosition(newPosition)) {
+            return false;
+        }
+        // méthode qui recalcule la nouvelle position
+        // adapter le rayon d'action à la newPosition
+        range = new ICWarsRange();
+        addEdge(newPosition);
+        return true;
     }
 
 
@@ -106,4 +126,5 @@ public class Unit extends ICWarsActor {
             new Path(getCurrentMainCellCoordinates().toVector(), path).draw(canvas);
         }
     }
+
 }

@@ -5,7 +5,6 @@ import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
-import ch.epfl.cs107.play.game.icwars.area.ICWarsRange;
 import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -16,8 +15,9 @@ import ch.epfl.cs107.play.window.Keyboard;
 public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1;
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
-    protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
     private Sprite sprite;
+
+
 
 
 
@@ -48,8 +48,9 @@ public class RealPlayer extends ICWarsPlayer {
         moveIfPressed(Orientation.RIGHT, keyboard.get(Keyboard.RIGHT));
         moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
 
-        super.update(deltaTime);
+        switchStates(getState());
 
+        super.update(deltaTime);
     }
 
     /**
@@ -68,19 +69,12 @@ public class RealPlayer extends ICWarsPlayer {
         }
     }
 
-
-
     @Override
     public void draw(Canvas canvas) {
         sprite.draw(canvas); // Cursor Draw
         gui.draw(canvas);    // GUI Draw
     }
 
-    public void selectUnit(int unitIndex) {
-        if (unitsList != null) {
-            gui.setSelectedUnit(unitsList.get(unitIndex));
-        }
-    }
 
     @Override
     public boolean takeCellSpace() {
@@ -101,4 +95,5 @@ public class RealPlayer extends ICWarsPlayer {
     public void acceptInteraction(AreaInteractionVisitor v) {
 
     }
+
 }

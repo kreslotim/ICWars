@@ -30,7 +30,6 @@ public abstract class ICWarsActor extends MovableAreaEntity {
     }
 
 
-
     /**
      * Center the camera on the player
      */
