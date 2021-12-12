@@ -58,13 +58,17 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
 
     public void startTurn() {
         setState(playerStates.NORMAL);
+
     }
 
     @Override
     public void onLeaving(List<DiscreteCoordinates> coordinates) {
-        super.onLeaving(coordinates);
+
+        if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getState() == playerStates.SELECT_CELL) {
+            setState(playerStates.NORMAL);
+            System.out.println("onLeaving works!");
+        }
         // Entreprendre les traitements nécessaires lorsque player quitte cellule
-        if (getState() == playerStates.SELECT_CELL) setState(playerStates.NORMAL);
     }
 
     @Override
@@ -141,6 +145,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
                 // do nothing
                 break;
             case NORMAL:
+                System.out.println("Normal");
                 if (keyboard.get(Keyboard.ENTER).isReleased()) {
                     setState(playerStates.SELECT_CELL);
                     System.out.println("State: SELECT_CELL");
@@ -153,16 +158,18 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
             case SELECT_CELL:
                 this.selectUnit(getUnitIndex());
                 if (selectedUnit != null) {
-                    if (selectedUnit.equals(unitsList.get(getUnitIndex()))) {
-                        memorisedUnits.add(selectedUnit);
-                        System.out.println("memorized!");
-                        setState(playerStates.MOVE_UNIT);
-                        System.out.println("State: MOVE_CELL");
-                        }
-                        else setState(ICWarsPlayer.playerStates.NORMAL);
-                    }
 
-                //else onLeaving(); // onLeaving() sur la position de l'unité...
+                    memorisedUnits.add(selectedUnit);
+                    System.out.println("memorized!");
+                    setState(playerStates.MOVE_UNIT);
+                    System.out.println("State: MOVE_UNIT");
+                }
+
+                else {
+                    onLeaving((getLeftCells()));
+                    System.out.println("Left: "+getLeftCells());
+                    System.out.println("Cursor: "+getCurrentMainCellCoordinates());
+                } // onLeaving() sur la position de l'unité...
                 break;
 
             case MOVE_UNIT:
@@ -170,6 +177,8 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
                     // move the selectedUnit to currentSpace
                     // mark memorisedUnit as used
 
+                    selectedUnit.changePosition(new DiscreteCoordinates(getCurrentMainCellCoordinates().x,getCurrentMainCellCoordinates().y));
+                    selectedUnit = null;
                     setState(playerStates.NORMAL);
                     System.out.println("State: NORMAL");
                 }
@@ -182,5 +191,4 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
 
         }
     }
-
 }

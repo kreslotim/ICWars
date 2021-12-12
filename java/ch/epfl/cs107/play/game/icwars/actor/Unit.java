@@ -12,7 +12,7 @@ import ch.epfl.cs107.play.window.Canvas;
 import java.util.Queue;
 
 
-public class Unit extends ICWarsActor {
+public abstract class Unit extends ICWarsActor {
 
     private int currentHp;
     private int maxHp;
@@ -40,6 +40,7 @@ public class Unit extends ICWarsActor {
         addEdge(getCurrentMainCellCoordinates()); // appel addNode
         Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
+        setOwnerArea(area); // Assoc
     }
 
     public void setUsedUnit() {
@@ -73,7 +74,7 @@ public class Unit extends ICWarsActor {
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
 
-                if (x+from.x <= getOwnerArea().getWidth()-1 && x+ from.x >= 0 &&
+                if (x+from.x <= getOwnerArea().getWidth()-1 && x+ from.x >= 0 && // getOwnerArea associé au Level0
                         y+ from.y <= getOwnerArea().getHeight()-1 && y+ from.y >= 0) {
 
                     hasLeftEdge = x > -radius && from.x + x >= 0;

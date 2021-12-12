@@ -59,6 +59,7 @@ public class ICWars extends AreaGame {
         player = new RealPlayer(area, coords, ICWarsActor.Faction.ALLY,
                  new Tank(area, new DiscreteCoordinates(2,5), ICWarsActor.Faction.ALLY),
                  new Soldier(area,  new DiscreteCoordinates(3, 5), ICWarsActor.Faction.ALLY));
+
         player.enterArea(area, coords);
         player.centerCamera();
         player.startTurn();
@@ -73,7 +74,7 @@ public class ICWars extends AreaGame {
             switchArea();
             if (getCurrentArea().getTitle().equals("icwars/Level0") && keyboard.get(Keyboard.N).isReleased()) {
                 end();
-            };
+            }
         }
 
         if (keyboard.get(Keyboard.R).isReleased()) {
@@ -111,10 +112,10 @@ public class ICWars extends AreaGame {
 
         areaIndex = (areaIndex==0) ? 1 : 0;
 
+
         ICWarsArea currentArea = (ICWarsArea)setCurrentArea(areas[areaIndex], false);
         player.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
         player.centerCamera();
-
 
     }
 
