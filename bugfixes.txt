@@ -9,3 +9,5 @@
 - unité doit devenir opaque une fois appuyée sur la touche A ou W (cf step3). Pour l'instant(step2), on appuie sur Enter et l'unité devient opaque...
 - @Line124 selectUnit ICWarsPlayer : must create a setter for the method isUsed
 - méthode startTurn (pdf p.21) à coder avec Hana
+- rajouter les units dans la waitingRound and currentRound (fin para 3.3.1 : "• to modify the list of players waiting to play the next round by removing those who
+have lost.")
