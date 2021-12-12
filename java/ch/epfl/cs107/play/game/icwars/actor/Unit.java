@@ -21,6 +21,7 @@ public class Unit extends ICWarsActor {
     private Faction faction;
     private Sprite sprite;
     private ICWarsRange range = new ICWarsRange();
+    private boolean usedUnit = false;
 
     /**
      * Default Unit constructor
@@ -39,6 +40,9 @@ public class Unit extends ICWarsActor {
         addEdge(); // appel addNode
         Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
+        setOwnerArea(area); // Assoc
+
+
     }
 
 
@@ -60,6 +64,10 @@ public class Unit extends ICWarsActor {
 
     public int getCurrentHp() {
         return currentHp;
+    }
+
+    public void setUsedUnit() {
+        this.usedUnit = true;
     }
 
     private void addEdge() {

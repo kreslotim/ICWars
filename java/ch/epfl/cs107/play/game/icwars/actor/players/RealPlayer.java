@@ -25,7 +25,6 @@ public class RealPlayer extends ICWarsPlayer {
 
 
 
-
     /**
      * Default RealPlayer constructor
      *
