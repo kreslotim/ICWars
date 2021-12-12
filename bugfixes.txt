@@ -8,4 +8,4 @@
 - pk la classe Soldier est si vide
 - unité doit devenir opaque une fois appuyée sur la touche A ou W (cf step3). Pour l'instant(step2), on appuie sur Enter et l'unité devient opaque...
 - @Line124 selectUnit ICWarsPlayer : must create a setter for the method isUsed
-- startTurn à coder avec Hana
+- méthode startTurn (pdf p.21) à coder avec Hana
