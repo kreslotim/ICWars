@@ -2,9 +2,13 @@ package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
+import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icwars.ICWars;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
+import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Keyboard;
 
@@ -13,12 +17,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
+abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, Interactor {
 
     protected List<Unit> unitsList;
     protected List<Area> areasList = new ArrayList<>();
     protected List<Unit> memorisedUnits = new ArrayList<>();
-    private playerStates state;
+    private PlayerStates playerState;
+
     protected Unit selectedUnit; // à utiliser avec Interactable
     protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
 
@@ -36,36 +41,30 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
             unitsList = new ArrayList<>(List.of(units));
         }
         //player = new ICWarsPlayer(area, position, ICWarsActor.Faction.values());
-        state = playerStates.IDLE;
+        playerState = PlayerStates.IDLE;
     }
 
-
-
-    /**
-     * get the state of the player
-     */
-    public playerStates getState() {
-        return state;
+    @Override
+    public void enterArea(Area area, DiscreteCoordinates position) {
+        area.registerActor(this);
+        area.setViewCandidate(this);
+        setOwnerArea(area);
+        setCurrentPosition(position.toVector());
+        resetMotion();
     }
 
-    /**
-     * set the state of the player
-     * @param state
-     */
-    public void setState(playerStates state) {
-        this.state = state;
-    }
 
     public void startTurn() {
-        setState(playerStates.NORMAL);
+        setPlayerState(PlayerStates.NORMAL);
+        // make all units of the player not Used
 
     }
 
     @Override
     public void onLeaving(List<DiscreteCoordinates> coordinates) {
 
-        if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getState() == playerStates.SELECT_CELL) {
-            setState(playerStates.NORMAL);
+        if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getPlayerState() == PlayerStates.SELECT_CELL) {
+            setPlayerState(PlayerStates.NORMAL);
             System.out.println("onLeaving works!");
         }
         // Entreprendre les traitements nécessaires lorsque player quitte cellule
@@ -74,6 +73,11 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
     @Override
     public List<DiscreteCoordinates> getCurrentCells() {
         return Collections.singletonList(getCurrentMainCellCoordinates());
+    }
+
+    @Override
+    public void acceptInteraction ( AreaInteractionVisitor v) {
+        ((ICWarsInteractionVisitor)v). interactWith ( this );
     }
 
     @Override
@@ -90,28 +94,11 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
         super.update(deltaTime);
     }
 
-
-
-    public enum playerStates {
-        IDLE,
-        NORMAL,
-        SELECT_CELL,
-        MOVE_UNIT,
-        ACTION_SELECTION,
-        ACTION
-    }
-
-
-    public boolean used(Unit selectedUnit) {
-        return memorisedUnits.contains(selectedUnit);
-    }
-
-
     public void selectUnit(int unitIndex) {
         if (unitsList.size() > unitIndex) {
             selectedUnit = unitsList.get(unitIndex);
             gui.setSelectedUnit(unitsList.get(unitIndex));
-            this.unitsList.get(unitIndex).setUsedUnit();
+            this.unitsList.get(unitIndex).isUsed();  // create a setter setUnitUsed
         }
     }
 
@@ -131,44 +118,65 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
         return 99999;
     }
 
+    /**
+     * get the playerState of the player
+     */
+    public PlayerStates getPlayerState() {
+        return playerState;
+    }
 
+    /**
+     * set the playerState of the player
+     * @param playerState
+     */
+    public void setPlayerState(PlayerStates playerState) {
+        this.playerState = playerState;
+    }
+
+
+    public enum PlayerStates {
+        IDLE,
+        NORMAL,
+        SELECT_CELL,
+        MOVE_UNIT,
+        ACTION_SELECTION,
+        ACTION
+    }
 
     /**
      * Method that switches the states of the player
      *
-     * @param playerStates
+     * @param playerState
      */
-    public void switchStates(playerStates playerStates) {
+    public void switchPlayerStates(PlayerStates playerState) {
         Keyboard keyboard = getOwnerArea().getKeyboard();
-        switch (playerStates) {
+        switch (playerState) {
             case IDLE:
                 // do nothing
                 break;
             case NORMAL:
                 System.out.println("Normal");
                 if (keyboard.get(Keyboard.ENTER).isReleased()) {
-                    setState(playerStates.SELECT_CELL);
+                    setPlayerState(playerState.SELECT_CELL);
                     System.out.println("State: SELECT_CELL");
 
                 }
                 if (keyboard.get(Keyboard.TAB).isReleased()) {
-                    setState(playerStates.IDLE);
+                    setPlayerState(playerState.IDLE);
                 }
                 break;
             case SELECT_CELL:
                 this.selectUnit(getUnitIndex());
                 if (selectedUnit != null) {
 
-                    memorisedUnits.add(selectedUnit);
+                    interactWith(selectedUnit);
                     System.out.println("memorized!");
-                    setState(playerStates.MOVE_UNIT);
+                    setPlayerState(playerState.MOVE_UNIT);
                     System.out.println("State: MOVE_UNIT");
                 }
 
                 else {
                     onLeaving((getLeftCells()));
-                    System.out.println("Left: "+getLeftCells());
-                    System.out.println("Cursor: "+getCurrentMainCellCoordinates());
                 } // onLeaving() sur la position de l'unité...
                 break;
 
@@ -178,8 +186,10 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
                     // mark memorisedUnit as used
 
                     selectedUnit.changePosition(new DiscreteCoordinates(getCurrentMainCellCoordinates().x,getCurrentMainCellCoordinates().y));
+
+                    //selectedUnit.isUsed() ? sprite.setAlpha(0.5f) : sprite.setAlpha(1.f)
                     selectedUnit = null;
-                    setState(playerStates.NORMAL);
+                    setPlayerState(playerState.NORMAL);
                     System.out.println("State: NORMAL");
                 }
                 break;

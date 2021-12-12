@@ -43,9 +43,11 @@ public abstract class Unit extends ICWarsActor {
         setOwnerArea(area); // Assoc
     }
 
-    public void setUsedUnit() {
-        this.usedUnit = true;
+    public boolean isUsed() {
+        return true;
     }
+
+
 
     int getDamage() {
         return damage;

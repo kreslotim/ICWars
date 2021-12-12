@@ -19,6 +19,8 @@ public abstract class ICWarsArea extends Area {
 
     public abstract DiscreteCoordinates getPlayerSpawnPosition();
 
+    public abstract DiscreteCoordinates getEnemySpawnPosition();
+
     protected abstract void createArea();
 
     @Override

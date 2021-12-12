@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class ICWarsActor extends MovableAreaEntity {
 
-    private Faction faction;
+    protected Faction faction;
 
     /**
      * Default ICWarsActor constructor
@@ -80,6 +80,7 @@ public abstract class ICWarsActor extends MovableAreaEntity {
     }
 
     public enum Faction {
+
         ALLY(true),
         ENEMY(false);
         final boolean isFriendly;
