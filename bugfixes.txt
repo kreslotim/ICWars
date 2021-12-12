@@ -10,3 +10,4 @@ qd position du tank = (4, 4) (et centré sur selectUnit(1)), deux erreurs rencon
 - cameraScaleFactor dans ICWarsPlayerGUI jamais utilise
 - SELECT_CELL ne peut pas repasser à NORMAL qd appuyer sur Enter
 - getters et setters dqns Tank et Soldat au lieu dans Unit
+- pk la classe Soldier est si vide
