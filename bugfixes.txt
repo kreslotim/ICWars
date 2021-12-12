@@ -1,8 +1,3 @@
-- Dans la classe Unit :
-qd position du tank = (4, 4) (et centré sur selectUnit(1)), deux erreurs rencontrées avec la touche U :
-  1) y'a un carré en bas à gauche
-  2) l'autre erreur j'ai pas compris faut demander à Sylvain
-
 - les deux méthodes de types énumérés (dans ICWarsAreaBehavior et ICWarsActor) faut faire les commentaires
 - MOVE_UNIT dans switch de RealPlayer : on peut pas encore faire car faut voir §2.2.2 
 -     protected Unit selectedUnit; (dans ICWarsPlayer) // ap avoir fait l'interaction interactWith(Unit unit) selectedunit=unit
@@ -13,3 +8,4 @@ qd position du tank = (4, 4) (et centré sur selectUnit(1)), deux erreurs rencon
 - pk la classe Soldier est si vide
 - unité doit devenir opaque une fois appuyée sur la touche A ou W (cf step3). Pour l'instant(step2), on appuie sur Enter et l'unité devient opaque...
 - @Line124 selectUnit ICWarsPlayer : must create a setter for the method isUsed
+- startTurn à coder avec Hana
