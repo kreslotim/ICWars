@@ -11,3 +11,4 @@ qd position du tank = (4, 4) (et centré sur selectUnit(1)), deux erreurs rencon
 - SELECT_CELL ne peut pas repasser à NORMAL qd appuyer sur Enter
 - getters et setters dqns Tank et Soldat au lieu dans Unit
 - pk la classe Soldier est si vide
+- unité doit devenir opaque une fois appuyée sur la touche A ou W (cf step3). Pour l'instant(step2), on appuie sur Enter et l'unité devient opaque...
