@@ -1,23 +1,29 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
+import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
+import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Button;
 import ch.epfl.cs107.play.window.Canvas;
 import ch.epfl.cs107.play.window.Keyboard;
 
+import java.util.List;
+
 public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1;
-    protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
     private Sprite sprite;
-    private ICWarsPlayer state;
+
+
+
 
 
     /**
@@ -37,57 +43,24 @@ public class RealPlayer extends ICWarsPlayer {
 
     }
 
-
-    /**
-     * Method that switches the states of the player
-     *
-     * @param playerStates
-     */
-    public void switchStates(PlayerStatesEnum playerStates) {
-        Keyboard keyboard = getOwnerArea().getKeyboard();
-        switch (playerStates) {
-            case IDLE:
-                break;
-            case NORMAL:
-                if (keyboard.get(Keyboard.ENTER).isReleased()) {
-                    setState(PlayerStatesEnum.SELECT_CELL);
-                } else if (keyboard.get(Keyboard.TAB).isReleased()) {
-                    setState(PlayerStatesEnum.IDLE);
-                }
-                break;
-            case SELECT_CELL:
-                if (selectedUnit != null) {
-                    setState(PlayerStatesEnum.MOVE_UNIT);
-                }
-                break;
-            case MOVE_UNIT:
-                if (keyboard.get(Keyboard.ENTER).isReleased()) {
-                    // à compléter
-                    setState(PlayerStatesEnum.NORMAL);
-                }
-                break;
-            case ACTION_SELECTION:
-                break;
-            case ACTION:
-                break;
-
-
-        }
-    }
-
     @Override
     public void update(float deltaTime) {
 
         Keyboard keyboard = getOwnerArea().getKeyboard();
 
-        moveIfPressed(Orientation.LEFT, keyboard.get(Keyboard.LEFT));
-        moveIfPressed(Orientation.UP, keyboard.get(Keyboard.UP));
-        moveIfPressed(Orientation.RIGHT, keyboard.get(Keyboard.RIGHT));
-        moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
+        if (getState() ==  playerStates.NORMAL
+                || getState() == playerStates.SELECT_CELL
+                || getState() == playerStates.MOVE_UNIT)
+        {
+            moveIfPressed(Orientation.LEFT, keyboard.get(Keyboard.LEFT));
+            moveIfPressed(Orientation.UP, keyboard.get(Keyboard.UP));
+            moveIfPressed(Orientation.RIGHT, keyboard.get(Keyboard.RIGHT));
+            moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
+        }
+
+        switchStates(getState());
 
         super.update(deltaTime);
-
-
     }
 
     /**
@@ -106,18 +79,14 @@ public class RealPlayer extends ICWarsPlayer {
         }
     }
 
-
     @Override
     public void draw(Canvas canvas) {
         sprite.draw(canvas); // Cursor Draw
-        gui.draw(canvas);    // GUI Draw
-    }
-
-    public void selectUnit(int unitIndex) {
-        if (unitsList != null) {
-            gui.setSelectedUnit(unitsList.get(unitIndex));
+        if (getState() == playerStates.MOVE_UNIT) {
+            gui.draw(canvas);    // GUI Draw
         }
     }
+
 
     @Override
     public boolean takeCellSpace() {
@@ -126,7 +95,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public boolean isCellInteractable() {
-        return false;
+        return true;
     }
 
     @Override
@@ -138,4 +107,34 @@ public class RealPlayer extends ICWarsPlayer {
     public void acceptInteraction(AreaInteractionVisitor v) {
 
     }
+
+    @Override
+    public List<DiscreteCoordinates> getFieldOfViewCells() {
+        return null;
+    }
+
+    @Override
+    public boolean wantsCellInteraction() {
+        return false;
+    }
+
+    @Override
+    public boolean wantsViewInteraction() {
+        return false;
+    }
+
+    @Override
+    public void interactWith(Interactable other) {
+
+    }
+
+
+    private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
+        
+        public void interactWith(Interactable other) {
+        }
+    }
+
+
 }
+

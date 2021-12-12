@@ -41,6 +41,7 @@ public class Unit extends ICWarsActor {
         this.sprite = sprite;
     }
 
+
     int getDamage() {
         return damage;
     }

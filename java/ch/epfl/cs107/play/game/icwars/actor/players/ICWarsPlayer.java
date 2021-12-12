@@ -2,20 +2,26 @@ package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
+import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.window.Keyboard;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
+abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, Interactor {
 
     protected List<Unit> unitsList;
     protected List<Area> areasList = new ArrayList<>();
-    protected Unit selectedUnit; // ap avoir fait l'interaction interactWith(Unit unit) selectedunit=unit
-    private PlayerStatesEnum state;
+    protected List<Unit> memorisedUnits = new ArrayList<>();
+    private playerStates state;
+    protected Unit selectedUnit; // à utiliser avec Interactable
+    protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
 
 
     /**
@@ -30,8 +36,40 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
             area.registerActor(unit);
             unitsList = new ArrayList<>(List.of(units));
         }
-        state = PlayerStatesEnum.IDLE; // any player at its creation is in the state IDLE ;
+        //player = new ICWarsPlayer(area, position, ICWarsActor.Faction.values());
+        state = playerStates.IDLE;
+    }
 
+
+
+    /**
+     * get the state of the player
+     */
+    public playerStates getState() {
+        return state;
+    }
+
+    /**
+     * set the state of the player
+     * @param state
+     */
+    public void setState(playerStates state) {
+        this.state = state;
+    }
+
+    public void startTurn() {
+        setState(playerStates.NORMAL);
+
+    }
+
+    @Override
+    public void onLeaving(List<DiscreteCoordinates> coordinates) {
+
+        if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getState() == playerStates.SELECT_CELL) {
+            setState(playerStates.NORMAL);
+            System.out.println("onLeaving works!");
+        }
+        // Entreprendre les traitements nécessaires lorsque player quitte cellule
     }
 
     @Override
@@ -53,55 +91,103 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable {
         super.update(deltaTime);
     }
 
-    /**
-     * taking care of the necessary actions to be undertaken when the player begins his turn
-     * For the moment, this method will allow the player to go to the state NORMAL where he becomes active and receptive to controls and will focus the camera on him
-     * All of its units must become available again.
-     * (the first player immediately takes the hand and begins his
-     * turn)
-     */
-    public void startTurn() {
 
 
-    }
-
-    /**
-     * get the state of the player
-     *
-     * @return
-     */
-    public PlayerStatesEnum getState() {
-        return state;
-    }
-
-    /**
-     * set the state of the player
-     *
-     * @param state
-     */
-    public void setState(PlayerStatesEnum state) {
-        this.state = state;
-    }
-
-    /**
-     * IDLE do nothing (it is no longer his turn);
-     * • NORMAL if the key Enter is pressed go to state SELECT_CELL (which indicates that the
-     * player will have an interaction with a unit, we will discuss this later), otherwise if the
-     * key Tab is pressed, return to state IDLE (it is now an opponent’s turn to play);
-     * • SELECT_CELL means that a selected unit has been memorized and is followed by the
-     * state MOVE_UNIT ;
-     * • MOVE_UNIT if the key Enter is pressed move the memorized unit to the current
-     * location (see instructions below); mark it as used and go to NORMAL state;
-     * • for any other value of the report, do nothing for the moment.
-     **/
-    public enum PlayerStatesEnum {
+    public enum playerStates {
         IDLE,
         NORMAL,
         SELECT_CELL,
         MOVE_UNIT,
         ACTION_SELECTION,
-        ACTION;
+        ACTION
     }
 
 
+    public boolean used(Unit selectedUnit) {
+        return memorisedUnits.contains(selectedUnit);
+    }
+
+
+    public void selectUnit(int unitIndex) {
+        if (unitsList.size() > unitIndex) {
+            selectedUnit = unitsList.get(unitIndex);
+            gui.setSelectedUnit(unitsList.get(unitIndex));
+            this.unitsList.get(unitIndex).setUsedUnit();
+        }
+    }
+
+    public int getUnitIndex() {
+
+        int index = 0;
+        int myX = getCurrentMainCellCoordinates().x;
+        int myY = getCurrentMainCellCoordinates().y;
+
+        for (Unit unit : unitsList) {
+
+            if ((int) unit.getPosition().x == myX && (int) unit.getPosition().y == myY) {
+                return index;
+            }
+            ++index;
+        }
+        return 99999;
+    }
+
+
+
+    /**
+     * Method that switches the states of the player
+     *
+     * @param playerStates
+     */
+    public void switchStates(playerStates playerStates) {
+        Keyboard keyboard = getOwnerArea().getKeyboard();
+        switch (playerStates) {
+            case IDLE:
+                // do nothing
+                break;
+            case NORMAL:
+                System.out.println("Normal");
+                if (keyboard.get(Keyboard.ENTER).isReleased()) {
+                    setState(playerStates.SELECT_CELL);
+                    System.out.println("State: SELECT_CELL");
+
+                }
+                if (keyboard.get(Keyboard.TAB).isReleased()) {
+                    setState(playerStates.IDLE);
+                }
+                break;
+            case SELECT_CELL:
+                this.selectUnit(getUnitIndex());
+                if (selectedUnit != null) {
+
+                    memorisedUnits.add(selectedUnit);
+                    System.out.println("memorized!");
+                    setState(playerStates.MOVE_UNIT);
+                    System.out.println("State: MOVE_UNIT");
+                }
+
+                else {
+                    onLeaving((getLeftCells()));
+                } // onLeaving() sur la position de l'unité...
+                break;
+
+            case MOVE_UNIT:
+                if (keyboard.get(Keyboard.ENTER).isReleased()) {
+                    // move the selectedUnit to currentSpace
+                    // mark memorisedUnit as used
+
+                    selectedUnit.changePosition(new DiscreteCoordinates(getCurrentMainCellCoordinates().x,getCurrentMainCellCoordinates().y));
+                    selectedUnit = null;
+                    setState(playerStates.NORMAL);
+                    System.out.println("State: NORMAL");
+                }
+                break;
+            case ACTION_SELECTION:
+                break;
+            case ACTION:
+                break;
+
+
+        }
+    }
 }
