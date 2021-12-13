@@ -1,7 +1,19 @@
 - les deux méthodes de types énumérés (dans ICWarsAreaBehavior et ICWarsActor) faut faire les commentaires
 - MOVE_UNIT dans switch de RealPlayer : on peut pas encore faire car faut voir §2.2.2 
--     protected Unit selectedUnit; (dans ICWarsPlayer) // ap avoir fait l'interaction interactWith(Unit unit) selectedunit=unit
+- protected Unit selectedUnit; (dans ICWarsPlayer) // ap avoir fait l'interaction interactWith(Unit unit) selectedunit=unit
 - Où on utilise la méthode startTurn de ICWarsPlayer ?
-- cameraScaleFactor dans ICWarsPlayerGUI jamais utilise
-- startTurn modifier avec Hana
-- 
+- cameraScaleFactor dans ICWarsPlayerGUI jamais utilisé
+- SELECT_CELL ne peut pas repasser à NORMAL qd appuyer sur Enter
+- un screenShot(cf discord à Tim) sur la 2e condition : Nico :
+    https://discord.com/channels/@me/903660344025690162/919630404024143872
+   On garde la condition sur la touche N dans la second if ?
+- getters et setters dqns Tank et Soldat au lieu dans Unit
+- pk la classe Soldier est si vide
+- unité doit devenir opaque une fois appuyée sur la touche A ou W (cf step3). Pour l'instant(step2), on appuie sur Enter et l'unité devient opaque...
+- @Line124 selectUnit ICWarsPlayer : must create a setter for the method isUsed
+- unité doit devenir opaque une fois appuyée sur la touche A ou W (cf step3). Pour l'instant(step2), on appuie sur Enter et l'unité devient opaque...
+- @Line124 selectUnit ICWarsPlayer : must create a setter for the method isUsed
+- méthode startTurn (pdf p.21) à coder avec Hana
+- rajouter les units dans la waitingRound and currentRound (fin para 3.3.1 : "• to modify the list of players waiting to play the next round by removing those who
+have lost.")
+-  Demande à Nico : dans ICWarsPlayer : pour réduire le nb de lignes, utilise "this" au lieu de setters et getters.
