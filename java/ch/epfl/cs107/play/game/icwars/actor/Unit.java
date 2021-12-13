@@ -4,7 +4,11 @@ import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Path;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
+import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsRange;
+import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
@@ -43,9 +47,11 @@ public abstract class Unit extends ICWarsActor {
         setOwnerArea(area); // Assoc
     }
 
-    public void setUsedUnit() {
-        this.usedUnit = true;
+    public boolean isUsed() {
+        return true;
     }
+
+
 
     int getDamage() {
         return damage;
@@ -90,6 +96,10 @@ public abstract class Unit extends ICWarsActor {
         }
     }
 
+    @Override
+    public void acceptInteraction(AreaInteractionVisitor v) {
+        ((ICWarsInteractionVisitor)v).interactWith(this);
+    }
 
     @Override
     public void draw(Canvas canvas) {

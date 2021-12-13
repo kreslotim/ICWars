@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class ICWarsActor extends MovableAreaEntity {
 
-    private Faction faction;
+    protected Faction faction;
 
     /**
      * Default ICWarsActor constructor
@@ -66,7 +66,7 @@ public abstract class ICWarsActor extends MovableAreaEntity {
 
     @Override
     public boolean isCellInteractable() {
-        return false;
+        return true;
     }
 
     @Override
@@ -76,10 +76,11 @@ public abstract class ICWarsActor extends MovableAreaEntity {
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v) {
-
     }
 
+
     public enum Faction {
+
         ALLY(true),
         ENEMY(false);
         final boolean isFriendly;
