@@ -17,4 +17,4 @@
 - rajouter les units dans la waitingRound and currentRound (fin para 3.3.1 : "• to modify the list of players waiting to play the next round by removing those who
 have lost.")
 -  Demande à Nico : dans ICWarsPlayer : pour réduire le nb de lignes, utilise "this" au lieu de setters et getters.
-- change "99999" à une autre chose
+- change "99999" de la classe ICWars à une autre chose
