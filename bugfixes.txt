@@ -20,3 +20,5 @@ have lost.")
 - change "99999" de la classe ICWars à une autre chose
 - la methode isUsed(), besoin de Sprite sprite comme param dans cette methode ?
 - opacité setAlpha mm pb que Hana
+- la methode isUsed dans Unit PROBLEME
+    https://discord.com/channels/@me/903660344025690162/920072790915285073
