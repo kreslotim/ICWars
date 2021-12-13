@@ -18,3 +18,4 @@
 have lost.")
 -  Demande à Nico : dans ICWarsPlayer : pour réduire le nb de lignes, utilise "this" au lieu de setters et getters.
 - change "99999" de la classe ICWars à une autre chose
+- la methode isUsed(), besoin de Sprite sprite comme param dans cette methode ?
