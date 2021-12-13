@@ -6,7 +6,7 @@
 - SELECT_CELL ne peut pas repasser à NORMAL qd appuyer sur Enter
 - un screenShot(cf discord à Tim) sur la 2e condition : Nico :
     https://discord.com/channels/@me/903660344025690162/919630404024143872
-   On garde la condition sur la touche N dans la second if ?
+   On garde la condition sur la touche N dans la second if (cf classe ICWars) ?
 - getters et setters dqns Tank et Soldat au lieu dans Unit
 - pk la classe Soldier est si vide
 - unité doit devenir opaque une fois appuyée sur la touche A ou W (cf step3). Pour l'instant(step2), on appuie sur Enter et l'unité devient opaque...
