@@ -2,6 +2,7 @@ package ch.epfl.cs107.play.game.icwars.area;
 
 import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.ICWars;
 import ch.epfl.cs107.play.window.Window;
@@ -54,6 +55,11 @@ public class ICWarsBehavior extends AreaBehavior {
         }
     }
 
+    @Override
+    public void cellInteractionOf(Interactor interactor) {
+        super.cellInteractionOf(interactor);
+    }
+
     /**
      * Cell adapted to the ICWars game
      */
@@ -83,15 +89,17 @@ public class ICWarsBehavior extends AreaBehavior {
         protected boolean canEnter(Interactable entity) {
 
 
-            boolean containsNonTraversable = false;
+            boolean containsNotTraversable = false;
             for (Interactable val : entities) {
                 if(val.takeCellSpace()){
-                    containsNonTraversable = true;
+                    containsNotTraversable = true;
                 }
 
             }
-            return !(containsNonTraversable && entity.takeCellSpace());
+            return !(containsNotTraversable && entity.takeCellSpace());
         }
+
+
 
         @Override
         public boolean isCellInteractable() {
@@ -107,5 +115,6 @@ public class ICWarsBehavior extends AreaBehavior {
         public void acceptInteraction(AreaInteractionVisitor v) {
 
         }
+
     }
 }

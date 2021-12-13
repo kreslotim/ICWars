@@ -1,12 +1,14 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
+import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.ICWars;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -20,9 +22,11 @@ import java.util.List;
 abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, Interactor {
 
     protected List<Unit> unitsList;
-    protected List<Area> areasList = new ArrayList<>();
+    private  List<Area> areasList = new ArrayList<>();
     protected List<Unit> memorisedUnits = new ArrayList<>();
     private PlayerStates playerState;
+    private boolean isDefeated = false;
+
 
     protected Unit selectedUnit; // à utiliser avec Interactable
     protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
@@ -44,13 +48,14 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         playerState = PlayerStates.IDLE;
     }
 
+
+
     @Override
     public void enterArea(Area area, DiscreteCoordinates position) {
         area.registerActor(this);
         area.setViewCandidate(this);
         setOwnerArea(area);
         setCurrentPosition(position.toVector());
-        resetMotion();
     }
 
 
@@ -63,7 +68,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     @Override
     public void onLeaving(List<DiscreteCoordinates> coordinates) {
 
-        if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getPlayerState() == PlayerStates.SELECT_CELL) {
+        if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getPlayerState().equals(PlayerStates.SELECT_CELL)) {
             setPlayerState(PlayerStates.NORMAL);
             System.out.println("onLeaving works!");
         }
@@ -75,9 +80,16 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         return Collections.singletonList(getCurrentMainCellCoordinates());
     }
 
+
+
+    @Override
+    public boolean takeCellSpace() {
+        return false;
+    }
+
     @Override
     public void acceptInteraction ( AreaInteractionVisitor v) {
-        ((ICWarsInteractionVisitor)v). interactWith ( this );
+        ((ICWarsInteractionVisitor)v).interactWith ( this );
     }
 
     @Override
@@ -87,6 +99,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
                 if (unit.getCurrentHp() <= 0) {
                     getOwnerArea().unregisterActor(unit);
                     areasList.remove(unit);
+                    if (unitsList.isEmpty()) {
+                        isDefeated =  true;
+                    }
                 }
             }
 
@@ -94,28 +109,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         super.update(deltaTime);
     }
 
-    public void selectUnit(int unitIndex) {
-        if (unitsList.size() > unitIndex) {
-            selectedUnit = unitsList.get(unitIndex);
-            gui.setSelectedUnit(unitsList.get(unitIndex));
-            this.unitsList.get(unitIndex).isUsed();  // create a setter setUnitUsed
-        }
-    }
 
-    public int getUnitIndex() {
-
-        int index = 0;
-        int myX = getCurrentMainCellCoordinates().x;
-        int myY = getCurrentMainCellCoordinates().y;
-
-        for (Unit unit : unitsList) {
-
-            if ((int) unit.getPosition().x == myX && (int) unit.getPosition().y == myY) {
-                return index;
-            }
-            ++index;
-        }
-        return 99999;
+    public boolean isDefeated() {
+        return isDefeated;
     }
 
     /**
@@ -124,6 +120,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     public PlayerStates getPlayerState() {
         return playerState;
     }
+
 
     /**
      * set the playerState of the player
@@ -155,7 +152,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
                 // do nothing
                 break;
             case NORMAL:
-                System.out.println("Normal");
+                //System.out.println("Normal");
                 if (keyboard.get(Keyboard.ENTER).isReleased()) {
                     setPlayerState(playerState.SELECT_CELL);
                     System.out.println("State: SELECT_CELL");
@@ -166,11 +163,10 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
                 }
                 break;
             case SELECT_CELL:
-                this.selectUnit(getUnitIndex());
+
                 if (selectedUnit != null) {
 
-                    interactWith(selectedUnit);
-                    System.out.println("memorized!");
+                    //interactWith(selectedUnit);
                     setPlayerState(playerState.MOVE_UNIT);
                     System.out.println("State: MOVE_UNIT");
                 }
@@ -187,7 +183,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
                     selectedUnit.changePosition(new DiscreteCoordinates(getCurrentMainCellCoordinates().x,getCurrentMainCellCoordinates().y));
 
-                    //selectedUnit.isUsed() ? sprite.setAlpha(0.5f) : sprite.setAlpha(1.f)
+                    selectedUnit.isUsed(); //? sprite.setAlpha(0.5f) : sprite.setAlpha(1.f)
                     selectedUnit = null;
                     setPlayerState(playerState.NORMAL);
                     System.out.println("State: NORMAL");

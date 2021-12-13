@@ -1,10 +1,12 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
+import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -18,6 +20,8 @@ public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1;
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
     private Sprite sprite;
+
+
 
 
 
@@ -58,6 +62,7 @@ public class RealPlayer extends ICWarsPlayer {
 
         switchPlayerStates(getPlayerState());
 
+
         super.update(deltaTime);
     }
 
@@ -79,10 +84,8 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public void draw(Canvas canvas) {
-        sprite.draw(canvas); // Cursor Draw
-        if (getPlayerState().equals(PlayerStates.MOVE_UNIT)) {
-            gui.draw(canvas);    // GUI Draw
-        }
+        if (!getPlayerState().equals(PlayerStates.IDLE)) sprite.draw(canvas); // Cursor Draw
+        if (getPlayerState().equals(PlayerStates.MOVE_UNIT)) gui.draw(canvas);    // GUI Draw
     }
 
 
@@ -108,7 +111,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public boolean wantsCellInteraction() {
-        return false;
+        return true;
     }
 
     @Override
@@ -118,14 +121,21 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public void interactWith(Interactable other) {
-
+        other.acceptInteraction(new ICWarsPlayerInteractionHandler());
     }
+
 
     private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
 
-        public void interactWith(Interactable other) {
-            if (getPlayerState().equals(PlayerStates.SELECT_CELL) && faction.equals(Faction.ALLY) ) {
+
+        public void interactWith(Unit unit) {
+            if (getPlayerState().equals(PlayerStates.SELECT_CELL) && faction.equals(Faction.ALLY) ) { // Problem ONLY ALLY
+                selectedUnit = unit;
+                System.out.println("test of interaction");
+                gui.setSelectedUnit(selectedUnit);
                 memorisedUnits.add(selectedUnit);
+                System.out.println("memorized!");
+
 
             }
         }

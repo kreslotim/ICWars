@@ -162,8 +162,7 @@ public class ICWars extends AreaGame {
         Keyboard keyboard = getWindow().getKeyboard();
         switch (gameState) {
             case INIT:
-                nextRound.add(player1);
-                nextRound.add(player2);
+                nextRound.addAll(icWarsPlayers);
                 setGameState(GameStates.CHOOSE_PLAYER);
                 break;
             case CHOOSE_PLAYER:
@@ -171,24 +170,44 @@ public class ICWars extends AreaGame {
                     setGameState(GameStates.END_TURN);
                 }
                 else {
-                    currentlyActivePlayer = currentRound.get(0); //
+                    currentlyActivePlayer = currentRound.get(0); // piazza ?
                     currentRound.remove(currentlyActivePlayer);
                     setGameState(GameStates.START_PLAYER_TURN);
                 }
 
                 break;
             case START_PLAYER_TURN:
+                currentlyActivePlayer.startTurn();
+                setGameState(GameStates.PLAYER_TURN);
+
                 break;
             case PLAYER_TURN:
+
+                if (currentlyActivePlayer.getPlayerState().equals(ICWarsPlayer.PlayerStates.IDLE))
+                    setGameState(GameStates.END_PLAYER_TURN);
+
                 break;
             case END_PLAYER_TURN:
+                if (currentlyActivePlayer.isDefeated()) currentlyActivePlayer.leaveArea();
+                else {
+                    nextRound.add(currentlyActivePlayer);
+                    setGameState(GameStates.CHOOSE_PLAYER); // all units must be Usable
+                }
+
                 break;
             case END_TURN:
+                nextRound.remove(currentlyActivePlayer);
+                icWarsPlayers.removeIf(ICWarsPlayer::isDefeated);
+
+                if (nextRound.size() < 2) setGameState(GameStates.END);
+                else {
+                    currentRound.addAll(nextRound);
+                    setGameState(GameStates.CHOOSE_PLAYER);
+                }
                 break;
             case END:
+                if ((getCurrentArea().getTitle().equals("icwars/Level1"))) switchArea(); else end(); // might have a problem
                 break;
         }
     }
-
-
 }
