@@ -22,3 +22,5 @@ have lost.")
 - opacité setAlpha mm pb que Hana
 - la methode isUsed dans Unit PROBLEME
     https://discord.com/channels/@me/903660344025690162/920072790915285073
+- on veut que si le joueur en question n'est pas interagi, alors Nico dit qu'il vaut mieux de desactiver les interactions. Demande aux assistants.
+- evite les protected. utilise setters et getters 
