@@ -15,7 +15,7 @@ import java.util.List;
 
 public abstract class ICWarsActor extends MovableAreaEntity {
 
-    protected Faction faction;
+    private Faction faction;
 
     /**
      * Default ICWarsActor constructor
@@ -28,6 +28,10 @@ public abstract class ICWarsActor extends MovableAreaEntity {
         // by default every ICWarsActor will be orientated UP
         super(area, Orientation.UP, position);
         this.faction = faction;
+    }
+
+    public Faction getFaction() {
+        return faction;
     }
 
 

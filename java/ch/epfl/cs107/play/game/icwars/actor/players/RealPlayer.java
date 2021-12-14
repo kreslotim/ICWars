@@ -84,7 +84,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public void draw(Canvas canvas) {
-        if (!getPlayerState().equals(PlayerStates.IDLE)) sprite.draw(canvas); // Cursor Draw
+        if (!getPlayerState().equals(PlayerStates.IDLE)) sprite.draw(canvas); // Cursor Draw // Make draw ENEMY CURSOR
         if (getPlayerState().equals(PlayerStates.MOVE_UNIT)) gui.draw(canvas);    // GUI Draw
     }
 
@@ -96,8 +96,8 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public boolean isCellInteractable() {
-        return true;
-    }
+        return false;
+    } // Get rid of Interactions with ENEMY CURSOR
 
     @Override
     public boolean isViewInteractable() {
@@ -129,7 +129,7 @@ public class RealPlayer extends ICWarsPlayer {
 
 
         public void interactWith(Unit unit) {
-            if (getPlayerState().equals(PlayerStates.SELECT_CELL) && faction.equals(Faction.ALLY) ) { // Problem ONLY ALLY
+            if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
                 selectedUnit = unit;
                 System.out.println("test of interaction");
                 gui.setSelectedUnit(selectedUnit);

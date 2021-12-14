@@ -20,7 +20,7 @@ public abstract class Unit extends ICWarsActor {
     private int maxHp;
     private int damage;
     private int radius;
-    private Faction faction;
+    //private Faction faction;
     private Sprite sprite;
     private ICWarsRange range = new ICWarsRange();
     private boolean usedUnit = false;
@@ -38,16 +38,20 @@ public abstract class Unit extends ICWarsActor {
         this.currentHp = maxHp;
         this.damage = damage;
         this.radius = radius;
-        this.faction = faction;
+
         addEdge(getCurrentMainCellCoordinates()); // appel addNode
         Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
         setOwnerArea(area);
     }
 
-    public void isUsed() {
-        usedUnit = true;
-        sprite.setAlpha(0.5f);
+    public void setIsUsedUnit(boolean used) {
+        sprite.setAlpha(used ? 0.5f : 1f);
+        usedUnit = used;
+    }
+
+    public boolean isUsed() {
+        return usedUnit;
     }
 
 

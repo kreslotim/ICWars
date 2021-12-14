@@ -1,14 +1,11 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
-import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
-import ch.epfl.cs107.play.game.icwars.ICWars;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
-import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -21,7 +18,7 @@ import java.util.List;
 
 abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, Interactor {
 
-    protected List<Unit> unitsList;
+    protected List<Unit> unitsList; // acces from ICWars?
     private  List<Area> areasList = new ArrayList<>();
     protected List<Unit> memorisedUnits = new ArrayList<>();
     private PlayerStates playerState;
@@ -46,6 +43,10 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         }
         //player = new ICWarsPlayer(area, position, ICWarsActor.Faction.values());
         playerState = PlayerStates.IDLE;
+    }
+
+    public List<Unit> getUnitsList() {
+        return unitsList;
     }
 
 
@@ -183,7 +184,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
                     selectedUnit.changePosition(new DiscreteCoordinates(getCurrentMainCellCoordinates().x,getCurrentMainCellCoordinates().y));
 
-                    selectedUnit.isUsed(); //? sprite.setAlpha(0.5f) : sprite.setAlpha(1.f)
+                    selectedUnit.setIsUsedUnit(true); //? sprite.setAlpha(0.5f) : sprite.setAlpha(1.f)
                     selectedUnit = null;
                     setPlayerState(playerState.NORMAL);
                     System.out.println("State: NORMAL");

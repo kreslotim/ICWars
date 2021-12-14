@@ -4,6 +4,7 @@ import ch.epfl.cs107.play.game.areagame.AreaGame;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Soldier;
 import ch.epfl.cs107.play.game.icwars.actor.Tank;
+import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
@@ -167,6 +168,7 @@ public class ICWars extends AreaGame {
                 break;
             case CHOOSE_PLAYER:
                 if (currentRound.isEmpty()) {
+
                     setGameState(GameStates.END_TURN);
                 }
                 else {
@@ -191,6 +193,9 @@ public class ICWars extends AreaGame {
                 if (currentlyActivePlayer.isDefeated()) currentlyActivePlayer.leaveArea();
                 else {
                     nextRound.add(currentlyActivePlayer);
+                    for (Unit u : currentlyActivePlayer.getUnitsList()) {
+                        u.setIsUsedUnit(false);
+                    }
                     setGameState(GameStates.CHOOSE_PLAYER); // all units must be Usable
                 }
 
