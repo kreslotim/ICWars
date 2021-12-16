@@ -19,7 +19,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
     protected Unit selectedUnit; // à utiliser avec Interactable
-    private List<Unit> unitsList; // acces from ICWars?
+    private List<Unit> unitsList; // acces from ICWars? OK
     private List<Area> areasList = new ArrayList<>();
     private PlayerStates playerState;
     private boolean defeated = false;
