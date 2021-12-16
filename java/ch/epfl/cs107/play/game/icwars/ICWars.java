@@ -160,7 +160,7 @@ public class ICWars extends AreaGame {
     }
 
     public void switchGameStates(GameStates gameState) {
-        Keyboard keyboard = getWindow().getKeyboard();
+        Keyboard keyboard = getWindow().getKeyboard();  // besoin d'instancier car jamais instancié keyboard dans les attributs de cette classe
         switch (gameState) {
             case INIT:
                 nextRound.addAll(icWarsPlayers);

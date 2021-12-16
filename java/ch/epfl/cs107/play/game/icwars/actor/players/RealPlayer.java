@@ -1,12 +1,10 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
-import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
-import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -20,11 +18,6 @@ public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1;
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
     private Sprite sprite;
-
-
-
-
-
 
 
     /**
@@ -49,7 +42,7 @@ public class RealPlayer extends ICWarsPlayer {
 
         Keyboard keyboard = getOwnerArea().getKeyboard();
 
-        if  (getPlayerState().equals(PlayerStates.NORMAL)
+        if (getPlayerState().equals(PlayerStates.NORMAL)
                 || getPlayerState().equals(PlayerStates.SELECT_CELL)
                 || getPlayerState().equals(PlayerStates.MOVE_UNIT)) {
 
@@ -85,7 +78,7 @@ public class RealPlayer extends ICWarsPlayer {
     @Override
     public void draw(Canvas canvas) {
         if (!getPlayerState().equals(PlayerStates.IDLE)) sprite.draw(canvas); // Cursor Draw // Make draw ENEMY CURSOR
-        if (getPlayerState().equals(PlayerStates.MOVE_UNIT)) gui.draw(canvas);    // GUI Draw
+        if (getPlayerState().equals(PlayerStates.MOVE_UNIT)) getGui().draw(canvas);    // GUI Draw
     }
 
 
@@ -132,8 +125,8 @@ public class RealPlayer extends ICWarsPlayer {
             if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
                 selectedUnit = unit;
                 System.out.println("test of interaction");
-                gui.setSelectedUnit(selectedUnit);
-                memorisedUnits.add(selectedUnit);
+                getGui().setSelectedUnit(selectedUnit);
+                getMemorisedUnits().add(selectedUnit);
                 System.out.println("memorized!");
 
 
