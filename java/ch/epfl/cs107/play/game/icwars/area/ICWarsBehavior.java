@@ -4,12 +4,34 @@ import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
-import ch.epfl.cs107.play.game.icwars.ICWars;
 import ch.epfl.cs107.play.window.Window;
 
 public class ICWarsBehavior extends AreaBehavior {
+    /**
+     * Default AreaBehavior Constructor
+     *
+     * @param window (Window): graphic context, not null
+     * @param name   (String): name of the behavior image, not null
+     */
+    public ICWarsBehavior(Window window, String name) {
+        super(window, name);
+        int height = getHeight();
+        int width = getWidth();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                ICWarsCellType color = ICWarsCellType.toType(getRGB(height - 1 - y, x));
+                setCell(x, y, new ICWarsCell(x, y, color));
+            }
+        }
+    }
+
+    @Override
+    public void cellInteractionOf(Interactor interactor) {
+        super.cellInteractionOf(interactor);
+    }
+
     public enum ICWarsCellType {
-        NONE(0,0),
+        NONE(0, 0),
 
         ROAD(16777216, 0),
 
@@ -28,36 +50,13 @@ public class ICWarsBehavior extends AreaBehavior {
         }
 
         public static ICWarsCellType toType(int type) {
-            for (ICWarsCellType ict : ICWarsCellType.values()){
+            for (ICWarsCellType ict : ICWarsCellType.values()) {
                 if (ict.type == type)
                     return ict;
             }
             // System.out.println(type);
             return NONE;
         }
-    }
-
-    /**
-     * Default AreaBehavior Constructor
-     *
-     * @param window (Window): graphic context, not null
-     * @param name   (String): name of the behavior image, not null
-     */
-    public ICWarsBehavior(Window window, String name) {
-        super(window, name);
-        int height = getHeight();
-        int width = getWidth();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width ;  x++) {
-                ICWarsCellType color = ICWarsCellType.toType(getRGB(height-1-y,x));
-                setCell(x,y, new ICWarsCell(x,y,color));
-            }
-        }
-    }
-
-    @Override
-    public void cellInteractionOf(Interactor interactor) {
-        super.cellInteractionOf(interactor);
     }
 
     /**
@@ -70,8 +69,8 @@ public class ICWarsBehavior extends AreaBehavior {
         /**
          * Default Cell constructor
          *
-         * @param x (int): x-coordinate of this cell
-         * @param y (int): y-coordinate of this cell
+         * @param x    (int): x-coordinate of this cell
+         * @param y    (int): y-coordinate of this cell
          * @param type (EnigmeCellType), not null
          */
         public ICWarsCell(int x, int y, ICWarsCellType type) {
@@ -91,14 +90,13 @@ public class ICWarsBehavior extends AreaBehavior {
 
             boolean containsNotTraversable = false;
             for (Interactable val : entities) {
-                if(val.takeCellSpace()){
+                if (val.takeCellSpace()) {
                     containsNotTraversable = true;
                 }
 
             }
             return !(containsNotTraversable && entity.takeCellSpace());
         }
-
 
 
         @Override

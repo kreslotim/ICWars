@@ -1,14 +1,7 @@
 package ch.epfl.cs107.play.game.icwars.area;
 
 import ch.epfl.cs107.play.game.areagame.actor.Background;
-import ch.epfl.cs107.play.game.areagame.actor.Foreground;
-import ch.epfl.cs107.play.game.areagame.actor.Sprite;
-import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
-import ch.epfl.cs107.play.game.icwars.actor.Soldier;
-import ch.epfl.cs107.play.game.icwars.actor.Tank;
-import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
-import ch.epfl.cs107.play.math.Vector;
 
 public class Level0 extends ICWarsArea {
 
@@ -26,7 +19,10 @@ public class Level0 extends ICWarsArea {
     }
 
     public DiscreteCoordinates getPlayerSpawnPosition() {
-        return new DiscreteCoordinates(0,0);
+        return new DiscreteCoordinates(0, 0);
     }
-    public DiscreteCoordinates getEnemySpawnPosition() { return new DiscreteCoordinates(7,4);}
+
+    public DiscreteCoordinates getEnemySpawnPosition() {
+        return new DiscreteCoordinates(7, 4);
+    }
 }

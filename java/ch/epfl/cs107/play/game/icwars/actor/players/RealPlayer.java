@@ -1,12 +1,10 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.Area;
-import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
-import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -14,6 +12,7 @@ import ch.epfl.cs107.play.window.Button;
 import ch.epfl.cs107.play.window.Canvas;
 import ch.epfl.cs107.play.window.Keyboard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RealPlayer extends ICWarsPlayer {
@@ -21,10 +20,7 @@ public class RealPlayer extends ICWarsPlayer {
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
     private Sprite sprite;
 
-
-
-
-
+    private List<Unit> memorisedUnits = new ArrayList<>();
 
 
     /**
@@ -49,7 +45,7 @@ public class RealPlayer extends ICWarsPlayer {
 
         Keyboard keyboard = getOwnerArea().getKeyboard();
 
-        if  (getPlayerState().equals(PlayerStates.NORMAL)
+        if (getPlayerState().equals(PlayerStates.NORMAL)
                 || getPlayerState().equals(PlayerStates.SELECT_CELL)
                 || getPlayerState().equals(PlayerStates.MOVE_UNIT)) {
 
@@ -127,7 +123,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
 
-
+        @Override
         public void interactWith(Unit unit) {
             if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
                 selectedUnit = unit;
