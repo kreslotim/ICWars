@@ -175,7 +175,7 @@ public class ICWars extends AreaGame {
     }
 
     public void switchGameStates(GameStates gameState) {
-        Keyboard keyboard = getWindow().getKeyboard();
+        //Keyboard keyboard = getWindow().getKeyboard();
         switch (gameState) {
             case INIT:
                 nextRound.addAll(icWarsPlayerList);
@@ -207,7 +207,7 @@ public class ICWars extends AreaGame {
                 if (currentlyActivePlayer.isDefeated()) currentlyActivePlayer.leaveArea();
                 else {
                     nextRound.add(currentlyActivePlayer);
-                    for (Unit u : currentlyActivePlayer.getUnitsList()) {
+                    for (Unit u : currentlyActivePlayer.getPlayerUnitsList()) {
                         u.setIsUsedUnit(false);
                     }
                     setGameState(GameStates.CHOOSE_PLAYER); // all units must be Usable

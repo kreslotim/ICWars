@@ -6,6 +6,7 @@ import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.game.icwars.gui.ICWarsPlayerGUI;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -17,12 +18,18 @@ import java.util.List;
 
 abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, Interactor {
 
-    protected final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
-    protected Unit selectedUnit; // à utiliser avec Interactable
-    private List<Unit> unitsList; // acces from ICWars? OK
+    public ICWarsPlayerGUI getGui() {
+        return gui;
+    }
+
+    private final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
+    private Unit selectedUnit;
+    private List<Unit> playerUnitsList;
     private List<Area> areasList = new ArrayList<>();
     private PlayerStates playerState;
     private boolean defeated = false;
+    private List<Unit> memorisedUnits = new ArrayList<>();
+
 
 
     /**
@@ -31,23 +38,29 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
      * @param area     (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      */
-    public ICWarsPlayer(Area area, DiscreteCoordinates position, Faction faction, Unit... units) {
+    public ICWarsPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction, Unit... units) {
         super(area, position, faction);
         for (Unit unit : units) {
             area.registerActor(unit);
-            unitsList = new ArrayList<>(List.of(units));
+            area.registerUnit(unit);
+            playerUnitsList = new ArrayList<>(List.of(units));
         }
         //player = new ICWarsPlayer(area, position, ICWarsActor.Faction.values());
         playerState = PlayerStates.IDLE;
     }
 
-    public List<Unit> getUnitsList() {
-        return unitsList;
+    public List<Unit> getPlayerUnitsList() {
+        return playerUnitsList;
     }
+
+    public void setSelectedUnit(Unit selectedUnit) {
+        this.selectedUnit = selectedUnit;
+    }
+    
 
 
     @Override
-    public void enterArea(Area area, DiscreteCoordinates position) {
+    public void enterArea(ICWarsArea area, DiscreteCoordinates position) {
         area.registerActor(this);
         area.setViewCandidate(this);
         setOwnerArea(area);
@@ -59,10 +72,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         setPlayerState(PlayerStates.NORMAL);
         this.centerCamera();
 
-        for (Unit u : unitsList) {
+        for (Unit u : playerUnitsList) {
             u.setIsUsedUnit(false);
         }
-        // make all units of the player not Used
 
     }
 
@@ -94,13 +106,13 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     @Override
     public void update(float deltaTime) {
-        if (unitsList != null) {
-            for (Unit unit : unitsList) {
+        if (playerUnitsList != null) {
+            for (Unit unit : playerUnitsList) {
                 if (unit.getCurrentHp() <= 0) {
                     getOwnerArea().unregisterActor(unit);
                     areasList.remove(unit);
 
-                    if (unitsList.isEmpty()) {
+                    if (playerUnitsList.isEmpty()) {
                         defeated = true;
                     }
                 }
@@ -193,5 +205,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         MOVE_UNIT,
         ACTION_SELECTION,
         ACTION
+    }
+
+    public List<Unit> getMemorisedUnits() {
+        return memorisedUnits;
     }
 }

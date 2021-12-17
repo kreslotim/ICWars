@@ -6,33 +6,23 @@ import ch.epfl.cs107.play.game.actor.ImageGraphics;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.window.Canvas;
 import ch.epfl.cs107.play.window.Keyboard;
 
-import java.awt.*;
 
-public class Action implements Graphics {
 
-    private Unit unit;
-    private String nameOfAction;
+public abstract class Action implements Graphics {
 
-    public Action(Unit unit, Area area) {
+    protected Unit unit;
+    protected int key;
+
+    public Action(Unit unit, ICWarsArea area, String nameOfAction, int key) {
         this.unit = unit;
-        //unit.setParent(this);
+        this.key = key;
 
     }
 
-    public void doAction(float dt, ICWarsPlayer player, Keyboard keyboard) {
 
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-    }
-
-    class Wait {
-        //unit.setIsUsed;
-    }
-
-
+    public abstract void doAction(float dt, ICWarsPlayer player, Keyboard keyboard);
 }

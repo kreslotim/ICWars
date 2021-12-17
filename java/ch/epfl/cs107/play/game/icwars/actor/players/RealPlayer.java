@@ -5,6 +5,7 @@ import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -20,9 +21,6 @@ public class RealPlayer extends ICWarsPlayer {
     private final String[] tab = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
     private Sprite sprite;
 
-    private List<Unit> memorisedUnits = new ArrayList<>();
-
-
     /**
      * Default RealPlayer constructor
      *
@@ -30,7 +28,7 @@ public class RealPlayer extends ICWarsPlayer {
      * @param position (Coordinate): Initial position of the entity. Not null
      * @param faction  (Faction): Faction of unity. Not null
      */
-    public RealPlayer(Area area, DiscreteCoordinates position, Faction faction, Unit... units) {
+    public RealPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction, Unit... units) {
         super(area, position, faction, units);
 
 //        player = new ICWarsActor(getOwnerArea(), getCurrentMainCellCoordinates(), faction);
@@ -55,6 +53,8 @@ public class RealPlayer extends ICWarsPlayer {
             moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
 
         }
+
+        //doAction();
 
         switchPlayerStates(getPlayerState());
 
@@ -81,7 +81,7 @@ public class RealPlayer extends ICWarsPlayer {
     @Override
     public void draw(Canvas canvas) {
         if (!getPlayerState().equals(PlayerStates.IDLE)) sprite.draw(canvas); // Cursor Draw // Make draw ENEMY CURSOR
-        if (getPlayerState().equals(PlayerStates.MOVE_UNIT)) gui.draw(canvas);    // GUI Draw
+        if (getPlayerState().equals(PlayerStates.MOVE_UNIT)) getGui().draw(canvas);    // GUI Draw
     }
 
 
@@ -126,10 +126,10 @@ public class RealPlayer extends ICWarsPlayer {
         @Override
         public void interactWith(Unit unit) {
             if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
-                selectedUnit = unit;
+                setSelectedUnit(unit);
                 System.out.println("test of interaction");
-                gui.setSelectedUnit(selectedUnit);
-                memorisedUnits.add(selectedUnit);
+                getGui().setSelectedUnit(unit);
+                getMemorisedUnits().add(unit);
                 System.out.println("memorized!");
 
 

@@ -1,10 +1,12 @@
 package ch.epfl.cs107.play.game.icwars.actor;
 
-import ch.epfl.cs107.play.game.areagame.Area;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Path;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsRange;
 import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
@@ -14,7 +16,7 @@ import ch.epfl.cs107.play.window.Canvas;
 import java.util.Queue;
 
 
-public abstract class Unit extends ICWarsActor {
+public abstract class Unit extends ICWarsActor implements Interactor {
 
     private int currentHp;
     private int maxHp;
@@ -25,6 +27,7 @@ public abstract class Unit extends ICWarsActor {
     private ICWarsRange range = new ICWarsRange();
     private boolean usedUnit = false;
 
+
     /**
      * Default Unit constructor
      *
@@ -32,7 +35,7 @@ public abstract class Unit extends ICWarsActor {
      * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-    Unit(Area area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction, String spriteName) {
+    Unit(ICWarsArea area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction, String spriteName) {
         super(area, position, faction);
         this.maxHp = maxHp;
         this.currentHp = maxHp;
@@ -43,6 +46,15 @@ public abstract class Unit extends ICWarsActor {
         Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
         setOwnerArea(area);
+    }
+
+    //public Action getActions() {
+    //}
+
+    /// Handler
+
+    public ICWarsRange getRange() {
+        return range;
     }
 
     public void setIsUsedUnit(boolean used) {
@@ -152,4 +164,16 @@ public abstract class Unit extends ICWarsActor {
         }
     }
 
+
+    /**
+     * interagir avec chaque unit
+     */
+    private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
+
+        @Override
+        public void interactWith(ICWarsBehavior.ICWarsCell cell) {
+
+
+        }
+    }
 }

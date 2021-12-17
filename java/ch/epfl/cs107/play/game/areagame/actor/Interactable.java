@@ -82,7 +82,8 @@ public interface Interactable {
          * @param entity (Interactable). Not null
          * @param coordinates (List of DiscreteCoordinates). Not null
          */
-        void enter(Interactable entity, List<DiscreteCoordinates> coordinates);
+        void
+        enter(Interactable entity, List<DiscreteCoordinates> coordinates);
     }
 
 }

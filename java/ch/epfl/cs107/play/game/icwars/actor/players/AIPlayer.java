@@ -3,6 +3,7 @@ package ch.epfl.cs107.play.game.icwars.actor.players;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
+import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Canvas;
 
@@ -17,7 +18,7 @@ public class AIPlayer extends ICWarsActor {
      * @param area     (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      */
-    public AIPlayer(Area area, DiscreteCoordinates position, Faction faction) {
+    public AIPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
         super(area, position, faction);
     }
 
