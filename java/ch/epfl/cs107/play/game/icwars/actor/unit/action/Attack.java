@@ -16,6 +16,8 @@ import java.util.List;
 
 public class Attack extends Action{
 
+    private int count = 0;
+
 
     private ImageGraphics cursor = new ImageGraphics(ResourcePath.getSprite("icwars/UIpackSheet"), 1f, 1f,
                                                 new RegionOfInterest(2*18, 26*18, 16, 16));
@@ -32,14 +34,17 @@ public class Attack extends Action{
 
     @Override
     public void doAction(float dt, ICWarsPlayer player, Keyboard keyboard) {
-            //attack();
-        if (keyboard.get(Keyboard.LEFT).isReleased()) {
 
-        }
         
-        if (keyboard.get(Keyboard.RIGHT).isReleased()) {
-
+        if (keyboard.get(Keyboard.RIGHT).isReleased() || keyboard.get(Keyboard.LEFT).isReleased()) {
+            count++;
+            enemyList.get(count%enemyList.size());
         }
+
+        if (keyboard.get(Keyboard.ENTER).isReleased()) {
+            //attack();
+        }
+
 
 
     }
