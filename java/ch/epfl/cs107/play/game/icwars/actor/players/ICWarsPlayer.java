@@ -19,11 +19,12 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     private final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
     private Unit selectedUnit; // à utiliser avec Interactable pour interagir avec Handler
-    private List<Unit> unitsList; // acces from ICWars?
+    private List<Unit> unitsList;
     private List<Area> areasList = new ArrayList<>();
     private List<Unit> memorisedUnits = new ArrayList<>();
     private PlayerStates playerState;
     private boolean defeated = false;
+
     /**
      * Default ICWarsActor constructor
      *
@@ -40,7 +41,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         playerState = PlayerStates.IDLE;
     }
 
-    public ICWarsPlayerGUI getGui() {
+    public ICWarsPlayerGUI getgetGui() {
         return gui;
     }
 
@@ -122,6 +123,13 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     }
 
 
+    /**
+     * trouver les cibles de l'attaque
+     *
+     * @return
+     */
+
+
     public boolean isDefeated() {
         return defeated;
     }
@@ -182,7 +190,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
                     selectedUnit.changePosition(new DiscreteCoordinates(getCurrentMainCellCoordinates().x, getCurrentMainCellCoordinates().y));
 
-                    selectedUnit.setIsUsedUnit(true); //? sprite.setAlpha(0.5f) : sprite.setAlpha(1.f)
+                    selectedUnit.setIsUsedUnit(true);
                     selectedUnit = null;
                     setPlayerState(playerState.NORMAL);
                     System.out.println("State: NORMAL");
