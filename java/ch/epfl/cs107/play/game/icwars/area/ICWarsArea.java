@@ -9,8 +9,11 @@ import ch.epfl.cs107.play.window.Window;
 public abstract class ICWarsArea extends Area {
 
     private ICWarsBehavior behavior;
-
-
+    private <Units>Units
+    // raisonnement Urs : inititilalise realplayers :
+// dans Area, players, registorUnit  dans une liste et appelle dans ICWarsPlayer (et du oup pour RealP etAIP en ,m te;.ps)
+//     // iune liste des index     (int) et une liste des coords
+    // use getUnit pour
     @Override
     public final float getCameraScaleFactor() {
         return ICWars.CAMERA_SCALE_FACTOR;
@@ -22,6 +25,13 @@ public abstract class ICWarsArea extends Area {
 
     protected abstract void createArea();
 
+    /**
+     * appelle dans ICWarsPlayer
+     */
+    public void registorUnits(){
+
+
+    }
     @Override
     public boolean begin(Window window, FileSystem fileSystem) {
         if (super.begin(window, fileSystem)) {

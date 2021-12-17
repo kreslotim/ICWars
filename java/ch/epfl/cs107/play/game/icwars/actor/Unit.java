@@ -45,6 +45,7 @@ public abstract class Unit extends ICWarsActor {
         setOwnerArea(area);
     }
 
+
     public void setIsUsedUnit(boolean used) {
         sprite.setAlpha(used ? 0.5f : 1f);
         usedUnit = used;

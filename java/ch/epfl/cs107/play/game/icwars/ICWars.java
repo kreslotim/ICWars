@@ -1,6 +1,7 @@
 package ch.epfl.cs107.play.game.icwars;
 
 import ch.epfl.cs107.play.game.areagame.AreaGame;
+import ch.epfl.cs107.play.game.icwars.ICWars.GameStates;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Soldier;
 import ch.epfl.cs107.play.game.icwars.actor.Tank;
@@ -89,6 +90,7 @@ public class ICWars extends AreaGame {
         player1.startTurn();
     }
 
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -108,124 +110,127 @@ public class ICWars extends AreaGame {
         if (keyboard.get(Keyboard.TAB).isReleased()) {
             switchTurn();
         }
-        
+
 
         //nextRound.remove(unit); // accès au Units?
 
-    }
-
-
-    public boolean reset() {
-        // reinitialiser les joueurs
-        // les mettre au centre
-        //player.centerCamera();
-        createAreas();
-        initArea(getCurrentArea().getTitle());
-        return true;
-    }
-
-    @Override
-    public void end() {
-        System.out.println("Game Over");
 
     }
 
-    protected void switchArea() {
-
-        player1.leaveArea();
-
-        areaIndex = (areaIndex == 0) ? 1 : 0;
-
-
-        ICWarsArea currentArea = (ICWarsArea) setCurrentArea(areas[areaIndex], false);
-        player1.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
-        player1.centerCamera();
-
-    }
-
-
-    /**
-     * get the gameState of the player
-     */
-    public GameStates getGameState() {
-        return gameState;
-    }
-
-    /**
-     * set the gameState of the player
-     *
-     * @param gameState
-     */
-    public void setGameState(GameStates gameState) {
-        this.gameState = gameState;
-    }
-
-    public void switchTurn() {
-        System.out.println(currentlyActivePlayer);
-        currentlyActivePlayer.setPlayerState(ICWarsPlayer.PlayerStates.IDLE);
-        playerIndex++;
-
-        currentlyActivePlayer = icWarsPlayerList.get(playerIndex % icWarsPlayerList.size());
-
-        System.out.println(playerIndex % icWarsPlayerList.size());
-        currentlyActivePlayer.startTurn();
-    }
-
-    public void switchGameStates(GameStates gameState) {
-        Keyboard keyboard = getWindow().getKeyboard();  // besoin d'instancier car jamais instancié keyboard dans les attributs de cette classe
-        switch (gameState) {
-            case INIT:
-                nextRound.addAll(icWarsPlayerList);
-                setGameState(GameStates.CHOOSE_PLAYER);
-                break;
-            case CHOOSE_PLAYER:
-                if (currentRound.isEmpty()) {
-
-                    setGameState(GameStates.END_TURN);
-                } else {
-                    currentlyActivePlayer = currentRound.get(0); // piazza ?
-                    currentRound.remove(currentlyActivePlayer);
-                    setGameState(GameStates.START_PLAYER_TURN);
-                }
-
-                break;
-            case START_PLAYER_TURN:
-                currentlyActivePlayer.startTurn();
-                setGameState(GameStates.PLAYER_TURN);
-
-                break;
-            case PLAYER_TURN:
-
-                if (currentlyActivePlayer.getPlayerState().equals(ICWarsPlayer.PlayerStates.IDLE))
-                    setGameState(GameStates.END_PLAYER_TURN);
-
-                break;
-            case END_PLAYER_TURN:
-                if (currentlyActivePlayer.isDefeated()) currentlyActivePlayer.leaveArea();
-                else {
-                    nextRound.add(currentlyActivePlayer);
-                    for (Unit u : currentlyActivePlayer.getUnitsList()) {
-                        u.setIsUsedUnit(false);
-                    }
-                    setGameState(GameStates.CHOOSE_PLAYER); // all units must be Usable
-                }
-
-                break;
-            case END_TURN:
-                nextRound.remove(currentlyActivePlayer);
-                icWarsPlayerList.removeIf(ICWarsPlayer::isDefeated);
-
-                if (nextRound.size() < 2) setGameState(GameStates.END);
-                else {
-                    currentRound.addAll(nextRound);
-                    setGameState(GameStates.CHOOSE_PLAYER);
-                }
-                break;
-            case END:
-                if ((getCurrentArea().getTitle().equals("icwars/Level1"))) switchArea();
-                else end(); // might have a problem
-                break;
+        public boolean reset () {
+            // reinitialiser les joueurs
+            // les mettre au centre
+            //player.centerCamera();
+            createAreas();
+            initArea(getCurrentArea().getTitle());
+            return true;
         }
+
+        @Override
+        public void end () {
+            System.out.println("Game Over");
+
+        }
+
+        protected void switchArea () {
+
+            player1.leaveArea();
+
+            areaIndex = (areaIndex == 0) ? 1 : 0;
+
+
+            ICWarsArea currentArea = (ICWarsArea) setCurrentArea(areas[areaIndex], false);
+            player1.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
+            player1.centerCamera();
+
+        }
+
+
+        /**
+         * get the gameState of the player
+         */
+        public GameStates getGameState () {
+            return gameState;
+        }
+
+        /**
+         * set the gameState of the player
+         *
+         * @param gameState
+         */
+        public void setGameState (GameStates gameState){
+            this.gameState = gameState;
+        }
+
+        public void switchTurn () {
+            System.out.println(currentlyActivePlayer);
+            currentlyActivePlayer.setPlayerState(ICWarsPlayer.PlayerStates.IDLE);
+            playerIndex++;
+
+            currentlyActivePlayer = icWarsPlayerList.get(playerIndex % icWarsPlayerList.size());
+
+            System.out.println(playerIndex % icWarsPlayerList.size());
+            currentlyActivePlayer.startTurn();
+        }
+
+        public void switchGameStates (GameStates gameState){
+            Keyboard keyboard = getWindow().getKeyboard();  // besoin d'instancier car jamais instancié keyboard dans les attributs de cette classe
+            switch (gameState) {
+                case INIT:
+                    nextRound.addAll(icWarsPlayerList);
+                    setGameState(GameStates.CHOOSE_PLAYER);
+                    break;
+                case CHOOSE_PLAYER:
+                    if (currentRound.isEmpty()) {
+
+                        setGameState(GameStates.END_TURN);
+                    } else {
+                        currentlyActivePlayer = currentRound.get(0); // piazza ?
+                        currentRound.remove(currentlyActivePlayer);
+                        setGameState(GameStates.START_PLAYER_TURN);
+                    }
+
+                    break;
+                case START_PLAYER_TURN:
+                    currentlyActivePlayer.startTurn();
+                    setGameState(GameStates.PLAYER_TURN);
+
+                    break;
+                case PLAYER_TURN:
+
+                    if (currentlyActivePlayer.getPlayerState().equals(ICWarsPlayer.PlayerStates.IDLE))
+                        setGameState(GameStates.END_PLAYER_TURN);
+
+                    break;
+                case END_PLAYER_TURN:
+                    if (currentlyActivePlayer.isDefeated()) currentlyActivePlayer.leaveArea();
+                    else {
+                        nextRound.add(currentlyActivePlayer);
+                        for (Unit u : currentlyActivePlayer.getUnitsList()) {
+                            u.setIsUsedUnit(false);
+                        }
+                        setGameState(GameStates.CHOOSE_PLAYER); // all units must be Usable
+                    }
+
+                    break;
+                case END_TURN:
+                    nextRound.remove(currentlyActivePlayer);
+                    icWarsPlayerList.removeIf(ICWarsPlayer::isDefeated);
+
+                    if (nextRound.size() < 2) setGameState(GameStates.END);
+                    else {
+                        currentRound.addAll(nextRound);
+                        setGameState(GameStates.CHOOSE_PLAYER);
+                    }
+                    break;
+                case END:
+                    if ((getCurrentArea().getTitle().equals("icwars/Level1"))) switchArea();
+                    else end(); // might have a problem
+                    break;
+            }
+        }
+
+
     }
 
     public enum GameStates {
@@ -238,4 +243,3 @@ public class ICWars extends AreaGame {
         END;
 
     }
-}

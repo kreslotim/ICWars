@@ -52,6 +52,7 @@ public abstract class ICWarsActor extends MovableAreaEntity {
         area.registerActor(this);
         setOwnerArea(area);
         setCurrentPosition(position.toVector());
+
     }
 
     @Override
