@@ -42,7 +42,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         playerState = PlayerStates.IDLE;
     }
 
-    public ICWarsPlayerGUI getgetGui() {
+    public ICWarsPlayerGUI getGui() {
         return gui;
     }
 
