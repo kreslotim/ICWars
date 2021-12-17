@@ -55,7 +55,6 @@ public abstract class Unit extends ICWarsActor {
     }
 
 
-
     int getDamage() {
         return damage;
     }
@@ -83,16 +82,17 @@ public abstract class Unit extends ICWarsActor {
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
 
-                if (x+from.x <= getOwnerArea().getWidth()-1 && x+ from.x >= 0 && // getOwnerArea associé au Level0
-                        y+ from.y <= getOwnerArea().getHeight()-1 && y+ from.y >= 0) {
+                if (x + from.x <= getOwnerArea().getWidth() - 1 && x + from.x >= 0 && // getOwnerArea associé au Level0
+                        y + from.y <= getOwnerArea().getHeight() - 1 && y + from.y >= 0) {
 
                     hasLeftEdge = x > -radius && from.x + x >= 0;
                     hasRightEdge = x < radius && from.x + x >= 0;
                     hasUpEdge = y < radius && from.y + y >= 0;
-                    hasDownEdge = y > - radius && from.y + y >= 0;
+                    hasDownEdge = y > -radius && from.y + y >= 0;
 
-                    range.addNode(new DiscreteCoordinates(x+from.x,y+from.y),
-                            hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);}
+                    range.addNode(new DiscreteCoordinates(x + from.x, y + from.y),
+                            hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);
+                }
 
 
             }
@@ -103,7 +103,7 @@ public abstract class Unit extends ICWarsActor {
     @Override
     public void acceptInteraction(AreaInteractionVisitor v) {
 
-        ((ICWarsInteractionVisitor)v).interactWith(this);
+        ((ICWarsInteractionVisitor) v).interactWith(this);
     }
 
     @Override
@@ -132,7 +132,6 @@ public abstract class Unit extends ICWarsActor {
         addEdge(newPosition);
         return true;
     }
-
 
 
     /**

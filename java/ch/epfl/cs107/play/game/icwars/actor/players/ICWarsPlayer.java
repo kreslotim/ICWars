@@ -18,12 +18,12 @@ import java.util.List;
 abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, Interactor {
 
     private final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this); // @TODO
-    private Unit selectedUnit; // à utiliser avec Interactable
+    private Unit selectedUnit; // à utiliser avec Interactable pour interagir avec Handler
     private List<Unit> unitsList; // acces from ICWars?
     private List<Area> areasList = new ArrayList<>();
     private List<Unit> memorisedUnits = new ArrayList<>();
     private PlayerStates playerState;
-    private boolean isDefeated = false;
+    private boolean defeated = false;
     /**
      * Default ICWarsActor constructor
      *
@@ -68,6 +68,11 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     public void startTurn() {
         setPlayerState(PlayerStates.NORMAL);
+        this.centerCamera();
+
+        for (Unit u : unitsList) {
+            u.setIsUsedUnit(false);
+        }
         // make all units of the player not Used
 
     }
@@ -77,7 +82,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
         if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getPlayerState().equals(PlayerStates.SELECT_CELL)) {
             setPlayerState(PlayerStates.NORMAL);
-            System.out.println("onLeaving works!");
+            //System.out.println("onLeaving works!");
         }
         // Entreprendre les traitements nécessaires lorsque player quitte cellule
     }
@@ -105,8 +110,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
                 if (unit.getCurrentHp() <= 0) {
                     getOwnerArea().unregisterActor(unit);
                     areasList.remove(unit);
+
                     if (unitsList.isEmpty()) {
-                        isDefeated = true;
+                        defeated = true;
                     }
                 }
             }
@@ -117,7 +123,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
 
     public boolean isDefeated() {
-        return isDefeated;
+        return defeated;
     }
 
     /**
@@ -153,11 +159,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
                 if (keyboard.get(Keyboard.ENTER).isReleased()) {
                     setPlayerState(playerState.SELECT_CELL);
                     System.out.println("State: SELECT_CELL");
+                }
 
-                }
-                if (keyboard.get(Keyboard.TAB).isReleased()) {
-                    setPlayerState(playerState.IDLE);
-                }
+
                 break;
             case SELECT_CELL:
 

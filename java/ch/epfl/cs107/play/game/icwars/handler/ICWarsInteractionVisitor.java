@@ -7,7 +7,7 @@ import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 public interface ICWarsInteractionVisitor extends AreaInteractionVisitor {
     default void interactWith(Unit unit) {
 
-   }
+    }
 
     default void interactWith(ICWarsPlayer unit) {
         System.out.println("There is a CURSOR");
