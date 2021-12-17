@@ -80,6 +80,7 @@ public class ICWars extends AreaGame {
         player1.enterArea(area, coordsAlly);
         player2.enterArea(area, coordsEnemy);
 
+        icWarsPlayerList.clear();
         icWarsPlayerList.add(player1);
         icWarsPlayerList.add(player2);
 
@@ -162,6 +163,11 @@ public class ICWars extends AreaGame {
             this.gameState = gameState;
         }
 
+
+    public void switchTurn() {
+        System.out.println(currentlyActivePlayer);
+        currentlyActivePlayer.setPlayerState(ICWarsPlayer.PlayerStates.IDLE);
+        playerIndex++;
         public void switchTurn () {
             System.out.println(currentlyActivePlayer);
             currentlyActivePlayer.setPlayerState(ICWarsPlayer.PlayerStates.IDLE);
@@ -243,3 +249,4 @@ public class ICWars extends AreaGame {
         END;
 
     }
+}

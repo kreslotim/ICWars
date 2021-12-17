@@ -25,6 +25,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     private PlayerStates playerState;
     private boolean defeated = false;
 
+
     /**
      * Default ICWarsActor constructor
      *
