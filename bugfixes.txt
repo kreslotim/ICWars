@@ -24,4 +24,4 @@ have lost.")
     https://discord.com/channels/@me/903660344025690162/920072790915285073
 - on veut que si le joueur en question n'est pas interagi, alors Nico dit qu'il vaut mieux de desactiver les interactions. Demande aux assistants.
 - evite les protected. utilise setters et getters 
-- on a deux getSelectedUnit dans ICWarsPlayer et ICWarsPlayerGUI car ils n'ont pas de lien de héritage
+- une liste protected pour Tank et Soldier à changer après
