@@ -4,6 +4,7 @@ import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icwars.handler.ICWarsInteractionVisitor;
 import ch.epfl.cs107.play.window.Window;
 
 public class ICWarsBehavior extends AreaBehavior {
@@ -31,32 +32,45 @@ public class ICWarsBehavior extends AreaBehavior {
     }
 
     public enum ICWarsCellType {
-        NONE(0, 0),
-
-        ROAD(16777216, 0),
-
-        PLAIN(-14112955, 1),
-        WOOD(-65536, 3),
-        RIVER(-16776961, 0),
-        MOUNTAIN(-256, 4),
-        CITY(-1, 2);
+        NONE(0, 0, "None"),
+        ROAD(16777216, 0, "Road"),
+        PLAIN(-14112955, 1, "Plain"),
+        WOOD(-65536, 3, "Wood"),
+        RIVER(-16776961, 0, "River"),
+        MOUNTAIN(-256, 4, "Mountain"),
+        CITY(-1, 2, "City");
 
         final int type;
-        final int DefenceStars;
+        final int defenceStars;
+        final String nameOfCell;
 
-        ICWarsCellType(int type, int DefenceStars) {
-            this.type = type;
-            this.DefenceStars = DefenceStars;
+
+
+        public int getDefenceStars() {
+            return defenceStars;
         }
+
+        public String typeToString() {
+            return nameOfCell;
+        }
+
+
+        ICWarsCellType(int type, int defenseStars, String nameOfCell) {
+            this.type = type;
+            this.defenceStars = defenseStars;
+            this.nameOfCell = nameOfCell;
+        }
+
 
         public static ICWarsCellType toType(int type) {
             for (ICWarsCellType ict : ICWarsCellType.values()) {
                 if (ict.type == type)
                     return ict;
             }
-            // System.out.println(type);
             return NONE;
         }
+
+
     }
 
     /**
@@ -64,18 +78,30 @@ public class ICWarsBehavior extends AreaBehavior {
      */
     public class ICWarsCell extends AreaBehavior.Cell {
         /// Type of the cell following the enum
-        private final ICWarsCellType type;
+        private final ICWarsCellType typeOfCell;
+
+        public int getDefenceStars() {
+            return typeOfCell.defenceStars;
+        }
+
+        public ICWarsCellType getCellType() {
+            return typeOfCell;
+        }
+
+
+
+
 
         /**
          * Default Cell constructor
          *
          * @param x    (int): x-coordinate of this cell
          * @param y    (int): y-coordinate of this cell
-         * @param type (EnigmeCellType), not null
+         * @param typeOfCell (EnigmeCellType), not null
          */
-        public ICWarsCell(int x, int y, ICWarsCellType type) {
+        public ICWarsCell(int x, int y, ICWarsCellType typeOfCell) {
             super(x, y);
-            this.type = type;
+            this.typeOfCell = typeOfCell;
         }
 
         @Override
@@ -111,7 +137,7 @@ public class ICWarsBehavior extends AreaBehavior {
 
         @Override
         public void acceptInteraction(AreaInteractionVisitor v) {
-
+            ((ICWarsInteractionVisitor) v).interactWith(this);
         }
 
     }

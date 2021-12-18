@@ -6,7 +6,8 @@ import ch.epfl.cs107.play.game.actor.ImageGraphics;
 import ch.epfl.cs107.play.game.actor.ShapeGraphics;
 import ch.epfl.cs107.play.game.actor.TextGraphics;
 import ch.epfl.cs107.play.game.areagame.io.ResourcePath;
-import ch.epfl.cs107.play.game.icwars.actor.unit.Unit;
+import ch.epfl.cs107.play.game.icwars.actor.Unit;
+//import ch.epfl.cs107.play.game.icwars.actor.unit.Unit;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.math.*;
 import ch.epfl.cs107.play.math.Polygon;
@@ -31,7 +32,7 @@ public class ICWarsInfoPanel implements Graphics {
 
     /**
      * Default Dialog Constructor
-     * /
+     */
     public ICWarsInfoPanel(float cameraScaleFactor) {
         final float height = cameraScaleFactor/4;
         final float width = cameraScaleFactor/8;
@@ -106,7 +107,7 @@ public class ICWarsInfoPanel implements Graphics {
         cellTypeText.setText(cellType.typeToString());
         cellTypeText.draw(canvas);
 
-        cellDefenseText.setText("Def: " + cellType.getDefenseStar());
+        cellDefenseText.setText("Def: " + cellType.getDefenceStars());
         cellDefenseText.setRelativeTransform(textTransform);
         cellDefenseText.draw(canvas);
 

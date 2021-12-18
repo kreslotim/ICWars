@@ -29,11 +29,11 @@ public class ICWars extends AreaGame {
     private int areaIndex;
     private GameStates gameState;
 
-    private List<ICWarsPlayer> currentRound = new ArrayList<>();
-    private List<ICWarsPlayer> nextRound = new ArrayList<>();
-    private ICWarsPlayer currentlyActivePlayer;
+    private List<RealPlayer> currentRound = new ArrayList<>();
+    private List<RealPlayer> nextRound = new ArrayList<>();
+    private RealPlayer currentlyActivePlayer;
 
-    private List<ICWarsPlayer> icWarsPlayerList = new ArrayList<>();
+    private List<RealPlayer> icWarsPlayerList = new ArrayList<>();
 
     @Override
     public String getTitle() {
@@ -165,7 +165,7 @@ public class ICWars extends AreaGame {
 
     public void switchTurn() {
         System.out.println(currentlyActivePlayer);
-        currentlyActivePlayer.setPlayerState(ICWarsPlayer.PlayerStates.IDLE);
+        currentlyActivePlayer.setPlayerState(RealPlayer.PlayerStates.IDLE);
         playerIndex++;
 
         currentlyActivePlayer = icWarsPlayerList.get(playerIndex % icWarsPlayerList.size());
@@ -186,7 +186,7 @@ public class ICWars extends AreaGame {
 
                     setGameState(GameStates.END_TURN);
                 } else {
-                    currentlyActivePlayer = currentRound.get(0); // piazza ?
+                    currentlyActivePlayer = currentRound.get(0);
                     currentRound.remove(currentlyActivePlayer);
                     setGameState(GameStates.START_PLAYER_TURN);
                 }
@@ -199,7 +199,7 @@ public class ICWars extends AreaGame {
                 break;
             case PLAYER_TURN:
 
-                if (currentlyActivePlayer.getPlayerState().equals(ICWarsPlayer.PlayerStates.IDLE))
+                if (currentlyActivePlayer.getPlayerState().equals(RealPlayer.PlayerStates.IDLE))
                     setGameState(GameStates.END_PLAYER_TURN);
 
                 break;
@@ -216,7 +216,7 @@ public class ICWars extends AreaGame {
                 break;
             case END_TURN:
                 nextRound.remove(currentlyActivePlayer);
-                icWarsPlayerList.removeIf(ICWarsPlayer::isDefeated);
+                icWarsPlayerList.removeIf(RealPlayer::isDefeated);
 
                 if (nextRound.size() < 2) setGameState(GameStates.END);
                 else {

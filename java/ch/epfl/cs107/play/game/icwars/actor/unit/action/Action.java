@@ -16,13 +16,21 @@ public abstract class Action implements Graphics {
 
     protected Unit unit;
     protected int key;
+    private String nameOfAction;
 
     public Action(Unit unit, ICWarsArea area, String nameOfAction, int key) {
         this.unit = unit;
         this.key = key;
-
+        this.nameOfAction = nameOfAction;
     }
 
+    public int getKey() {
+        return key;
+    }
+
+    public String getName() {
+        return nameOfAction;
+    }
 
     public abstract void doAction(float dt, ICWarsPlayer player, Keyboard keyboard);
 }

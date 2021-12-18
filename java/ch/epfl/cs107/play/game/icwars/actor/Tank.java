@@ -15,6 +15,7 @@ public class Tank extends Unit {
 
     private final static String[] factionImage = {"icwars/friendlyTank", "icwars/enemyTank"};
 
+
     /**
      * Default Unit constructor
      *
@@ -26,13 +27,19 @@ public class Tank extends Unit {
     public Tank(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
         super(area, position, 4, 7, 10, faction, factionImage[faction.ordinal()]);
         // factionImage[0] = ...
-        final List<Action> actionsList = new ArrayList<>(){{add(attack);
-                                                            add(wait);}};
+
+        Action attack = new Attack(this,(ICWarsArea)getOwnerArea());
+        Action wait = new Wait(this,(ICWarsArea)getOwnerArea());
+        actionsList.add(attack);
+        actionsList.add(wait);
 
     }
 
-    Action attack = new Attack(this,(ICWarsArea)getOwnerArea());
-    Action wait = new Wait(this,(ICWarsArea)getOwnerArea());
+
+
+
+
+
 
     @Override
     public List<DiscreteCoordinates> getFieldOfViewCells() {

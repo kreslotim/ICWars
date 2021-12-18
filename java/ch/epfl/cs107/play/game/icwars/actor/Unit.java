@@ -5,6 +5,7 @@ import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Path;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.icwars.actor.unit.action.Action;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsRange;
@@ -13,12 +14,16 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 
 public abstract class Unit extends ICWarsActor implements Interactor {
 
-    private int currentHp;
+    private String unitName;
+    private int hp;
     private int maxHp;
     private int damage;
     private int radius;
@@ -26,6 +31,12 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     private Sprite sprite;
     private ICWarsRange range = new ICWarsRange();
     private boolean usedUnit = false;
+    private int defenseStar; // comming from where?
+
+    protected final List<Action> actionsList = new ArrayList<>();
+
+
+
 
 
     /**
@@ -35,23 +46,28 @@ public abstract class Unit extends ICWarsActor implements Interactor {
      * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-    Unit(ICWarsArea area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction, String spriteName) {
+    Unit(ICWarsArea area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction, String unitName) {
         super(area, position, faction);
+        this.unitName = unitName;
         this.maxHp = maxHp;
-        this.currentHp = maxHp;
+        this.hp = maxHp;
         this.damage = damage;
         this.radius = radius;
 
+
         addEdge(getCurrentMainCellCoordinates()); // appel addNode
-        Sprite sprite = new Sprite(spriteName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
+        Sprite sprite = new Sprite(unitName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
         setOwnerArea(area);
     }
 
-    //public Action getActions() {
-    //}
+    public List<Action> getAction() {
+        return actionsList;
+    }
 
-    /// Handler
+    public String getName() {
+        return unitName;
+    }
 
     public ICWarsRange getRange() {
         return range;
@@ -67,24 +83,28 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     }
 
 
-    int getDamage() {
+    public int getDamage() {
         return damage;
     }
 
-    void receiveDamage(int damage) {
+    public void makeDamage() {
+        hp = hp - damage + defenseStar;
+    }
+
+    public void receiveDamage(int damage) {
         // check if hp < 0
-        int newHp = this.currentHp - damage;
-        this.currentHp = newHp < 0 ? 0 : newHp;
+        int newHp = this.hp - damage;
+        this.hp = Math.max(newHp, 0);
     }
 
-    void repairDamage(int heal) {
+    public void setHeal(int heal) {
         // check if hp > maxHp
-        int newHp = this.currentHp + heal;
-        this.currentHp = newHp > maxHp ? maxHp : newHp;
+        int newHp = this.hp + heal;
+        this.hp = Math.min(newHp, maxHp);
     }
 
-    public int getCurrentHp() {
-        return currentHp;
+    public int getHp() {
+        return hp;
     }
 
     private void addEdge(DiscreteCoordinates from) {
@@ -94,7 +114,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         for (int x = -radius; x <= radius; ++x) {
             for (int y = -radius; y <= radius; ++y) {
 
-                if (x + from.x <= getOwnerArea().getWidth() - 1 && x + from.x >= 0 && // getOwnerArea associé au Level0
+                if (x + from.x <= getOwnerArea().getWidth() - 1 && x + from.x >= 0 &&
                         y + from.y <= getOwnerArea().getHeight() - 1 && y + from.y >= 0) {
 
                     hasLeftEdge = x > -radius && from.x + x >= 0;
@@ -138,8 +158,6 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         if (!range.nodeExists(newPosition) || !super.changePosition(newPosition)) {
             return false;
         }
-        // méthode qui recalcule la nouvelle position
-        // adapter le rayon d'action à la newPosition
         range = new ICWarsRange();
         addEdge(newPosition);
         return true;
@@ -173,7 +191,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         @Override
         public void interactWith(ICWarsBehavior.ICWarsCell cell) {
 
-
+            defenseStar = cell.getDefenceStars();
         }
     }
 }

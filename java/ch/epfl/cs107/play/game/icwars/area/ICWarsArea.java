@@ -34,18 +34,25 @@ public abstract class ICWarsArea extends Area {
         List<Integer> indexList = new ArrayList<>();
         for (int i = 0; i < unitsList.size(); i++) {
 
-            if ((faction.equals(ICWarsActor.Faction.ALLY) && (unitsList.get(i).getFaction().equals(ICWarsActor.Faction.ENEMY)))
-                    || (faction.equals(ICWarsActor.Faction.ENEMY) && (unitsList.get(i).getFaction().equals(ICWarsActor.Faction.ALLY)))) {
+            if (((faction.equals(ICWarsActor.Faction.ALLY) && (unitsList.get(i).getFaction().equals(ICWarsActor.Faction.ENEMY)))
+                    || (faction.equals(ICWarsActor.Faction.ENEMY) && (unitsList.get(i).getFaction().equals(ICWarsActor.Faction.ALLY))))
+
+                    && unitsList.get(i).getRange().nodeExists(new DiscreteCoordinates( (int) unitsList.get(i).getPosition().x,
+                                                                                       (int) unitsList.get(i).getPosition().y ))); {
 
                 indexList.add(i);
-
-                unitsList.get(i).getRange().nodeExists(new DiscreteCoordinates( (int) unitsList.get(i).getPosition().x,
-                                                                                (int) unitsList.get(i).getPosition().y ));
-
             }
         }
 
         return indexList;
+    }
+
+    public void centerCameraOnUnit(int indexOfAttack) {
+        unitsList.get(indexOfAttack).centerCamera();
+    }
+
+    public void doDamage(int indexOfAttack) {
+        unitsList.get(indexOfAttack).makeDamage();
     }
 
     public void registerUnit(Unit u) {

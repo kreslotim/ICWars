@@ -25,12 +25,15 @@ public class Soldier extends Unit {
 
     public Soldier(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
         super(area, position, 2, 7, 10, faction, factionImage[faction.ordinal()]);
-        final List<Action> actionsList = new ArrayList<>(){{add(attack);
-                                                            add(wait);}};
+
+        Action attack = new Attack(this,(ICWarsArea)getOwnerArea());
+        Action wait = new Wait(this,(ICWarsArea)getOwnerArea());
+        actionsList.add(attack);
+        actionsList.add(wait);
     }
 
-    Action attack = new Attack(this,(ICWarsArea)getOwnerArea());
-    Action wait = new Wait(this,(ICWarsArea)getOwnerArea());
+
+
 
     @Override
     public List<DiscreteCoordinates> getFieldOfViewCells() {
