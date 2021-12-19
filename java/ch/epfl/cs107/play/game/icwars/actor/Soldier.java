@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Soldier extends Unit {
 
-    private static final String[] factionImage = {"icwars/friendlySoldier", "icwars/enemySoldier"};
+    private static final String[] factionImage = {"Good Guy", "Bad Boy"};
 
     /**
      * Default Unit constructor

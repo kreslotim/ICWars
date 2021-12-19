@@ -172,12 +172,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     public void makeDamage() {
         hp = hp - damage + defenseStar;
-    }
-
-    public void receiveDamage(int damage) {
-        // check if hp < 0
-        int newHp = this.hp - damage;
-        this.hp = Math.max(newHp, 0);
+        this.hp = Math.max(hp, 0);
     }
 
     public void setHeal(int heal) {

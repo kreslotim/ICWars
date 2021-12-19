@@ -34,8 +34,8 @@ public class ICWarsInfoPanel implements Graphics {
      * Default Dialog Constructor
      */
     public ICWarsInfoPanel(float cameraScaleFactor) {
-        final float height = cameraScaleFactor/4;
-        final float width = cameraScaleFactor/8;
+        final float height = cameraScaleFactor/8;
+        final float width = cameraScaleFactor/4;
 
         fontSize = cameraScaleFactor/ICWarsPlayerGUI.FONT_SIZE;
 
@@ -43,7 +43,7 @@ public class ICWarsInfoPanel implements Graphics {
         cellDetailsBackground = new ShapeGraphics(rect, Color.DARK_GRAY, Color.BLACK, 0f, .8f, 3000f);
         unitDetailsBackground = new ShapeGraphics(rect, Color.DARK_GRAY, Color.BLACK, 0f, .8f, 3000f);
 
-        Vector anchor = new Vector(.1f, -.2f);
+        Vector anchor = new Vector(.1f, -0.5f);
         woodSprite = new ImageGraphics(ResourcePath.getSprite("icwars/wood"), 1f, 1f, null, anchor, 1f, 3001f);
         plainSprite = new ImageGraphics(ResourcePath.getSprite("icwars/plain"), 1f, 1f, null, anchor, 1f, 3001f);
         citySprite = new ImageGraphics(ResourcePath.getSprite("icwars/neutralBuilding"), 1f, 1f, null, anchor, 1f, 3001f);
@@ -52,24 +52,24 @@ public class ICWarsInfoPanel implements Graphics {
         riverSprite = new ImageGraphics(ResourcePath.getSprite("icwars/river"), 1f, 1f, null, anchor, 1f, 3001f);
 
         cellTypeText = new TextGraphics("", fontSize, Color.WHITE, null, 0.0f,
-                false, false, new Vector(0, -0.3f),
+                false, false, new Vector(-1.25f, -1.2f),
                 TextAlign.Horizontal.LEFT, TextAlign.Vertical.MIDDLE, 1.0f, 3001f);
 
         cellDefenseText = new TextGraphics("", fontSize, Color.WHITE, null, 0.0f,
-                false, false, new Vector(0, -2.5f*fontSize-0.7f),
+                false, false, new Vector(-1.25f, 2.5f*fontSize-3.2f),
                 TextAlign.Horizontal.LEFT, TextAlign.Vertical.MIDDLE, 1.0f, 3001f);
 
 
         unitNameText = new TextGraphics("", fontSize, Color.WHITE, null, 0.0f,
-                false, false, new Vector(0, -0.3f),
+                false, false, new Vector(0, 0.3f),
                 TextAlign.Horizontal.LEFT, TextAlign.Vertical.MIDDLE, 1.0f, 3001f);
 
         unitHealthText = new TextGraphics("", fontSize, Color.WHITE, null, 0.0f,
-                false, false, new Vector(0, -1.25f*fontSize-0.5f),
+                false, false, new Vector(0, 0.5f*fontSize-0.5f),
                 TextAlign.Horizontal.LEFT, TextAlign.Vertical.MIDDLE, 1.0f, 3001f);
 
         unitDamageText = new TextGraphics("", fontSize, Color.WHITE, null, 0.0f,
-                false, false, new Vector(0, -2.5f*fontSize-0.4f),
+                false, false, new Vector(1.1f, 0.5f*fontSize-0.5f),
                 TextAlign.Horizontal.LEFT, TextAlign.Vertical.MIDDLE, 1.0f, 3001f);
     }
 
@@ -94,7 +94,7 @@ public class ICWarsInfoPanel implements Graphics {
     }
 
     private void drawCellDetails(Canvas canvas, float height, float width) {
-        final Transform transform = Transform.I.translated(canvas.getPosition().add(3*width/8, -height/2));
+        final Transform transform = Transform.I.translated(canvas.getPosition().add(3*width/12, -height/2));
         cellDetailsBackground.setRelativeTransform(transform);
         cellDetailsBackground.draw(canvas);
 
@@ -140,7 +140,7 @@ public class ICWarsInfoPanel implements Graphics {
     }
 
     private void drawUnitDetails(Canvas canvas, float height, float width) {
-        final Transform transform = Transform.I.translated(canvas.getPosition().add(width/4, -height/2));
+        final Transform transform = Transform.I.translated(canvas.getPosition().add(width/4, -height/2+1.5f));
         unitDetailsBackground.setRelativeTransform(transform);
         unitDetailsBackground.draw(canvas);
 

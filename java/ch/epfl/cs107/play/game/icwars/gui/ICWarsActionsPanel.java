@@ -44,9 +44,9 @@ public class ICWarsActionsPanel implements Graphics {
     private void createActionsText() {
         actionsText = new TextGraphics[actions.size()];
         for (int i = 0; i < actions.size(); ++i) {
-            TextGraphics text = new TextGraphics(actions.get(i).getNameOfAction(), fontSize, Color.WHITE, null, 0.0f,
-                    false, false, new Vector(0, -i * 1.25f * fontSize - 0.35f),
-                    TextAlign.Horizontal.LEFT, TextAlign.Vertical.MIDDLE, 1.0f, 3001f);
+            TextGraphics text = new TextGraphics(actions.get(i).getNameOfAction(), fontSize, Color.YELLOW, Color.red, 0.01f,
+                    true, false, new Vector(0, -i * 1.25f * fontSize - 0.35f),
+                    TextAlign.Horizontal.LEFT, TextAlign.Vertical.TOP, 1.0f, 3001f);
 
             text.setFontName("Kenney Pixel");
 

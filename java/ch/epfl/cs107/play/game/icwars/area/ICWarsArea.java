@@ -4,7 +4,6 @@ import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.icwars.ICWars;
 import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
-import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Window;
@@ -27,6 +26,8 @@ public abstract class ICWarsArea extends Area {
 
     public void registerUnit(Unit u) { unitsList.add(u); }
 
+
+
     /**
      * get the index of every units
      *
@@ -39,8 +40,7 @@ public abstract class ICWarsArea extends Area {
 
             if (!u.getFaction().equals(faction) && u.getRange().nodeExists(new DiscreteCoordinates((int) u.getPosition().x,
                                                                                                    (int) u.getPosition().y))) {
-
-                System.out.println(u.getPosition());
+                //System.out.println(u.getPosition());
                 indexList.add(unitsList.indexOf(u));
             }
         }

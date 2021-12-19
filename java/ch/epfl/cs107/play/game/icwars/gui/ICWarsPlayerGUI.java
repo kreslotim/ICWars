@@ -8,7 +8,7 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Canvas;
 
 public class ICWarsPlayerGUI implements Graphics {
-    public final static float FONT_SIZE = 20f;
+    public final static float FONT_SIZE = 20.f;
     private Unit selectedUnit;
     private Unit infoPanelUnit;
     private ICWarsPlayer player;
@@ -19,8 +19,8 @@ public class ICWarsPlayerGUI implements Graphics {
     private ICWarsInfoPanel panelOfInfo;
 
     public ICWarsPlayerGUI(float cameraScaleFactor, ICWarsPlayer player) {
-        this.panelOfInfo = new ICWarsInfoPanel(cameraScaleFactor);
-        this.panelOfActions = new ICWarsActionsPanel(cameraScaleFactor);
+        this.panelOfInfo = new ICWarsInfoPanel(12.f);
+        this.panelOfActions = new ICWarsActionsPanel(12.f);
         this.player = player;
     }
 

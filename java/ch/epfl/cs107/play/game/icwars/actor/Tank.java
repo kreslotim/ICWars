@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Tank extends Unit {
 
-    private final static String[] factionImage = {"icwars/friendlyTank", "icwars/enemyTank"};
+    private final static String[] factionImage = {"Good Tank", "Bad Tank"};
 
 
     /**

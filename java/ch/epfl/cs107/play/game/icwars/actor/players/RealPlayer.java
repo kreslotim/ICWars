@@ -156,7 +156,6 @@ public class RealPlayer extends ICWarsPlayer {
         public void interactWith(Unit unit) {
             if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
                 setSelectedUnit(unit);
-                System.out.println("test of interaction");
                 gui.setSelectedUnit(unit);
                 getMemorisedUnits().add(unit);
                 System.out.println("memorized!");
@@ -261,7 +260,10 @@ public class RealPlayer extends ICWarsPlayer {
 
                     selectedUnit.changePosition(new DiscreteCoordinates(getCurrentMainCellCoordinates().x, getCurrentMainCellCoordinates().y));
 
-                    if (!getCurrentMainCellCoordinates().equals(getLeftCells().get(0))) { //If the unit was not repositioned
+                    if (!getCurrentMainCellCoordinates().equals(getLeftCells().get(0))
+                            && selectedUnit.getRange().nodeExists(getCurrentMainCellCoordinates())) {
+
+                        //If the unit was repositioned and is in range
                         setPlayerState(PlayerStates.ACTION_SELECTION);
                         System.out.println("State: ACTION_SELECTION");
                         System.out.println("Choosing Attack or Wait");
@@ -315,7 +317,7 @@ public class RealPlayer extends ICWarsPlayer {
 
         if (playerUnitsList != null) {
             for (Unit unit : playerUnitsList) {
-                if (unit.getHp() <= 0) {
+                if (unit.getHp() == 0) {
                     getOwnerArea().unregisterActor(unit);
                     areasList.remove(unit);
 
