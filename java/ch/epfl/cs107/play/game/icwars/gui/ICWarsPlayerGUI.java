@@ -12,7 +12,9 @@ public class ICWarsPlayerGUI implements Graphics {
     private Unit selectedUnit;
     private Unit infoPanelUnit;
     private ICWarsPlayer player;
+
     private ICWarsBehavior.ICWarsCellType myCell;
+
     private ICWarsActionsPanel panelOfActions;
     private ICWarsInfoPanel panelOfInfo;
 
