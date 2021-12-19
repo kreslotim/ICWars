@@ -17,8 +17,9 @@ public class Wait extends Action {
 
     @Override
     public void doAction(float dt, ICWarsPlayer player, Keyboard keyboard) {
-            unit.setIsUsedUnit(true);
-        ((RealPlayer)player).setPlayerState(RealPlayer.PlayerStates.NORMAL);
+        System.out.println("Waiting");
+        unit.setIsUsedUnit(true);
+        player.setPlayerState(RealPlayer.PlayerStates.NORMAL);
     }
 
     @Override

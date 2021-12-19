@@ -44,7 +44,7 @@ public class ICWarsActionsPanel implements Graphics {
     private void createActionsText() {
         actionsText = new TextGraphics[actions.size()];
         for (int i = 0; i < actions.size(); ++i) {
-            TextGraphics text = new TextGraphics(actions.get(i).getName(), fontSize, Color.WHITE, null, 0.0f,
+            TextGraphics text = new TextGraphics(actions.get(i).getNameOfAction(), fontSize, Color.WHITE, null, 0.0f,
                     false, false, new Vector(0, -i * 1.25f * fontSize - 0.35f),
                     TextAlign.Horizontal.LEFT, TextAlign.Vertical.MIDDLE, 1.0f, 3001f);
 

@@ -5,7 +5,6 @@ import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Soldier;
 import ch.epfl.cs107.play.game.icwars.actor.Tank;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
-import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.game.icwars.area.Level0;
@@ -23,23 +22,37 @@ public class ICWars extends AreaGame {
 
     public final static float CAMERA_SCALE_FACTOR = 10.f;
     private final String[] areas = {"icwars/Level0", "icwars/Level1"};
-    private RealPlayer player1;
-    private RealPlayer player2;
-    private int playerIndex = 0;
-    private int areaIndex;
-    private GameStates gameState;
 
+    private List<RealPlayer> icWarsPlayerList = new ArrayList<>();
     private List<RealPlayer> currentRound = new ArrayList<>();
     private List<RealPlayer> nextRound = new ArrayList<>();
     private RealPlayer currentlyActivePlayer;
 
-    private List<RealPlayer> icWarsPlayerList = new ArrayList<>();
+    private RealPlayer player1;
+    private RealPlayer player2;
 
+    private int playerIndex = 0;
+    private int areaIndex;
+    private GameStates gameState;
+
+
+    /******************************************************************************************************************
+                                          |-- WELCOME TO ICWARS --|
+     ******************************************************************************************************************/
+    /**
+     * Title of the window
+     * @return title (String)
+     */
     @Override
     public String getTitle() {
         return "ICWars";
     }
 
+    /**
+     * @param window
+     * @param fileSystem
+     * @return true if the game must begin
+     */
     @Override
     public boolean begin(Window window, FileSystem fileSystem) {
 
@@ -53,7 +66,7 @@ public class ICWars extends AreaGame {
     }
 
     /**
-     * Add all the areas
+     * Add all the areas to the game
      */
     private void createAreas() {
 
@@ -62,6 +75,10 @@ public class ICWars extends AreaGame {
 
     }
 
+    /**
+     * Initializing the grid, and players
+     * @param areaKey
+     */
     private void initArea(String areaKey) {
 
         ICWarsArea area = (ICWarsArea) setCurrentArea(areaKey, true);
@@ -79,17 +96,26 @@ public class ICWars extends AreaGame {
         player1.enterArea(area, coordsAlly);
         player2.enterArea(area, coordsEnemy);
 
+        //clearing and adding all players to a new level
         icWarsPlayerList.clear();
         icWarsPlayerList.add(player1);
         icWarsPlayerList.add(player2);
 
+        // default state of a player
+        setGameState(GameStates.INIT);
+
+        //player1 starts the game
+        currentRound.add(player1);
         currentlyActivePlayer = player1;
-
-
-        //player1.centerCamera();
-        player1.startTurn();
+        currentlyActivePlayer.startTurn();
     }
 
+    /**
+     * Main update method, for a player,
+     * allowing to manipulate the game through the keyboard
+     *
+     * @param deltaTime (float) frequency of update
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -109,73 +135,56 @@ public class ICWars extends AreaGame {
         if (keyboard.get(Keyboard.TAB).isReleased()) {
             switchTurn();
         }
-        
 
-        //nextRound.remove(unit); // accès au Units?
-
+        updateGameStates();
     }
 
+    /**
+     * Jump to next level
+     */
+    protected void switchArea() {
 
+        player1.leaveArea();
+        player2.leaveArea();
+
+        areaIndex = (areaIndex == 0) ? 1 : 0;
+
+        ICWarsArea currentArea = (ICWarsArea) setCurrentArea(areas[areaIndex], false);
+        player1.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
+        player1.centerCamera();
+        reset();
+    }
+
+    /**
+     * Reset the game, on current level (must be executed when changing level)
+     * @return true if executed
+     */
     public boolean reset() {
-        // reinitialiser les joueurs
-        // les mettre au centre
-        //player.centerCamera();
         createAreas();
         initArea(getCurrentArea().getTitle());
         return true;
     }
 
+    /**
+     * End of the game
+     */
     @Override
     public void end() {
         System.out.println("Game Over");
-
     }
 
-    protected void switchArea() {
-
-        player1.leaveArea();
-
-        areaIndex = (areaIndex == 0) ? 1 : 0;
 
 
-        ICWarsArea currentArea = (ICWarsArea) setCurrentArea(areas[areaIndex], false);
-        player1.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
-        player1.centerCamera();
 
-
-    }
-
+    /******************************************************************************************************************
+     ***********************************     FINITE STATE AUTOMATON     ***********************************************
+     ******************************************************************************************************************/
 
     /**
-     * get the gameState of the player
+     * Automaton that changes the behaviour of the Game
      */
-    public GameStates getGameState() {
-        return gameState;
-    }
+    public void updateGameStates() {
 
-    /**
-     * set the gameState of the player
-     *
-     * @param gameState
-     */
-    public void setGameState(GameStates gameState) {
-        this.gameState = gameState;
-    }
-
-
-    public void switchTurn() {
-        System.out.println(currentlyActivePlayer);
-        currentlyActivePlayer.setPlayerState(RealPlayer.PlayerStates.IDLE);
-        playerIndex++;
-
-        currentlyActivePlayer = icWarsPlayerList.get(playerIndex % icWarsPlayerList.size());
-
-        System.out.println(playerIndex % icWarsPlayerList.size());
-        currentlyActivePlayer.startTurn();
-    }
-
-    public void switchGameStates(GameStates gameState) {
-        //Keyboard keyboard = getWindow().getKeyboard();
         switch (gameState) {
             case INIT:
                 nextRound.addAll(icWarsPlayerList);
@@ -183,7 +192,6 @@ public class ICWars extends AreaGame {
                 break;
             case CHOOSE_PLAYER:
                 if (currentRound.isEmpty()) {
-
                     setGameState(GameStates.END_TURN);
                 } else {
                     currentlyActivePlayer = currentRound.get(0);
@@ -231,14 +239,34 @@ public class ICWars extends AreaGame {
         }
     }
 
-    public enum GameStates {
-        INIT,
-        CHOOSE_PLAYER,
-        START_PLAYER_TURN,
-        PLAYER_TURN,
-        END_PLAYER_TURN,
-        END_TURN,
-        END;
-
+    /******************************************************************************************************************
+     *                                    All methods used in the Automaton
+     ******************************************************************************************************************/
+    /**
+     * sets the gameState of the player
+     * @param gameState
+     */
+    public void setGameState(GameStates gameState) {
+        this.gameState = gameState;
     }
+
+    /**
+     * Method allowing switching rounds between players
+     */
+    public void switchTurn() {
+        System.out.println(currentlyActivePlayer);
+        currentlyActivePlayer.setPlayerState(RealPlayer.PlayerStates.IDLE);
+        playerIndex++;
+
+        currentlyActivePlayer = icWarsPlayerList.get(playerIndex % icWarsPlayerList.size());
+
+        System.out.println(playerIndex % icWarsPlayerList.size());
+        currentlyActivePlayer.startTurn();
+    }
+
+
+    /**
+     * Enumeration of all States of the Game
+     */
+    public enum GameStates { INIT, CHOOSE_PLAYER, START_PLAYER_TURN, PLAYER_TURN, END_PLAYER_TURN, END_TURN, END;}
 }

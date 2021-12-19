@@ -27,7 +27,7 @@ public class Attack extends Action{
 
     public Attack(Unit unit, ICWarsArea area) {
         super(unit, area, "(A)ttack", Keyboard.A);
-
+        myArea = area;
         enemyList = area.unitIndexList(unit.getFaction());
 
     }
@@ -43,7 +43,7 @@ public class Attack extends Action{
         }
 
         if (keyboard.get(Keyboard.ENTER).isReleased()) {
-            //attack();
+            System.out.println("Attacking");
             myArea.doDamage(indexOfAttack% enemyList.size());
             unit.setIsUsedUnit(true);
 
@@ -52,8 +52,10 @@ public class Attack extends Action{
         }
 
         if (enemyList.isEmpty() || keyboard.get(Keyboard.TAB).isReleased()) {
+            System.out.println("enemyList empty");
             player.centerCamera();
             player.setPlayerState(ICWarsPlayer.PlayerStates.ACTION_SELECTION);
+
         }
 
 
@@ -63,6 +65,7 @@ public class Attack extends Action{
     @Override
     public void draw(Canvas canvas) {
         if (!enemyList.isEmpty()) {
+            System.out.println("testt of drawing");
             myArea.centerCameraOnUnit(indexOfAttack);
             cursor.setAnchor(canvas.getPosition().add(1,0));
             cursor.draw(canvas);

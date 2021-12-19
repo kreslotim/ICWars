@@ -28,7 +28,7 @@ public abstract class Action implements Graphics {
         return key;
     }
 
-    public String getName() {
+    public String getNameOfAction() {
         return nameOfAction;
     }
 

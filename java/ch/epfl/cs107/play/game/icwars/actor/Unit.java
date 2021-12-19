@@ -14,7 +14,6 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -45,7 +44,6 @@ public abstract class Unit extends ICWarsActor implements Interactor {
      * @param area     (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      */
-
     Unit(ICWarsArea area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction, String unitName) {
         super(area, position, faction);
         this.unitName = unitName;
@@ -54,59 +52,31 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         this.damage = damage;
         this.radius = radius;
 
+        // Method allowing to draw the range, around a unit
+        addEdge(getCurrentMainCellCoordinates());
 
-        addEdge(getCurrentMainCellCoordinates()); // appel addNode
+        //Builds the image of each unit, on the grid
         Sprite sprite = new Sprite(unitName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
         setOwnerArea(area);
     }
 
-    public List<Action> getAction() {
-        return actionsList;
+    /**
+     * drawing method for each unit
+     * @param canvas target, not null
+     */
+    @Override
+    public void draw(Canvas canvas) {
+        sprite.draw(canvas); // Unit Draw
     }
 
-    public String getName() {
-        return unitName;
-    }
-
-    public ICWarsRange getRange() {
-        return range;
-    }
-
-    public void setIsUsedUnit(boolean used) {
-        sprite.setAlpha(used ? 0.5f : 1f);
-        usedUnit = used;
-    }
-
-    public boolean isUsed() {
-        return usedUnit;
-    }
-
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public void makeDamage() {
-        hp = hp - damage + defenseStar;
-    }
-
-    public void receiveDamage(int damage) {
-        // check if hp < 0
-        int newHp = this.hp - damage;
-        this.hp = Math.max(newHp, 0);
-    }
-
-    public void setHeal(int heal) {
-        // check if hp > maxHp
-        int newHp = this.hp + heal;
-        this.hp = Math.min(newHp, maxHp);
-    }
-
-    public int getHp() {
-        return hp;
-    }
-
+    /******************************************************************************************************************
+     *                                            DRAWING RANGE
+     ******************************************************************************************************************/
+    /**
+     * Main method determining the edges of a unit's range, based on four booleans, defining if each side has an edge
+     * @param from (Discrete Coordinates). Center of the range, positioned on the selected unit (origin)
+     */
     private void addEdge(DiscreteCoordinates from) {
 
         boolean hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge;
@@ -125,44 +95,9 @@ public abstract class Unit extends ICWarsActor implements Interactor {
                     range.addNode(new DiscreteCoordinates(x + from.x, y + from.y),
                             hasLeftEdge, hasUpEdge, hasRightEdge, hasDownEdge);
                 }
-
-
             }
         }
     }
-
-
-    @Override
-    public void acceptInteraction(AreaInteractionVisitor v) {
-
-        ((ICWarsInteractionVisitor) v).interactWith(this);
-    }
-
-    @Override
-    public boolean isCellInteractable() {
-        return true;
-    }
-
-    @Override
-    public boolean takeCellSpace() {
-        return true;
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-        sprite.draw(canvas); // l'affichage du sprite sur l'ecran
-    }
-
-    @Override
-    public boolean changePosition(DiscreteCoordinates newPosition) {
-        if (!range.nodeExists(newPosition) || !super.changePosition(newPosition)) {
-            return false;
-        }
-        range = new ICWarsRange();
-        addEdge(newPosition);
-        return true;
-    }
-
 
     /**
      * Draw the unit's range and a path from the unit position to
@@ -171,7 +106,6 @@ public abstract class Unit extends ICWarsActor implements Interactor {
      * @param destination path destination
      * @param canvas      canvas
      */
-
     public void drawRangeAndPathTo(DiscreteCoordinates destination, Canvas canvas) {
         range.draw(canvas);
         Queue<Orientation> path = range.shortestPath(getCurrentMainCellCoordinates(), destination);
@@ -182,16 +116,109 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         }
     }
 
+    /**
+     * @param newPosition new unit's position
+     * @return (Boolean) true if new position is in bounds, and is different from it's initial position
+     */
+    @Override
+    public boolean changePosition(DiscreteCoordinates newPosition) {
+        if (!range.nodeExists(newPosition) || !super.changePosition(newPosition)) {
+            return false;
+        }
+
+        // resetting the new range, after changing unit's position
+        range = new ICWarsRange();
+        addEdge(newPosition);
+        return true;
+    }
+
+
+    /******************************************************************************************************************
+                                             GETTERS   &   SETTERS
+     *****************************************************************************************************************/
+    /** GETTERS */
+
+    public List<Action> getAction() {
+        return actionsList;
+    }
+
+    public String getName() {
+        return unitName;
+    }
+
+    public ICWarsRange getRange() {
+        return range;
+    }
+
+    public boolean isUsed() {
+        return usedUnit;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+
+    /** SETTERS */
+
+    public void setIsUsedUnit(boolean used) {
+        sprite.setAlpha(used ? 0.5f : 1f);
+        usedUnit = used;
+    }
+
+    public void makeDamage() {
+        hp = hp - damage + defenseStar;
+    }
+
+    public void receiveDamage(int damage) {
+        // check if hp < 0
+        int newHp = this.hp - damage;
+        this.hp = Math.max(newHp, 0);
+    }
+
+    public void setHeal(int heal) {
+        // check if hp > maxHp
+        int newHp = this.hp + heal;
+        this.hp = Math.min(newHp, maxHp);
+    }
+
+
+
+    /******************************************************************************************************************
+     ****************************************    INTERACTIONS    ******************************************************
+     ******************************************************************************************************************/
 
     /**
-     * interagir avec chaque unit
+     * Nested class, handling the Interactions
      */
     private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
-
+        /**
+         * InteractWith method redefined in the Interface ICWarsInteractionVisitor, setting the defense stars
+         * @param cell
+         */
         @Override
         public void interactWith(ICWarsBehavior.ICWarsCell cell) {
-
-            defenseStar = cell.getDefenceStars();
+            defenseStar = cell.getDefenseStars();
         }
     }
+
+
+    @Override
+    public void acceptInteraction(AreaInteractionVisitor v) {
+        ((ICWarsInteractionVisitor) v).interactWith(this);
+    } // A unit must accept interactions requested from an Interactor (player), casted to an ICWarsInteractionVisitor
+
+    @Override
+    public boolean isCellInteractable() {
+        return true;
+    } // A unit must be Interactable by an Interactor (player), on a specific Cell
+
+    @Override
+    public boolean takeCellSpace() {
+        return true;
+    } // A unit occupies a specific cell, making it not traversable
 }

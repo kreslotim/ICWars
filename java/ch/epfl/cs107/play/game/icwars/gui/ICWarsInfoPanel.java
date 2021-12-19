@@ -79,9 +79,7 @@ public class ICWarsInfoPanel implements Graphics {
         this.cellType = cellType;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
+    public void setUnit(Unit unit) { this.unit = unit; }
 
     @Override
     public void draw(Canvas canvas) {
