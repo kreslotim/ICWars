@@ -45,7 +45,7 @@ public class RealPlayer extends ICWarsPlayer {
      * @param units    (Unit) Ellipse of all units, of a player
      */
     public RealPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction, Unit... units) {
-        super(area, position, faction, units);
+        super(area, position, faction);
 
         for (Unit unit : units) {
             area.registerActor(unit);
@@ -207,7 +207,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     @Override
     public boolean wantsCellInteraction() {
-        return true; // The player must wish to do an Interaction with an Interactable object
+        return true; // The player wishes to Interact with an Interactable object (unit)
     }
 
     @Override
@@ -246,7 +246,7 @@ public class RealPlayer extends ICWarsPlayer {
                 break;
             case SELECT_CELL:
 
-                if (selectedUnit != null) {
+                if (selectedUnit != null && !selectedUnit.isUsed()) {
 
                     setPlayerState(PlayerStates.MOVE_UNIT);
                     System.out.println("State: MOVE_UNIT");

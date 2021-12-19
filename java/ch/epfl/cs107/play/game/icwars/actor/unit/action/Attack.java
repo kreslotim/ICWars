@@ -2,7 +2,6 @@ package ch.epfl.cs107.play.game.icwars.actor.unit.action;
 
 import ch.epfl.cs107.play.game.actor.ImageGraphics;
 import ch.epfl.cs107.play.game.areagame.io.ResourcePath;
-import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
@@ -19,16 +18,14 @@ public class Attack extends Action{
     private int indexOfAttack = 0;
     private ICWarsArea myArea;
 
-
     private ImageGraphics cursor = new ImageGraphics(ResourcePath.getSprite("icwars/UIpackSheet"), 1f, 1f,
-                                                new RegionOfInterest(2*18, 26*18, 16, 16));
+                                                new RegionOfInterest(2*36, 26*18, 16, 16));
 
-    private final List<Integer> enemyList;
+    private List<Integer> enemyList;
 
     public Attack(Unit unit, ICWarsArea area) {
         super(unit, area, "(A)ttack", Keyboard.A);
         myArea = area;
-        enemyList = area.unitIndexList(unit.getFaction());
 
     }
 
@@ -36,10 +33,14 @@ public class Attack extends Action{
     @Override
     public void doAction(float dt, ICWarsPlayer player, Keyboard keyboard) {
 
-        
+
+        //enemyList.addAll(myArea.getIndex(unit.getFaction())); // Why does this doesn't work???
+        enemyList = myArea.getIndex(unit.getFaction());
+
         if (keyboard.get(Keyboard.RIGHT).isReleased() || keyboard.get(Keyboard.LEFT).isReleased()) {
+
             indexOfAttack++;
-            enemyList.get(indexOfAttack %enemyList.size());
+            System.out.println(enemyList.get(indexOfAttack %enemyList.size()));
         }
 
         if (keyboard.get(Keyboard.ENTER).isReleased()) {
@@ -52,21 +53,17 @@ public class Attack extends Action{
         }
 
         if (enemyList.isEmpty() || keyboard.get(Keyboard.TAB).isReleased()) {
-            System.out.println("enemyList empty");
+            System.out.println("No enemies in range: must wait");
             player.centerCamera();
             player.setPlayerState(ICWarsPlayer.PlayerStates.ACTION_SELECTION);
 
         }
-
-
-
     }
 
     @Override
     public void draw(Canvas canvas) {
-        if (!enemyList.isEmpty()) {
-            System.out.println("testt of drawing");
-            myArea.centerCameraOnUnit(indexOfAttack);
+        if (enemyList != null) {
+            myArea.centerCameraOnUnit(enemyList.get(indexOfAttack%enemyList.size()));
             cursor.setAnchor(canvas.getPosition().add(1,0));
             cursor.draw(canvas);
         }

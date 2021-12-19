@@ -15,8 +15,8 @@ import java.util.List;
 public abstract class ICWarsArea extends Area {
 
     private ICWarsBehavior behavior;
-    private ICWarsPlayer warsPlayer;
     private List<Unit> unitsList = new ArrayList<>();
+
 
 
     @Override
@@ -24,28 +24,36 @@ public abstract class ICWarsArea extends Area {
         return ICWars.CAMERA_SCALE_FACTOR;
     }
 
+
+    public void registerUnit(Unit u) { unitsList.add(u); }
+
     /**
      * get the index of every units
      *
      * @param faction
      * @return
      */
-    public List<Integer> unitIndexList(ICWarsActor.Faction faction) {
-        List<Integer> indexList = new ArrayList<>();
-        for (int i = 0; i < unitsList.size(); i++) {
+    public List<Integer> getIndex(ICWarsActor.Faction faction) {
+        List<Integer> indexList = new ArrayList<>(); // maybe at the top
+        for (Unit u : unitsList) {
 
-            if (((faction.equals(ICWarsActor.Faction.ALLY) && (unitsList.get(i).getFaction().equals(ICWarsActor.Faction.ENEMY)))
-                    || (faction.equals(ICWarsActor.Faction.ENEMY) && (unitsList.get(i).getFaction().equals(ICWarsActor.Faction.ALLY))))
+            if (!u.getFaction().equals(faction) && u.getRange().nodeExists(new DiscreteCoordinates((int) u.getPosition().x,
+                                                                                                   (int) u.getPosition().y))) {
 
-                    && unitsList.get(i).getRange().nodeExists(new DiscreteCoordinates( (int) unitsList.get(i).getPosition().x,
-                                                                                       (int) unitsList.get(i).getPosition().y ))); {
-
-                indexList.add(i);
+                System.out.println(u.getPosition());
+                indexList.add(unitsList.indexOf(u));
             }
         }
 
         return indexList;
     }
+
+
+    /**
+     *  && (unitsList.get(i).getRange().nodeExists(new DiscreteCoordinates((int) unitsList.get(i).getPosition().x,
+     *                                                                                        (int) unitsList.get(i).getPosition().y )))); {
+     * @param indexOfAttack
+     */
 
     public void centerCameraOnUnit(int indexOfAttack) {
         unitsList.get(indexOfAttack).centerCamera();
@@ -53,10 +61,6 @@ public abstract class ICWarsArea extends Area {
 
     public void doDamage(int indexOfAttack) {
         unitsList.get(indexOfAttack).makeDamage();
-    }
-
-    public void registerUnit(Unit u) {
-        unitsList.add(u);
     }
 
 

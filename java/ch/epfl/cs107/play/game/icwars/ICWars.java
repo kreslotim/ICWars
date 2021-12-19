@@ -254,13 +254,17 @@ public class ICWars extends AreaGame {
      * Method allowing switching rounds between players
      */
     public void switchTurn() {
-        System.out.println(currentlyActivePlayer);
+        //System.out.println(currentlyActivePlayer);
         currentlyActivePlayer.setPlayerState(RealPlayer.PlayerStates.IDLE);
         playerIndex++;
 
+        for (Unit u : currentlyActivePlayer.getPlayerUnitsList()) {
+            u.setIsUsedUnit(false);
+        }
+
         currentlyActivePlayer = icWarsPlayerList.get(playerIndex % icWarsPlayerList.size());
 
-        System.out.println(playerIndex % icWarsPlayerList.size());
+        //System.out.println(playerIndex % icWarsPlayerList.size());
         currentlyActivePlayer.startTurn();
     }
 

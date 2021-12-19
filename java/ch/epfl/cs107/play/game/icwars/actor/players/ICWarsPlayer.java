@@ -23,7 +23,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
      * @param area     (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      */
-    public ICWarsPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction, Unit... units) {
+    public ICWarsPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
         super(area, position, faction);
     }
 
