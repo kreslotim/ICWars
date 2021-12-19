@@ -33,7 +33,7 @@ public class ICWarsBehavior extends AreaBehavior {
 
     public enum ICWarsCellType {
         NONE(0, 0, "None"),
-        ROAD(16777216, 0, "Road"),
+        ROAD(-16777216, 0, "Road"),
         PLAIN(-14112955, 1, "Plain"),
         WOOD(-65536, 3, "Wood"),
         RIVER(-16776961, 0, "River"),
@@ -44,14 +44,14 @@ public class ICWarsBehavior extends AreaBehavior {
         final int defenceStars;
         final String nameOfCell;
 
+        public String typeToString() {
+            return nameOfCell;
+        }
+
 
 
         public int getDefenceStars() {
             return defenceStars;
-        }
-
-        public String typeToString() {
-            return nameOfCell;
         }
 
 

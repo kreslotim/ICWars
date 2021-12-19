@@ -158,7 +158,7 @@ public class RealPlayer extends ICWarsPlayer {
             if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
                 setSelectedUnit(unit);
                 System.out.println("test of interaction");
-                getGui().setSelectedUnit(unit);
+                gui.setSelectedUnit(unit);
                 getMemorisedUnits().add(unit);
                 System.out.println("memorized!");
 

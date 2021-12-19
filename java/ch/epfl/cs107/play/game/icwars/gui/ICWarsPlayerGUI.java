@@ -12,7 +12,9 @@ public class ICWarsPlayerGUI implements Graphics {
     private Unit selectedUnit;
     private Unit infoPanelUnit;
     private ICWarsPlayer player;
+
     private ICWarsBehavior.ICWarsCellType myCell;
+
     private ICWarsActionsPanel panelOfActions;
     private ICWarsInfoPanel panelOfInfo;
 
@@ -26,9 +28,7 @@ public class ICWarsPlayerGUI implements Graphics {
         this.selectedUnit = selectedUnit;
     }
 
-    public void setCurrentCell(ICWarsBehavior.ICWarsCellType cell) {
-        myCell = cell;
-    }
+    public void setCurrentCell(ICWarsBehavior.ICWarsCellType cell) { myCell = cell;}
 
     public void setPanelOfInfoForUnit(Unit infoPanelUnit) {
         this.infoPanelUnit = infoPanelUnit;
@@ -61,7 +61,7 @@ public class ICWarsPlayerGUI implements Graphics {
 
         if (player.getPlayerState().equals(ICWarsPlayer.PlayerStates.MOVE_UNIT)) {
             selectedUnit.drawRangeAndPathTo(new DiscreteCoordinates((int) player.getPosition().x,
-                    (int) player.getPosition().y), canvas);
+                                                                    (int) player.getPosition().y), canvas);
         }
 
 
