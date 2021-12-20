@@ -50,9 +50,11 @@ public class ICWarsPlayerGUI implements Graphics {
         panelOfInfo.setCurrentCell(myCell);
         panelOfInfo.setUnit(infoPanelUnit);
 
-        panelOfInfo.draw(canvas);
 
 
+        if (player.getPlayerState().equals(ICWarsPlayer.PlayerStates.NORMAL) || player.getPlayerState().equals(ICWarsPlayer.PlayerStates.SELECT_CELL)) {
+            panelOfInfo.draw(canvas);
+        }
 
         if (player.getPlayerState().equals(ICWarsPlayer.PlayerStates.ACTION_SELECTION)) {
             panelOfActions.setActions(selectedUnit.getAction());

@@ -52,16 +52,15 @@ public class Attack extends Action{
             //System.out.println(enemyList.get(indexOfAttack %enemyList.size()));
         }
 
-        if (keyboard.get(Keyboard.ENTER).isReleased()) {
-            System.out.println("Attacking");
-            myArea.doDamage(indexOfAttack% enemyList.size()+2);
+        if (keyboard.get(Keyboard.ENTER).isReleased() && enemyList != null) {
+            myArea.doDamage(enemyList.get(indexOfAttack% enemyList.size()));
             myUnit.setIsUsedUnit(true);
 
             player.centerCamera();
             player.setPlayerState(RealPlayer.PlayerStates.NORMAL);
         }
 
-        if (enemyList.isEmpty() || keyboard.get(Keyboard.TAB).isReleased()) {
+        if (enemyList == null || keyboard.get(Keyboard.TAB).isReleased()) {
             System.out.println("No enemies in range: must wait");
             player.centerCamera();
             player.setPlayerState(ICWarsPlayer.PlayerStates.ACTION_SELECTION);

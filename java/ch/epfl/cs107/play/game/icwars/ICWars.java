@@ -105,9 +105,10 @@ public class ICWars extends AreaGame {
         setGameState(GameStates.INIT);
 
         //player1 starts the game
+        player1.centerCamera();
         currentRound.add(player1);
-        currentlyActivePlayer = player1;
-        currentlyActivePlayer.startTurn();
+        //currentlyActivePlayer = player1;
+        //currentlyActivePlayer.startTurn();
     }
 
     /**
@@ -135,6 +136,14 @@ public class ICWars extends AreaGame {
         if (keyboard.get(Keyboard.TAB).isReleased()) {
             switchTurn();
         }
+
+        /**
+        if ( keyboard.get(Keyboard.U).isReleased ()) {
+            System.out.println("test");
+            currentlyActivePlayer.selectUnit(1) ; // 0, 1 ...
+        } // draws the range, of a selected unit, with some index (int).
+          // works only if a player is in "SELECT_CELL" state (after pushing "Enter")
+         */
 
         updateGameStates();
     }
@@ -187,6 +196,8 @@ public class ICWars extends AreaGame {
 
         switch (gameState) {
             case INIT:
+                System.out.println("LET THE GAME BEGIN");
+
                 nextRound.addAll(icWarsPlayerList);
                 setGameState(GameStates.CHOOSE_PLAYER);
                 break;
@@ -207,8 +218,11 @@ public class ICWars extends AreaGame {
                 break;
             case PLAYER_TURN:
 
-                if (currentlyActivePlayer.getPlayerState().equals(RealPlayer.PlayerStates.IDLE))
+                if (currentlyActivePlayer.getPlayerState().equals(RealPlayer.PlayerStates.IDLE)) {
+                    System.out.println("test");
                     setGameState(GameStates.END_PLAYER_TURN);
+                }
+                //System.out.println("another test");
 
                 break;
             case END_PLAYER_TURN:

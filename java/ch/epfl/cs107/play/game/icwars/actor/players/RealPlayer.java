@@ -80,7 +80,6 @@ public class RealPlayer extends ICWarsPlayer {
     }
 
 
-
     /**
      * General update method, for a player,
      * allowing to navigate on the grid
@@ -117,14 +116,23 @@ public class RealPlayer extends ICWarsPlayer {
     private void moveIfPressed(Orientation orientation, Button b) {
         if (b.isDown()) {
             if (!isDisplacementOccurs()) {
-                System.out.println(orientation);
+                //System.out.println(orientation);
                 orientate(orientation);
                 move(MOVE_DURATION);
             }
         }
     }
 
-
+/**
+ public void selectUnit(int unitIndex) {
+ if (playerUnitsList.size() > unitIndex) {
+ System.out.println(playerUnitsList.size());
+ selectedUnit = playerUnitsList.get(unitIndex);
+ gui.setSelectedUnit(playerUnitsList.get(unitIndex));
+ }
+ }
+ // Method used for selecting a unit, and draw it's range, using the "U" key
+ */
 
 
 
@@ -158,7 +166,7 @@ public class RealPlayer extends ICWarsPlayer {
                 setSelectedUnit(unit);
                 gui.setSelectedUnit(unit);
                 getMemorisedUnits().add(unit);
-                System.out.println("memorized!");
+                //System.out.println("memorized!");
 
             }
 
@@ -266,7 +274,6 @@ public class RealPlayer extends ICWarsPlayer {
                         //If the unit was repositioned and is in range
                         setPlayerState(PlayerStates.ACTION_SELECTION);
                         System.out.println("State: ACTION_SELECTION");
-                        System.out.println("Choosing Attack or Wait");
                     }
                 }
                 break;
@@ -277,7 +284,7 @@ public class RealPlayer extends ICWarsPlayer {
                     if (keyboard.get(act.getKey()).isReleased()) {
                         action = act;
                         setPlayerState(PlayerStates.ACTION);
-                        System.out.println("State: Action");
+                        System.out.println("State: ACTION");
 
                         //selectedUnit = null;
                     }
@@ -315,13 +322,14 @@ public class RealPlayer extends ICWarsPlayer {
      */
     public boolean isDefeated() {
 
+        System.out.println("is defeated");
         if (playerUnitsList != null) {
             for (Unit unit : playerUnitsList) {
                 if (unit.getHp() == 0) {
                     getOwnerArea().unregisterActor(unit);
-                    areasList.remove(unit);
+                    unit.leaveArea();
 
-                    if (playerUnitsList.isEmpty()) {
+                    if (playerUnitsList == null) {
                         defeated = true;
                     }
                 }

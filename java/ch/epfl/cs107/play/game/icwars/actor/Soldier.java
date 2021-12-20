@@ -24,7 +24,7 @@ public class Soldier extends Unit {
 
 
     public Soldier(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
-        super(area, position, 2, 7, 10, faction, factionImage[faction.ordinal()]);
+        super(area, position, 2, 2, 5, faction, factionImage[faction.ordinal()]);
 
         Action attack = new Attack(this,(ICWarsArea)getOwnerArea());
         Action wait = new Wait(this,(ICWarsArea)getOwnerArea());

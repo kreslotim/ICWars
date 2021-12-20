@@ -60,6 +60,7 @@ public abstract class ICWarsArea extends Area {
     }
 
     public void doDamage(int indexOfAttack) {
+        System.out.println(indexOfAttack);
         unitsList.get(indexOfAttack).makeDamage();
     }
 
