@@ -1,0 +1,35 @@
+CONCEPTION
+
+CLASSES ET INTERFACES
+Voici l’organisation des paquets de notre jeu ICWars :
+
+Les liens de hiérarchie entre les classes et les interfaces  
+
+MODIFICATIONS EFFECTUEES AU CODE FOURNI  // les classes que t'as rajoute pas les methodes
+et les trucs que t'as modifié dans les fichiers déjà là
+//  classes rajoutees pas de base 
+// modif du code fourni Area
+
+Implémentation des fonctionnalités principales de l’énoncé
+•	Dans le paquetage game.icwars :
+La classe ICWars est notre super-classe.
+•	Dans game.icwars.actor.players :
+La classe RealPlayer qui modélise le joueur « humain », contrôlable manuellement.
+RealPlayer(joueur humain) et AIPlayer(joueur artificiel) héritent de ICWarsActor
+Dans un sous-paquetage game.icwars.area
+La classe ICWarsArea
+Les classes Level0 et Level1, héritant de ICWarsArea
+la classe ICWarsBehavior et ICWarsCell
+la classe ICWarsCell
+•	Dans le paquetage game.icwars.actor :
+Soldat et Tank héritent de Unit
+
+
+
+// besoin d’ajouter les meths supplémentaires ?
+Dans la méthode cellInteractionOf de la classe AreaBehavior, nous avons mis 
+interactable != interactor pour que l’unité ne puisse pas interagir avec le curseur 
+Dans l’interface ICWarsInteractionVisitor, nous avons ajouté  .
+
+
+Extensions :
