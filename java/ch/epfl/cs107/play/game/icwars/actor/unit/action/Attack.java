@@ -81,6 +81,11 @@ public class Attack extends Action{
         }
     }
 
+    @Override
+    public void doAutoAction(float dt, ICWarsPlayer player) {
+
+    }
+
     /**
      * draws attacking cursor
      * @param canvas target, not null

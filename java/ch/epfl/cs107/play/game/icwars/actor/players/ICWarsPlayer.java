@@ -13,7 +13,8 @@ import java.util.List;
 
 abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, Interactor {
 
-    private List<Unit> memorisedUnits = new ArrayList<>();
+    private final List<Unit> memorisedUnits = new ArrayList<>();
+    private List<Unit> ICUnitsList = new ArrayList<>();
     private PlayerStates playerState;
 
 
@@ -23,8 +24,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
      * @param area     (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      */
-    public ICWarsPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
+    public ICWarsPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction, Unit... units) {
         super(area, position, faction);
+        ICUnitsList = new ArrayList<>(List.of(units));
     }
 
     /**
@@ -50,6 +52,37 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     }
 
     /**
+     * Method allowing to a player to start his round
+     */
+    public void startTurn() {
+        setPlayerState(PlayerStates.NORMAL);
+        this.centerCamera();
+    }
+
+
+    /**
+     * Sets all units of a player available
+     */
+    public void UnitAvailability() {
+        for (Unit u : ICUnitsList) {
+            u.setIsUsedUnit(false);
+        }
+    }
+
+    /**
+     * Tests if a player is defeated, depending if it's list of usable units is empty or not
+     *
+     * @return defeated (Boolean)
+     */
+    public boolean isDefeated() {
+        boolean defeated = false;
+        if (ICUnitsList.isEmpty()) {
+            defeated = true;
+        }
+        return defeated;
+    }
+
+    /**
      * gets the list of memorized (selected) units
      * @return memorizedUnits (List)
      */
@@ -62,6 +95,14 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         return Collections.singletonList(getCurrentMainCellCoordinates());
     }
 
+    /**
+     * Gets the list of units, of a specific player
+     *
+     * @return playerUnitsList (List)
+     */
+    public List<Unit> getICUnitsList() {
+        return ICUnitsList;
+    }
 
     /**
      * get the playerState of the player

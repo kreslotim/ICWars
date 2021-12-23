@@ -310,27 +310,7 @@ public class RealPlayer extends ICWarsPlayer {
         this.selectedUnit = selectedUnit;
     }
 
-    /**
-     * Gets the list of units, of a specific player
-     *
-     * @return playerUnitsList (List)
-     */
-    public List<Unit> getPlayerUnitsList() {
-        return playerUnitsList;
-    }
 
-    /**
-     * Tests if a player is defeated, depending if it's list of usable units is empty or not
-     *
-     * @return defeated (Boolean)
-     */
-    public boolean isDefeated() {
-        boolean defeated = false;
-        if (playerUnitsList.isEmpty()) {
-            defeated = true;
-        }
-        return defeated;
-    }
 
 
     /**
@@ -341,18 +321,6 @@ public class RealPlayer extends ICWarsPlayer {
     }
 
 
-    /**
-     * Method allowing to a player to start his round
-     */
-    public void startTurn() {
-        setPlayerState(PlayerStates.NORMAL);
-        this.centerCamera();
-
-        for (Unit u : playerUnitsList) {
-            u.setIsUsedUnit(false);
-        }
-
-    }
 
     /**
      * Tests if a player has moved out of a cell, without selecting any Unit inside of it

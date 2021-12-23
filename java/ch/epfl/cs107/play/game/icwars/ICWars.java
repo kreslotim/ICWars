@@ -5,6 +5,8 @@ import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Soldier;
 import ch.epfl.cs107.play.game.icwars.actor.Tank;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
+import ch.epfl.cs107.play.game.icwars.actor.players.AIPlayer;
+import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
 import ch.epfl.cs107.play.game.icwars.area.*;
 import ch.epfl.cs107.play.io.FileSystem;
@@ -23,13 +25,13 @@ public class ICWars extends AreaGame {
     private final String[] areasResult = {"icwars/GAMEOVER", "icwars/VICTORY"};
     private boolean won = true;
 
-    private List<RealPlayer> icWarsPlayerList = new ArrayList<>();
-    private List<RealPlayer> currentRound = new ArrayList<>();
-    private List<RealPlayer> nextRound = new ArrayList<>();
-    private RealPlayer currentlyActivePlayer;
+    private List<ICWarsPlayer> icWarsPlayerList = new ArrayList<>();
+    private List<ICWarsPlayer> currentRound = new ArrayList<>();
+    private List<ICWarsPlayer> nextRound = new ArrayList<>();
+    private ICWarsPlayer currentlyActivePlayer;
 
     private RealPlayer player1;
-    private RealPlayer player2;
+    private AIPlayer player2;
 
     private int playerIndex = 0;
     private int areaIndex;
@@ -94,7 +96,7 @@ public class ICWars extends AreaGame {
                 new Tank(area, new DiscreteCoordinates(2, 5), ICWarsActor.Faction.ALLY),
                 new Soldier(area, new DiscreteCoordinates(3, 5), ICWarsActor.Faction.ALLY));
 
-        player2 = new RealPlayer(area, coordsEnemy, ICWarsActor.Faction.ENEMY,
+        player2 = new AIPlayer(area, coordsEnemy, ICWarsActor.Faction.ENEMY,
                 new Tank(area, new DiscreteCoordinates(8, 5), ICWarsActor.Faction.ENEMY),
                 new Soldier(area, new DiscreteCoordinates(9, 5), ICWarsActor.Faction.ENEMY));
 
@@ -181,12 +183,12 @@ public class ICWars extends AreaGame {
                 break;
             case START_PLAYER_TURN:
                 currentlyActivePlayer.startTurn();
-
+                currentlyActivePlayer.UnitAvailability();
                 setGameState(GameStates.PLAYER_TURN);
 
                 break;
             case PLAYER_TURN:
-                if (currentlyActivePlayer.getPlayerState().equals(RealPlayer.PlayerStates.IDLE)) {
+                if (currentlyActivePlayer.getPlayerState().equals(RealPlayer.PlayerStates.IDLE) || currentlyActivePlayer.isDefeated()) {
 
                     setGameState(GameStates.END_PLAYER_TURN);
                 }
@@ -203,7 +205,7 @@ public class ICWars extends AreaGame {
                     nextRound.add(currentlyActivePlayer);
                     nextRound.remove(0);
 
-                    for (Unit u : currentlyActivePlayer.getPlayerUnitsList()) {
+                    for (Unit u : currentlyActivePlayer.getICUnitsList()) {
                         u.setIsUsedUnit(false);
                     } // set all units as usable again
 
@@ -251,7 +253,7 @@ public class ICWars extends AreaGame {
     public void switchTurn() {
         currentlyActivePlayer.setPlayerState(RealPlayer.PlayerStates.IDLE);
 
-        for (Unit u : currentlyActivePlayer.getPlayerUnitsList()) {
+        for (Unit u : currentlyActivePlayer.getICUnitsList()) {
             u.setIsUsedUnit(false);
         }
 

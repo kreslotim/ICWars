@@ -28,4 +28,6 @@ public abstract class Action implements Graphics {
     }
 
     public abstract void doAction(float dt, ICWarsPlayer player, Keyboard keyboard);
+
+    public abstract void doAutoAction(float dt, ICWarsPlayer player);
 }

@@ -34,6 +34,11 @@ public class Wait extends Action {
     }
 
     @Override
+    public void doAutoAction(float dt, ICWarsPlayer player) {
+
+    }
+
+    @Override
     public void draw(Canvas canvas) {
     }
 }
