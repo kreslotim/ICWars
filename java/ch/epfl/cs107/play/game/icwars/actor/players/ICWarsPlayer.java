@@ -29,6 +29,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     /**
      * update
+     *
      * @param deltaTime
      */
     @Override
@@ -38,6 +39,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     /**
      * Method adding the new actors (players and units) on the grid
+     *
      * @param area     (Area): initial area, not null
      * @param position (DiscreteCoordinates): initial position, not null
      */
@@ -51,6 +53,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     /**
      * gets the list of memorized (selected) units
+     *
      * @return memorizedUnits (List)
      */
     public List<Unit> getMemorisedUnits() {
@@ -73,6 +76,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     /**
      * sets the playerState of the player
+     *
      * @param playerState
      */
     public void setPlayerState(PlayerStates playerState) {
@@ -83,5 +87,5 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     /**
      * Enumeration of all States of player, used in RealPlayer, and ICWars
      */
-    public enum PlayerStates {IDLE, NORMAL, SELECT_CELL, MOVE_UNIT, ACTION_SELECTION, ACTION;}
+    public enum PlayerStates {IDLE, NORMAL, SELECT_CELL, MOVE_UNIT, ACTION_SELECTION, ACTION}
 }

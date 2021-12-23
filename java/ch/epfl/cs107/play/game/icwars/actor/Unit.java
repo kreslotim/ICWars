@@ -21,6 +21,7 @@ import java.util.Queue;
 
 public abstract class Unit extends ICWarsActor implements Interactor {
 
+    protected final List<Action> actionsList = new ArrayList<>();
     private String unitName;
     private int hp;
     private int maxHp;
@@ -31,11 +32,6 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     private ICWarsRange range = new ICWarsRange();
     private boolean usedUnit = false;
     private int defenseStar; // comming from where?
-
-    protected final List<Action> actionsList = new ArrayList<>();
-
-
-
 
 
     /**
@@ -63,6 +59,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * drawing method for each unit
+     *
      * @param canvas target, not null
      */
     @Override
@@ -75,6 +72,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
      ******************************************************************************************************************/
     /**
      * Main method determining the edges of a unit's range, based on four booleans, defining if each side has an edge
+     *
      * @param from (Discrete Coordinates). Center of the range, positioned on the selected unit (origin)
      */
     private void addEdge(DiscreteCoordinates from) {
@@ -134,9 +132,11 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
 
     /******************************************************************************************************************
-                                             GETTERS   &   SETTERS
+     GETTERS   &   SETTERS
      *****************************************************************************************************************/
-    /** GETTERS */
+    /**
+     * GETTERS
+     */
 
     public List<Action> getAction() {
         return actionsList;
@@ -163,7 +163,9 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     }
 
 
-    /** SETTERS */
+    /**
+     * SETTERS
+     */
 
     public void setIsUsedUnit(boolean used) {
         sprite.setAlpha(used ? 0.5f : 1f);
@@ -182,25 +184,9 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     }
 
 
-
     /******************************************************************************************************************
      ****************************************    INTERACTIONS    ******************************************************
      ******************************************************************************************************************/
-
-    /**
-     * Nested class, handling the Interactions
-     */
-    private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
-        /**
-         * InteractWith method redefined in the Interface ICWarsInteractionVisitor, setting the defense stars
-         * @param cell
-         */
-        @Override
-        public void interactWith(ICWarsBehavior.ICWarsCell cell) {
-            defenseStar = cell.getDefenseStars();
-        }
-    }
-
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v) {
@@ -216,4 +202,19 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     public boolean takeCellSpace() {
         return true;
     } // A unit occupies a specific cell, making it not traversable
+
+    /**
+     * Nested class, handling the Interactions
+     */
+    private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
+        /**
+         * InteractWith method redefined in the Interface ICWarsInteractionVisitor, setting the defense stars
+         *
+         * @param cell
+         */
+        @Override
+        public void interactWith(ICWarsBehavior.ICWarsCell cell) {
+            defenseStar = cell.getDefenseStars();
+        }
+    }
 }

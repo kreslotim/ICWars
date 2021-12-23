@@ -7,7 +7,6 @@ import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.window.Keyboard;
 
 
-
 public abstract class Action implements Graphics {
 
 
@@ -28,4 +27,14 @@ public abstract class Action implements Graphics {
     }
 
     public abstract void doAction(float dt, ICWarsPlayer player, Keyboard keyboard);
+
+
+    /**
+     * method describing the functioning (it's automatic) when it's AIPlayer's turn
+     *
+     * @param dt
+     * @param player
+     */
+    public abstract void doAutoAction(float dt, ICWarsPlayer player);
+
 }

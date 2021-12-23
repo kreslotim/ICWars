@@ -1,10 +1,5 @@
 package ch.epfl.cs107.play.game.areagame;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import ch.epfl.cs107.play.game.actor.Draggable;
 import ch.epfl.cs107.play.game.actor.Droppable;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
@@ -14,13 +9,18 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Image;
 import ch.epfl.cs107.play.window.Window;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * AreaBehavior is a basically a map made of Cells. Those cells are used for the game behavior
  * Note: implementation from Interactable.Listener not excpected from students
  */
 
-public abstract class AreaBehavior implements Interactable.Listener, Interactor.Listener{
+public abstract class AreaBehavior implements Interactable.Listener, Interactor.Listener {
 
     /// The behavior is an Image of size height x width
     private final Image behaviorMap;
@@ -30,10 +30,11 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
 
     /**
      * Default AreaBehavior Constructor
+     *
      * @param window (Window): graphic context, not null
-     * @param name (String): name of the behavior image, not null
+     * @param name   (String): name of the behavior image, not null
      */
-    public AreaBehavior(Window window, String name){
+    public AreaBehavior(Window window, String name) {
         // Load the image
         System.out.println(ResourcePath.getBehavior(name));
         behaviorMap = window.getImage(ResourcePath.getBehavior(name), null, false);
@@ -44,60 +45,61 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
     }
 
     public void dropInteractionOf(Draggable draggable, DiscreteCoordinates mouseCoordinates) {
-    	if(mouseCoordinates.x >= 0 && mouseCoordinates.y >= 0 && mouseCoordinates.x < width && mouseCoordinates.y < height) {
-    		cells[mouseCoordinates.x][mouseCoordinates.y].dropInteractionOf(draggable);
-    	}
+        if (mouseCoordinates.x >= 0 && mouseCoordinates.y >= 0 && mouseCoordinates.x < width && mouseCoordinates.y < height) {
+            cells[mouseCoordinates.x][mouseCoordinates.y].dropInteractionOf(draggable);
+        }
     }
 
     /// AreaBehavior implements Interactor.Listener
 
     @Override
-    public void cellInteractionOf(Interactor interactor){
-        for(DiscreteCoordinates dc : interactor.getCurrentCells()){
-            if(dc.x < 0 || dc.y < 0 || dc.x >= width || dc.y >= height)
+    public void cellInteractionOf(Interactor interactor) {
+        for (DiscreteCoordinates dc : interactor.getCurrentCells()) {
+            if (dc.x < 0 || dc.y < 0 || dc.x >= width || dc.y >= height)
                 continue;
             cells[dc.x][dc.y].cellInteractionOf(interactor);
         }
     }
 
     @Override
-    public void viewInteractionOf(Interactor interactor){
-        for(DiscreteCoordinates dc : interactor.getFieldOfViewCells()){
-            if(dc.x < 0 || dc.y < 0 || dc.x >= width || dc.y >= height)
+    public void viewInteractionOf(Interactor interactor) {
+        for (DiscreteCoordinates dc : interactor.getFieldOfViewCells()) {
+            if (dc.x < 0 || dc.y < 0 || dc.x >= width || dc.y >= height)
                 continue;
             cells[dc.x][dc.y].viewInteractionOf(interactor);
         }
     }
-    
-    protected void setCell(int x,int y, Cell cell) {
-    	cells[x][y] = cell;
+
+    protected void setCell(int x, int y, Cell cell) {
+        cells[x][y] = cell;
     }
-    
+
     protected Cell getCell(int x, int y) {
-    	return cells[x][y];
+        return cells[x][y];
     }
+
     protected int getRGB(int r, int c) {
-    	return behaviorMap.getRGB(r, c);
+        return behaviorMap.getRGB(r, c);
     }
-    
+
     protected int getHeight() {
-    	return height;
+        return height;
     }
-    
+
     protected int getWidth() {
-    	return width;
+        return width;
     }
-    
+
 
     /// AreaBehavior implements Interactable.Listener
 
     @Override
     public boolean canLeave(Interactable entity, List<DiscreteCoordinates> coordinates) {
 
-        for(DiscreteCoordinates c : coordinates){
-            if(c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
+        for (DiscreteCoordinates c : coordinates) {
+            if (c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
                 return false;
-            if(!cells[c.x][c.y].canLeave(entity))
+            if (!cells[c.x][c.y].canLeave(entity))
                 return false;
         }
         return true;
@@ -105,10 +107,10 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
 
     @Override
     public boolean canEnter(Interactable entity, List<DiscreteCoordinates> coordinates) {
-        for(DiscreteCoordinates c : coordinates){
-            if(c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
+        for (DiscreteCoordinates c : coordinates) {
+            if (c.x < 0 || c.y < 0 || c.x >= width || c.y >= height)
                 return false;
-            if(!cells[c.x][c.y].canEnter(entity))
+            if (!cells[c.x][c.y].canEnter(entity))
                 return false;
         }
         return true;
@@ -117,7 +119,7 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
     @Override
     public void leave(Interactable entity, List<DiscreteCoordinates> coordinates) {
 
-        for(DiscreteCoordinates c : coordinates){
+        for (DiscreteCoordinates c : coordinates) {
             cells[c.x][c.y].leave(entity);
         }
 
@@ -125,7 +127,7 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
 
     @Override
     public void enter(Interactable entity, List<DiscreteCoordinates> coordinates) {
-        for(DiscreteCoordinates c : coordinates){
+        for (DiscreteCoordinates c : coordinates) {
             cells[c.x][c.y].enter(entity);
         }
     }
@@ -134,7 +136,7 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
      * Each AreaGame will have its own Cell extension.
      * At minimum a cell is linked to its content
      */
-    public abstract class Cell implements Interactable{
+    public abstract class Cell implements Interactable {
 
         /// Content of the cell as a set of Interactable
         protected Set<Interactable> entities;
@@ -143,60 +145,65 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
 
         /**
          * Default Cell constructor
+         *
          * @param x (int): x-coordinate of this cell
          * @param y (int): y-coordinate of this cell
          */
-        public Cell(int x, int y){
+        public Cell(int x, int y) {
             entities = new HashSet<>();
             coordinates = new DiscreteCoordinates(x, y);
         }
 
         /**
          * Do the given draggableAreaEntity interacts with all Droppable sharing the same cell
+         *
          * @param draggable (Interactor), not null
          */
         private void dropInteractionOf(Draggable draggable) {
-        	for(Interactable interactable : entities){
-                if(interactable instanceof Droppable) {
-                	Droppable droppable = (Droppable)interactable;
-                	if(droppable.canDrop())
-                		droppable.receiveDropFrom(draggable);
+            for (Interactable interactable : entities) {
+                if (interactable instanceof Droppable) {
+                    Droppable droppable = (Droppable) interactable;
+                    if (droppable.canDrop())
+                        droppable.receiveDropFrom(draggable);
                 }
             }
-        	if(this instanceof Droppable) {
-            	Droppable droppable = (Droppable)this;
-            	if(droppable.canDrop())
-            		droppable.receiveDropFrom(draggable);
-        	}
-        		
+            if (this instanceof Droppable) {
+                Droppable droppable = (Droppable) this;
+                if (droppable.canDrop())
+                    droppable.receiveDropFrom(draggable);
+            }
+
         }
-        
+
         /**
          * Do the given interactor interacts with all Interactable sharing the same cell
+         *
          * @param interactor (Interactor), not null
          */
-        private void cellInteractionOf(Interactor interactor){
+        private void cellInteractionOf(Interactor interactor) {
             interactor.interactWith(this);
-            for(Interactable interactable : entities){
-                if(interactable.isCellInteractable() && interactable != interactor)
+            for (Interactable interactable : entities) {
+                if (interactable.isCellInteractable() && interactable != interactor)
                     interactor.interactWith(interactable);
             }
         }
 
         /**
          * Do the given interactor interacts with all Interactable sharing the same cell
+         *
          * @param interactor (Interactor), not null
          */
-        private void viewInteractionOf(Interactor interactor){
+        private void viewInteractionOf(Interactor interactor) {
             interactor.interactWith(this);
-            for(Interactable interactable : entities){
-                if(interactable.isViewInteractable())
+            for (Interactable interactable : entities) {
+                if (interactable.isViewInteractable())
                     interactor.interactWith(interactable);
             }
         }
 
         /**
          * Do the given interactable enter into this Cell
+         *
          * @param entity (Interactable), not null
          */
         protected void enter(Interactable entity) {
@@ -205,6 +212,7 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
 
         /**
          * Do the given Interactable leave this Cell
+         *
          * @param entity (Interactable), not null
          */
         protected void leave(Interactable entity) {
@@ -213,6 +221,7 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
 
         /**
          * Indicate if the given Interactable can leave this Cell
+         *
          * @param entity (Interactable), not null
          * @return (boolean): true if entity can leave
          */
@@ -220,6 +229,7 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
 
         /**
          * Indicate if the given Interactable can enter this Cell
+         *
          * @param entity (Interactable), not null
          * @return (boolean): true if entity can enter
          */
@@ -228,15 +238,17 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
         /// Cell implements Interactable
 
         @Override
-        public boolean takeCellSpace(){
+        public boolean takeCellSpace() {
             return false;
         }
 
         @Override
-        public void onLeaving(List<DiscreteCoordinates> coordinates) {}
+        public void onLeaving(List<DiscreteCoordinates> coordinates) {
+        }
 
         @Override
-        public void onEntering(List<DiscreteCoordinates> coordinates) {}
+        public void onEntering(List<DiscreteCoordinates> coordinates) {
+        }
 
         @Override
         public List<DiscreteCoordinates> getCurrentCells() {

@@ -22,7 +22,9 @@ public class ICWars extends AreaGame {
 
     public final static float CAMERA_SCALE_FACTOR = 10.f;
     private final String[] areas = {"icwars/Level0", "icwars/Level1"};
+    private final String[] areasResult = {"icwars/GAMEOVER", "icwars/VICTORY"};
 
+    private boolean won;
     private List<RealPlayer> icWarsPlayerList = new ArrayList<>();
     private List<RealPlayer> currentRound = new ArrayList<>();
     private List<RealPlayer> nextRound = new ArrayList<>();
@@ -33,14 +35,16 @@ public class ICWars extends AreaGame {
 
     private int playerIndex = 0;
     private int areaIndex;
+    //    private int areaResultIndex;
     private GameStates gameState;
 
 
     /******************************************************************************************************************
-                                          |-- WELCOME TO ICWARS --|
+     |-- WELCOME TO ICWARS --|
      ******************************************************************************************************************/
     /**
      * Title of the window
+     *
      * @return title (String)
      */
     @Override
@@ -77,6 +81,7 @@ public class ICWars extends AreaGame {
 
     /**
      * Initializing the grid, and players
+     *
      * @param areaKey
      */
     private void initArea(String areaKey) {
@@ -138,11 +143,11 @@ public class ICWars extends AreaGame {
         }
 
         /**
-        if ( keyboard.get(Keyboard.U).isReleased ()) {
-            System.out.println("test");
-            currentlyActivePlayer.selectUnit(1) ; // 0, 1 ...
-        } // draws the range, of a selected unit, with some index (int).
-          // works only if a player is in "SELECT_CELL" state (after pushing "Enter")
+         if ( keyboard.get(Keyboard.U).isReleased ()) {
+         System.out.println("test");
+         currentlyActivePlayer.selectUnit(1) ; // 0, 1 ...
+         } // draws the range, of a selected unit, with some index (int).
+         // works only if a player is in "SELECT_CELL" state (after pushing "Enter")
          */
 
         updateGameStates();
@@ -162,10 +167,27 @@ public class ICWars extends AreaGame {
         player1.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
         player1.centerCamera();
         reset();
+
+//            areaResultIndex = (areaResultIndex == 0) ? 1 : 0;
+        // for the winner
+        if (won == true) { // binaire...
+            setCurrentArea(areasResult[1], false);
+            icWarsPlayerList.clear();
+            end();
+
+        } else {
+            // for the loser
+            setCurrentArea(areasResult[0], false);
+            icWarsPlayerList.clear();
+            end();
+        }
+
+
     }
 
     /**
      * Reset the game, on current level (must be executed when changing level)
+     *
      * @return true if executed
      */
     public boolean reset() {
@@ -181,8 +203,6 @@ public class ICWars extends AreaGame {
     public void end() {
         System.out.println("Game Over");
     }
-
-
 
 
     /******************************************************************************************************************
@@ -258,6 +278,7 @@ public class ICWars extends AreaGame {
      ******************************************************************************************************************/
     /**
      * sets the gameState of the player
+     *
      * @param gameState
      */
     public void setGameState(GameStates gameState) {
@@ -286,5 +307,5 @@ public class ICWars extends AreaGame {
     /**
      * Enumeration of all States of the Game
      */
-    public enum GameStates { INIT, CHOOSE_PLAYER, START_PLAYER_TURN, PLAYER_TURN, END_PLAYER_TURN, END_TURN, END;}
+    public enum GameStates {INIT, CHOOSE_PLAYER, START_PLAYER_TURN, PLAYER_TURN, END_PLAYER_TURN, END_TURN, END;}
 }

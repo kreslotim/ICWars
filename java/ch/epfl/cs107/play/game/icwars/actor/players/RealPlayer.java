@@ -23,17 +23,13 @@ import java.util.List;
 public class RealPlayer extends ICWarsPlayer {
     private final static int MOVE_DURATION = 1; // Time is money
     private final String[] cursors = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
-    private Sprite sprite;
-
     private final ICWarsPlayerGUI gui = new ICWarsPlayerGUI(0, this);
-
+    private Sprite sprite;
     private Unit selectedUnit;
     private List<Unit> playerUnitsList;
     private List<Area> areasList = new ArrayList<>();
     private boolean defeated = false;
     private Action action;
-
-
 
 
     /**
@@ -65,6 +61,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     /**
      * drawing method for GUI and Cursor
+     *
      * @param canvas target, not null
      */
     @Override
@@ -73,7 +70,7 @@ public class RealPlayer extends ICWarsPlayer {
         if (!getPlayerState().equals(PlayerStates.IDLE)) sprite.draw(canvas); // Cursor Draw
 
         if (getPlayerState().equals(PlayerStates.ACTION)) {
-            if (action!=null) {
+            if (action != null) {
                 action.draw(canvas);
             }
         }
@@ -135,9 +132,6 @@ public class RealPlayer extends ICWarsPlayer {
  */
 
 
-
-
-
     /******************************************************************************************************************
      ****************************************    INTERACTIONS    ******************************************************
      ******************************************************************************************************************/
@@ -151,41 +145,6 @@ public class RealPlayer extends ICWarsPlayer {
     public void interactWith(Interactable other) {
         other.acceptInteraction(new ICWarsPlayerInteractionHandler());
     }
-
-    /**
-     * Nested class, handling all the Interactions
-     */
-    private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
-        /**
-         * InteractWith method redefined in the Interface ICWarsInteractionVisitor
-         * @param unit (Unit)
-         */
-        @Override
-        public void interactWith(Unit unit) {
-            if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
-                setSelectedUnit(unit);
-                gui.setSelectedUnit(unit);
-                getMemorisedUnits().add(unit);
-                //System.out.println("memorized!");
-
-            }
-
-            if (getPlayerState().equals(PlayerStates.NORMAL) || getPlayerState().equals(PlayerStates.SELECT_CELL)) {
-                gui.setPanelOfInfoForUnit(unit);
-
-            }
-        }
-
-        @Override
-        public void interactWith(ICWarsBehavior.ICWarsCell cell) {
-            if (getPlayerState().equals(PlayerStates.NORMAL) || getPlayerState().equals(PlayerStates.SELECT_CELL)) {
-
-                gui.setCurrentCell(cell.getCellType());
-
-            }
-        }
-    }
-
 
     @Override
     public void acceptInteraction(AreaInteractionVisitor v) {
@@ -221,13 +180,6 @@ public class RealPlayer extends ICWarsPlayer {
     public boolean wantsViewInteraction() {
         return false;
     }
-
-
-
-
-    /******************************************************************************************************************
-     ***********************************     FINITE STATE AUTOMATON     ***********************************************
-     ******************************************************************************************************************/
 
     /**
      * Automaton that changes the behaviour of the player
@@ -291,9 +243,23 @@ public class RealPlayer extends ICWarsPlayer {
                 }
                 break;
             case ACTION:
-                action.doAction(deltaTime,this, keyboard);
+                if (action != null) action.doAction(deltaTime, this, keyboard);
                 break;
         }
+    }
+
+
+    /******************************************************************************************************************
+     ***********************************     FINITE STATE AUTOMATON     ***********************************************
+     ******************************************************************************************************************/
+
+    /**
+     * Sets the selectedUnit
+     *
+     * @param selectedUnit (Unit)
+     */
+    public void setSelectedUnit(Unit selectedUnit) {
+        this.selectedUnit = selectedUnit;
     }
 
     /******************************************************************************************************************
@@ -301,15 +267,8 @@ public class RealPlayer extends ICWarsPlayer {
      ******************************************************************************************************************/
 
     /**
-     * Sets the selectedUnit
-     * @param selectedUnit (Unit)
-     */
-    public void setSelectedUnit(Unit selectedUnit) {
-        this.selectedUnit = selectedUnit;
-    }
-
-    /**
      * Gets the list of units, of a specific player
+     *
      * @return playerUnitsList (List)
      */
     public List<Unit> getPlayerUnitsList() {
@@ -318,6 +277,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     /**
      * Tests if a player is defeated, depending if it's list of usable units is empty or not
+     *
      * @return defeated (Boolean)
      */
     public boolean isDefeated() {
@@ -339,9 +299,8 @@ public class RealPlayer extends ICWarsPlayer {
         return defeated;
     }
 
-
     /**
-     *  Method allowing to a player to start his round
+     * Method allowing to a player to start his round
      */
     public void startTurn() {
         setPlayerState(PlayerStates.NORMAL);
@@ -355,6 +314,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     /**
      * Tests if a player has moved out of a cell, without selecting any Unit inside of it
+     *
      * @param coordinates (List<DiscreteCoordinates>)
      */
     @Override
@@ -362,6 +322,41 @@ public class RealPlayer extends ICWarsPlayer {
 
         if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getPlayerState().equals(PlayerStates.SELECT_CELL)) {
             setPlayerState(PlayerStates.NORMAL);
+        }
+    }
+
+    /**
+     * Nested class, handling all the Interactions
+     */
+    private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
+        /**
+         * InteractWith method redefined in the Interface ICWarsInteractionVisitor
+         *
+         * @param unit (Unit)
+         */
+        @Override
+        public void interactWith(Unit unit) {
+            if (getPlayerState().equals(PlayerStates.SELECT_CELL) && getFaction().equals(unit.getFaction()) && !unit.isUsed()) {
+                setSelectedUnit(unit);
+                gui.setSelectedUnit(unit);
+                getMemorisedUnits().add(unit);
+                //System.out.println("memorized!");
+
+            }
+
+            if (getPlayerState().equals(PlayerStates.NORMAL) || getPlayerState().equals(PlayerStates.SELECT_CELL)) {
+                gui.setPanelOfInfoForUnit(unit);
+
+            }
+        }
+
+        @Override
+        public void interactWith(ICWarsBehavior.ICWarsCell cell) {
+            if (getPlayerState().equals(PlayerStates.NORMAL) || getPlayerState().equals(PlayerStates.SELECT_CELL)) {
+
+                gui.setCurrentCell(cell.getCellType());
+
+            }
         }
     }
 }
