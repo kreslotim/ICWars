@@ -26,11 +26,10 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     private int maxHp;
     private int damage;
     private int radius;
-    //private Faction faction;
     private Sprite sprite;
     private ICWarsRange range = new ICWarsRange();
     private boolean usedUnit = false;
-    private int defenseStar; // comming from where?
+    private int defenseStar;
 
     protected final List<Action> actionsList = new ArrayList<>();
 
@@ -40,7 +39,6 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * Default Unit constructor
-     *
      * @param area     (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      */
@@ -52,7 +50,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         this.damage = damage;
         this.radius = radius;
 
-        // Method allowing to draw the range, around a unit
+        // Draws the range, around a unit
         addEdge(getCurrentMainCellCoordinates());
 
         //Builds the image of each unit, on the grid
@@ -62,7 +60,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     }
 
     /**
-     * drawing method for each unit
+     * draws the unit
      * @param canvas target, not null
      */
     @Override
@@ -100,9 +98,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     }
 
     /**
-     * Draw the unit's range and a path from the unit position to
-     * destination
-     *
+     * Draw the unit's range and a path from the unit position to destination
      * @param destination path destination
      * @param canvas      canvas
      */
@@ -117,7 +113,8 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     }
 
     /**
-     * @param newPosition new unit's position
+     * Changes a unit's position, inside of it's range, calculating it's new range after moving
+     * @param newPosition (DiscreteCoordinates)
      * @return (Boolean) true if new position is in bounds, and is different from it's initial position
      */
     @Override
@@ -138,26 +135,48 @@ public abstract class Unit extends ICWarsActor implements Interactor {
      *****************************************************************************************************************/
     /** GETTERS */
 
+    /**
+     * Gets list of actions of a unit
+     * @return actionsList (List)
+     */
     public List<Action> getAction() {
         return actionsList;
     }
 
+    /**
+     * Gets the name of a unit
+     * @return unitName (String)
+     */
     public String getName() {
         return unitName;
     }
 
+    /**
+     * Gets the range of a unit
+     * @return range (ICWarsRange)
+     */
     public ICWarsRange getRange() {
         return range;
     }
 
+    /**
+     * Checks if a unit has been used
+     * @return usedUnit (Boolean)
+     */
     public boolean isUsed() {
         return usedUnit;
     }
 
-    public int getHp() {
-        return hp;
-    }
+    /**
+     * Gets the hp (HP) of a unit
+     * @return hp (Integer)
+     */
+    public int getHp() { return hp;}
 
+    /**
+     * Gets the damage (DMG) of a unit
+     * @return damage (Integer)
+     */
     public int getDamage() {
         return damage;
     }
@@ -165,14 +184,27 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /** SETTERS */
 
+    /**
+     * Sets the unit as used, adjusting transparency
+     * @param used (Boolean)
+     */
     public void setIsUsedUnit(boolean used) {
         sprite.setAlpha(used ? 0.5f : 1f);
         usedUnit = used;
     }
 
-    public void makeDamage() {
-        hp = hp - damage + defenseStar;
+    /**
+     * Sets new hp to the unit, after receiving damage
+     * @param received_damage (Integer)
+     */
+    public void doDamage(int received_damage) {
+        hp = hp - received_damage + defenseStar;
         this.hp = Math.max(hp, 0);
+        if (hp == 0) {
+            this.leaveArea();
+            // Remove from unitsList (ICWarsArea) unit if hp == 0
+            ((ICWarsArea)getOwnerArea()).unregisterUnit(this);
+        }
     }
 
     public void setHeal(int heal) {

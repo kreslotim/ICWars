@@ -37,10 +37,11 @@ public class ICWars extends AreaGame {
 
 
     /******************************************************************************************************************
-                                          |-- WELCOME TO ICWARS --|
+                                            |-- WELCOME TO ICWARS --|
      ******************************************************************************************************************/
     /**
      * Title of the window
+     *
      * @return title (String)
      */
     @Override
@@ -77,6 +78,7 @@ public class ICWars extends AreaGame {
 
     /**
      * Initializing the grid, and players
+     *
      * @param areaKey
      */
     private void initArea(String areaKey) {
@@ -101,14 +103,11 @@ public class ICWars extends AreaGame {
         icWarsPlayerList.add(player1);
         icWarsPlayerList.add(player2);
 
-        // default state of a player
+        // default state of the game
         setGameState(GameStates.INIT);
 
-        //player1 starts the game
-        player1.centerCamera();
-        currentRound.add(player1);
-        //currentlyActivePlayer = player1;
-        //currentlyActivePlayer.startTurn();
+        player1.centerCamera(); // redundant, but it's faster...
+        currentRound.addAll(icWarsPlayerList);
     }
 
     /**
@@ -138,51 +137,15 @@ public class ICWars extends AreaGame {
         }
 
         /**
-        if ( keyboard.get(Keyboard.U).isReleased ()) {
-            System.out.println("test");
-            currentlyActivePlayer.selectUnit(1) ; // 0, 1 ...
-        } // draws the range, of a selected unit, with some index (int).
-          // works only if a player is in "SELECT_CELL" state (after pushing "Enter")
+         if ( keyboard.get(Keyboard.U).isReleased ()) {
+         System.out.println("test");
+         currentlyActivePlayer.selectUnit(1) ; // 0, 1 ...
+         } // draws the range, of a selected unit, with some index (int).
+         // works only if a player is in "SELECT_CELL" state (after pushing "Enter")
          */
 
         updateGameStates();
     }
-
-    /**
-     * Jump to next level
-     */
-    protected void switchArea() {
-
-        player1.leaveArea();
-        player2.leaveArea();
-
-        areaIndex = (areaIndex == 0) ? 1 : 0;
-
-        ICWarsArea currentArea = (ICWarsArea) setCurrentArea(areas[areaIndex], false);
-        player1.enterArea(currentArea, currentArea.getPlayerSpawnPosition());
-        player1.centerCamera();
-        reset();
-    }
-
-    /**
-     * Reset the game, on current level (must be executed when changing level)
-     * @return true if executed
-     */
-    public boolean reset() {
-        createAreas();
-        initArea(getCurrentArea().getTitle());
-        return true;
-    }
-
-    /**
-     * End of the game
-     */
-    @Override
-    public void end() {
-        System.out.println("Game Over");
-    }
-
-
 
 
     /******************************************************************************************************************
@@ -206,49 +169,59 @@ public class ICWars extends AreaGame {
                     setGameState(GameStates.END_TURN);
                 } else {
                     currentlyActivePlayer = currentRound.get(0);
+
                     currentRound.remove(currentlyActivePlayer);
+
                     setGameState(GameStates.START_PLAYER_TURN);
                 }
 
                 break;
             case START_PLAYER_TURN:
                 currentlyActivePlayer.startTurn();
+
                 setGameState(GameStates.PLAYER_TURN);
 
                 break;
             case PLAYER_TURN:
-
                 if (currentlyActivePlayer.getPlayerState().equals(RealPlayer.PlayerStates.IDLE)) {
-                    System.out.println("test");
+
                     setGameState(GameStates.END_PLAYER_TURN);
                 }
-                //System.out.println("another test");
 
                 break;
             case END_PLAYER_TURN:
-                if (currentlyActivePlayer.isDefeated()) currentlyActivePlayer.leaveArea();
-                else {
+                if (currentlyActivePlayer.isDefeated()) {
+
+                    nextRound.remove(currentlyActivePlayer);
+                    currentlyActivePlayer.leaveArea();
+                    setGameState(GameStates.CHOOSE_PLAYER);
+                } else {
+
                     nextRound.add(currentlyActivePlayer);
+                    nextRound.remove(0);
+
                     for (Unit u : currentlyActivePlayer.getPlayerUnitsList()) {
                         u.setIsUsedUnit(false);
-                    }
-                    setGameState(GameStates.CHOOSE_PLAYER); // all units must be Usable
+                    } // set all units as usable again
+
+                    setGameState(GameStates.CHOOSE_PLAYER);
+
                 }
 
                 break;
             case END_TURN:
-                nextRound.remove(currentlyActivePlayer);
-                icWarsPlayerList.removeIf(RealPlayer::isDefeated);
 
-                if (nextRound.size() < 2) setGameState(GameStates.END);
-                else {
+                if (nextRound.size() < 2) {
+                    setGameState(GameStates.END);
+                    System.out.println("END");
+                } else {
                     currentRound.addAll(nextRound);
                     setGameState(GameStates.CHOOSE_PLAYER);
                 }
                 break;
             case END:
-                if ((getCurrentArea().getTitle().equals("icwars/Level1"))) switchArea();
-                else end(); // might have a problem
+                if ((getCurrentArea().getTitle().equals("icwars/Level0"))) switchArea();
+                else end();
                 break;
         }
     }
@@ -258,6 +231,7 @@ public class ICWars extends AreaGame {
      ******************************************************************************************************************/
     /**
      * sets the gameState of the player
+     *
      * @param gameState
      */
     public void setGameState(GameStates gameState) {
@@ -265,26 +239,66 @@ public class ICWars extends AreaGame {
     }
 
     /**
-     * Method allowing switching rounds between players
+     * Switches rounds between players, whenever user hits "TAB"
      */
     public void switchTurn() {
-        //System.out.println(currentlyActivePlayer);
         currentlyActivePlayer.setPlayerState(RealPlayer.PlayerStates.IDLE);
-        playerIndex++;
 
         for (Unit u : currentlyActivePlayer.getPlayerUnitsList()) {
             u.setIsUsedUnit(false);
         }
 
+        playerIndex++;
         currentlyActivePlayer = icWarsPlayerList.get(playerIndex % icWarsPlayerList.size());
 
-        //System.out.println(playerIndex % icWarsPlayerList.size());
         currentlyActivePlayer.startTurn();
+    }
+
+    /**
+     * Jumps to next level
+     */
+    protected void switchArea() {
+
+        player1.leaveArea();
+        player2.leaveArea();
+
+        areaIndex++;
+        areaIndex = areaIndex % areas.length;
+
+        ICWarsArea currentArea = (ICWarsArea) setCurrentArea(areas[areaIndex], false);
+        initArea(currentArea.getTitle());
+
+        reset();
+    }
+
+    /**
+     * Resets the game, on current level (must be executed when changing level)
+     *
+     * @return true if executed
+     */
+    public boolean reset() {
+        createAreas();
+
+        nextRound.clear();
+        currentRound.clear();
+        initArea(getCurrentArea().getTitle());
+
+        return true;
+    }
+
+    /**
+     * Ends the game
+     */
+    @Override
+    public void end() {
+        System.out.println("Game Over");
+        System.exit(0);
+        //switchArea(); // If need to restart game after final level
     }
 
 
     /**
      * Enumeration of all States of the Game
      */
-    public enum GameStates { INIT, CHOOSE_PLAYER, START_PLAYER_TURN, PLAYER_TURN, END_PLAYER_TURN, END_TURN, END;}
+    public enum GameStates {INIT, CHOOSE_PLAYER, START_PLAYER_TURN, PLAYER_TURN, END_PLAYER_TURN, END_TURN, END;}
 }

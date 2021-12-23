@@ -30,9 +30,6 @@ public interface Mouse extends Positionable {
     default Button getRightButton() {
         return getButton(2);
     }
-    
-    // TODO wheel/scroll
-    // TODO other position getters and screen space things?
 
 
     /// Mouse extends Positionable

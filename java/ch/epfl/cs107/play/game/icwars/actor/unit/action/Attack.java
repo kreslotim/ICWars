@@ -2,12 +2,10 @@ package ch.epfl.cs107.play.game.icwars.actor.unit.action;
 
 import ch.epfl.cs107.play.game.actor.ImageGraphics;
 import ch.epfl.cs107.play.game.areagame.io.ResourcePath;
-import ch.epfl.cs107.play.game.icwars.actor.ICWarsActor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
-import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.RegionOfInterest;
 import ch.epfl.cs107.play.window.Canvas;
 import ch.epfl.cs107.play.window.Keyboard;
@@ -18,6 +16,7 @@ import java.util.List;
 public class Attack extends Action{
 
     private int indexOfAttack = 0;
+    private int target = 0;
     private ICWarsArea myArea;
     private Unit myUnit;
 
@@ -26,6 +25,11 @@ public class Attack extends Action{
 
     private List<Integer> enemyList;
 
+    /**
+     * Default Attack constructor
+     * @param myUnit
+     * @param myArea
+     */
     public Attack(Unit myUnit, ICWarsArea myArea) {
         super(myUnit, myArea, "(A)ttack", Keyboard.A);
         this.myUnit = myUnit;
@@ -33,34 +37,43 @@ public class Attack extends Action{
     }
 
 
+    /**
+     * Inflicts damage to a target, by a unit from opposite faction.
+     * @param dt
+     * @param player
+     * @param keyboard
+     */
     @Override
     public void doAction(float dt, ICWarsPlayer player, Keyboard keyboard) {
 
 
         //enemyList.addAll(myArea.getIndex(unit.getFaction())); // Why does this doesn't work???
-        enemyList = myArea.getIndex(myUnit.getFaction());
+        enemyList = myArea.getTargetIndex(myUnit);
 
-        /**for (int unitIndex : myArea.getIndex(myUnit.getFaction())) {
-            DiscreteCoordinates enemyCoords = myArea.getUnitCoords(unitIndex);
-            if (myUnit.getRange().nodeExists(enemyCoords)) enemyList.add(unitIndex);
+        if (!enemyList.isEmpty()) {
+            target = enemyList.get(indexOfAttack%enemyList.size());
+
+            if (keyboard.get(Keyboard.RIGHT).isReleased()) {
+                indexOfAttack++;
+                indexOfAttack = Math.floorMod(indexOfAttack,enemyList.size());
+            }
+
+            else if (keyboard.get(Keyboard.LEFT).isReleased()) {
+                indexOfAttack--;
+                indexOfAttack = Math.floorMod(indexOfAttack,enemyList.size());
+            }
+
+            if (keyboard.get(Keyboard.ENTER).isReleased()) {
+
+                myArea.makeDamageLink(target, myArea.getUnitIndex(myUnit));
+                myUnit.setIsUsedUnit(true);
+
+                player.centerCamera();
+                player.setPlayerState(RealPlayer.PlayerStates.NORMAL);
+            }
         }
-         */
 
-        if (keyboard.get(Keyboard.RIGHT).isReleased() || keyboard.get(Keyboard.LEFT).isReleased()) {
-
-            indexOfAttack++;
-            //System.out.println(enemyList.get(indexOfAttack %enemyList.size()));
-        }
-
-        if (keyboard.get(Keyboard.ENTER).isReleased() && enemyList != null) {
-            myArea.doDamage(enemyList.get(indexOfAttack% enemyList.size()));
-            myUnit.setIsUsedUnit(true);
-
-            player.centerCamera();
-            player.setPlayerState(RealPlayer.PlayerStates.NORMAL);
-        }
-
-        if (enemyList == null || keyboard.get(Keyboard.TAB).isReleased()) {
+        else if (enemyList.isEmpty() || keyboard.get(Keyboard.TAB).isReleased()) {
             System.out.println("No enemies in range: must wait");
             player.centerCamera();
             player.setPlayerState(ICWarsPlayer.PlayerStates.ACTION_SELECTION);
@@ -68,10 +81,15 @@ public class Attack extends Action{
         }
     }
 
+    /**
+     * draws attacking cursor
+     * @param canvas target, not null
+     */
     @Override
     public void draw(Canvas canvas) {
         if (enemyList != null) {
-            myArea.centerCameraOnUnit(enemyList.get(indexOfAttack%enemyList.size()));
+
+            myArea.centerCameraOnUnit(target);
             cursor.setAnchor(canvas.getPosition().add(1,0));
             cursor.draw(canvas);
         }

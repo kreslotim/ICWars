@@ -123,7 +123,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
      * @return (boolean): true if the actor is correctly registered
      */
     public final boolean registerActor(Actor a){
-        // TODO if actor can be registered: It is this Area decision, implement a strategy
         return registeredActors.add(a);
     }
 
@@ -133,7 +132,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
      * @return (boolean): true if the actor is correctly unregistered
      */
     public final boolean unregisterActor(Actor a){
-        // TODO if actor can be unregistered: It is this Area decision, implement a strategy
         return unregisteredActors.add(a);
     }
 
@@ -199,7 +197,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
      * @return (boolean): True if possible to leave
      */
     public final boolean leaveAreaCells(Interactable entity, List<DiscreteCoordinates> coordinates) {
-        // TODO if Interactable can leave the cells: It is this Area decision, implement a strategy
         // Until now, the entity is put in a map waiting the update end to avoid concurrent exception during interaction
         if(areaBehavior.canLeave(entity, coordinates)){
             interactablesToLeave.put(entity, coordinates);
@@ -215,7 +212,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
      * @return (boolean): True if possible to enter
      */
     public final boolean enterAreaCells(Interactable entity, List<DiscreteCoordinates> coordinates) {
-        // TODO if Interactable can enter the cells: It is this Area decision, implement a strategy
         // Until now, the entity is put in a map waiting the update end to avoid concurrent exception during interaction
         if(areaBehavior.canEnter(entity, coordinates)){
             interactablesToEnter.put(entity, coordinates);
@@ -284,7 +280,7 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
 
             // Realize interaction between interactors and their cells contents
             for (Interactor interactor : interactors) {
-                if (interactor.wantsCellInteraction()) {
+                                if (interactor.wantsCellInteraction()) {
                     areaBehavior.cellInteractionOf(interactor);
                 }
                 if (interactor.wantsViewInteraction()) {
@@ -356,7 +352,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
 
     @Override
     public void end() {
-        // TODO save the AreaState somewhere
     }
 
 
@@ -370,7 +365,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
      *             be responsible of the ResumeRequest, not null
      */
     public final void requestAreaPause(AreaPauseMenu menu){
-        // TODO if the request end up: It is this Area decision, implement a strategy
         if(menu != null) {
             this.menu = menu;
             // Important to begin the menu each time : isResumeRequested must be set to false
@@ -382,7 +376,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
 
     @Override
     public final void requestPause() {
-        // TODO if the request end up: It is this Area decision, implement a strategy
         this.paused = true;
     }
 
@@ -393,7 +386,6 @@ public abstract class Area implements Playable, PauseMenu.Pausable {
      */
     @Override
     public final void requestResume() {
-        // TODO if the request end up: It is this Area decision, implement a strategy
         this.paused = false;
     }
 

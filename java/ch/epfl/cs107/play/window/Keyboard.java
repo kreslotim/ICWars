@@ -4,7 +4,6 @@ package ch.epfl.cs107.play.window;
  * Represents the keyboard.
  */
 public interface Keyboard {
-    // TODO put int constants here, instead of using KeyEvent directly?
     int TAB = 9;
     int ENTER = 10;
     int SPACE = 32;

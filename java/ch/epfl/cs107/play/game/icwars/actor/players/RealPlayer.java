@@ -1,6 +1,5 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
-import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
@@ -29,11 +28,8 @@ public class RealPlayer extends ICWarsPlayer {
 
     private Unit selectedUnit;
     private List<Unit> playerUnitsList;
-    private List<Area> areasList = new ArrayList<>();
-    private boolean defeated = false;
+    private ICWarsArea playerArea;
     private Action action;
-
-
 
 
     /**
@@ -51,12 +47,14 @@ public class RealPlayer extends ICWarsPlayer {
             area.registerActor(unit);
             area.registerUnit(unit);
             playerUnitsList = new ArrayList<>(List.of(units));
+            //System.out.println(playerUnitsList.size());
         }
 
         // choosing the Cursor for a player, and constructing the corresponding image
         String cursorName = cursors[faction.ordinal()];
         Sprite sprite = new Sprite(cursorName, 1f, 1f, this, null, new Vector(0f, 0f));
         this.sprite = sprite;
+        playerArea = area;
 
         // Player starts in state : IDLE
         setPlayerState(PlayerStates.IDLE);
@@ -64,16 +62,17 @@ public class RealPlayer extends ICWarsPlayer {
 
 
     /**
-     * drawing method for GUI and Cursor
+     * draws method for GUI and Cursor
+     *
      * @param canvas target, not null
      */
     @Override
     public void draw(Canvas canvas) {
-        gui.draw(canvas);                                                      // GUI Draw
+        gui.draw(canvas); // GUI Draw
         if (!getPlayerState().equals(PlayerStates.IDLE)) sprite.draw(canvas); // Cursor Draw
 
         if (getPlayerState().equals(PlayerStates.ACTION)) {
-            if (action!=null) {
+            if (action != null) {
                 action.draw(canvas);
             }
         }
@@ -101,6 +100,8 @@ public class RealPlayer extends ICWarsPlayer {
             moveIfPressed(Orientation.DOWN, keyboard.get(Keyboard.DOWN));
 
         }
+
+        removeUnitIfDead();
 
         updatePlayerStates(deltaTime);
 
@@ -135,9 +136,6 @@ public class RealPlayer extends ICWarsPlayer {
  */
 
 
-
-
-
     /******************************************************************************************************************
      ****************************************    INTERACTIONS    ******************************************************
      ******************************************************************************************************************/
@@ -156,8 +154,10 @@ public class RealPlayer extends ICWarsPlayer {
      * Nested class, handling all the Interactions
      */
     private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
+
         /**
          * InteractWith method redefined in the Interface ICWarsInteractionVisitor
+         *
          * @param unit (Unit)
          */
         @Override
@@ -166,7 +166,6 @@ public class RealPlayer extends ICWarsPlayer {
                 setSelectedUnit(unit);
                 gui.setSelectedUnit(unit);
                 getMemorisedUnits().add(unit);
-                //System.out.println("memorized!");
 
             }
 
@@ -176,12 +175,15 @@ public class RealPlayer extends ICWarsPlayer {
             }
         }
 
+        /**
+         * sets the cell type to the GUI
+         *
+         * @param cell
+         */
         @Override
         public void interactWith(ICWarsBehavior.ICWarsCell cell) {
             if (getPlayerState().equals(PlayerStates.NORMAL) || getPlayerState().equals(PlayerStates.SELECT_CELL)) {
-
                 gui.setCurrentCell(cell.getCellType());
-
             }
         }
     }
@@ -223,8 +225,6 @@ public class RealPlayer extends ICWarsPlayer {
     }
 
 
-
-
     /******************************************************************************************************************
      ***********************************     FINITE STATE AUTOMATON     ***********************************************
      ******************************************************************************************************************/
@@ -239,24 +239,29 @@ public class RealPlayer extends ICWarsPlayer {
 
         switch (getPlayerState()) {
             case IDLE:
+                //System.out.println("IDLE");
                 gui.setPanelOfInfoForUnit(null);
                 gui.setCurrentCell(null);
                 break;
             case NORMAL:
-                //System.out.println("Normal");
                 gui.setPanelOfInfoForUnit(null);
                 if (keyboard.get(Keyboard.ENTER).isReleased()) {
                     setPlayerState(PlayerStates.SELECT_CELL);
-                    System.out.println("State: SELECT_CELL");
+                } else {
+                    // Checks if all units of a player are used => switch turn
+                    int count = 0;
+                    for (Unit u : playerUnitsList) {
+                        if (u.isUsed()) count++;
+                    }
+                    if (count == playerUnitsList.size()) setPlayerState(PlayerStates.IDLE);
                 }
+
 
                 break;
             case SELECT_CELL:
-
                 if (selectedUnit != null && !selectedUnit.isUsed()) {
 
                     setPlayerState(PlayerStates.MOVE_UNIT);
-                    System.out.println("State: MOVE_UNIT");
                 } else {
                     onLeaving(getLeftCells());
                 }
@@ -273,7 +278,6 @@ public class RealPlayer extends ICWarsPlayer {
 
                         //If the unit was repositioned and is in range
                         setPlayerState(PlayerStates.ACTION_SELECTION);
-                        System.out.println("State: ACTION_SELECTION");
                     }
                 }
                 break;
@@ -284,14 +288,11 @@ public class RealPlayer extends ICWarsPlayer {
                     if (keyboard.get(act.getKey()).isReleased()) {
                         action = act;
                         setPlayerState(PlayerStates.ACTION);
-                        System.out.println("State: ACTION");
-
-                        //selectedUnit = null;
                     }
                 }
                 break;
             case ACTION:
-                action.doAction(deltaTime,this, keyboard);
+                action.doAction(deltaTime, this, keyboard);
                 break;
         }
     }
@@ -302,6 +303,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     /**
      * Sets the selectedUnit
+     *
      * @param selectedUnit (Unit)
      */
     public void setSelectedUnit(Unit selectedUnit) {
@@ -310,6 +312,7 @@ public class RealPlayer extends ICWarsPlayer {
 
     /**
      * Gets the list of units, of a specific player
+     *
      * @return playerUnitsList (List)
      */
     public List<Unit> getPlayerUnitsList() {
@@ -318,30 +321,28 @@ public class RealPlayer extends ICWarsPlayer {
 
     /**
      * Tests if a player is defeated, depending if it's list of usable units is empty or not
+     *
      * @return defeated (Boolean)
      */
     public boolean isDefeated() {
-
-        System.out.println("is defeated");
-        if (playerUnitsList != null) {
-            for (Unit unit : playerUnitsList) {
-                if (unit.getHp() == 0) {
-                    getOwnerArea().unregisterActor(unit);
-                    unit.leaveArea();
-
-                    if (playerUnitsList == null) {
-                        defeated = true;
-                    }
-                }
-            }
-
+        boolean defeated = false;
+        if (playerUnitsList.isEmpty()) {
+            defeated = true;
         }
         return defeated;
     }
 
 
     /**
-     *  Method allowing to a player to start his round
+     * Purge player's unit list, when unit dies
+     */
+    public void removeUnitIfDead() {
+        playerUnitsList.removeIf(unit -> unit.getHp() == 0);
+    }
+
+
+    /**
+     * Method allowing to a player to start his round
      */
     public void startTurn() {
         setPlayerState(PlayerStates.NORMAL);
@@ -355,12 +356,12 @@ public class RealPlayer extends ICWarsPlayer {
 
     /**
      * Tests if a player has moved out of a cell, without selecting any Unit inside of it
+     *
      * @param coordinates (List<DiscreteCoordinates>)
      */
     @Override
     public void onLeaving(List<DiscreteCoordinates> coordinates) {
-
-        if (getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getPlayerState().equals(PlayerStates.SELECT_CELL)) {
+        if (coordinates != null && getCurrentMainCellCoordinates().equals(coordinates.get(0)) && getPlayerState().equals(PlayerStates.SELECT_CELL)) {
             setPlayerState(PlayerStates.NORMAL);
         }
     }

@@ -13,10 +13,7 @@ public abstract class Shape {
     /** @return shape perimeter */
     public abstract float getPerimeter();
     
-    // TODO bounding box/circle?
-    
-    // TODO apply transform (or at least some translation, scale, rotation) to shape?
-    
+
     /**
      * Sample uniform point inside shape, including border.
      * @return (Vector): a uniform sample, not null

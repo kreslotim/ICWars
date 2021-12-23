@@ -58,7 +58,6 @@ public final class SoundItem implements LineListener {
      * - Notice the MASTER_GAIN FloatControl value is in decibels,
      * meaning it's a logarithmic scale, not a linear one. */
     private void applyVolume(){
-        // TODO the FloatControl may be problematic following the JDK version: figure it out exactly
         // seems to work with OracleJDK version and not always with OpenJDK
         if(audioClip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             FloatControl gainControl = (FloatControl) audioClip.getControl(FloatControl.Type.MASTER_GAIN);

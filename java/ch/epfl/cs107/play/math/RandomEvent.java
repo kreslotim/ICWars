@@ -72,7 +72,7 @@ public final class RandomEvent {
      * @param max (int): High bound, exclusive
      * @return (int): between [min, max)
      */
-    public int nextInt(int min, int max){//TODO should be deleted
+    public int nextInt(int min, int max){
         return RandomGenerator.getInstance().nextInt(max - min) + min;
     }
 

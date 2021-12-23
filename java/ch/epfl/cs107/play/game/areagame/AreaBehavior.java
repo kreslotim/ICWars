@@ -178,7 +178,7 @@ public abstract class AreaBehavior implements Interactable.Listener, Interactor.
         private void cellInteractionOf(Interactor interactor){
             interactor.interactWith(this);
             for(Interactable interactable : entities){
-                if(interactable.isCellInteractable() && interactable != interactor)
+                if(interactable.isCellInteractable() && interactable != interactor) // modified to avoid interaction with cursor
                     interactor.interactWith(interactable);
             }
         }

@@ -16,13 +16,10 @@ public interface Window extends Canvas, Audio, Attachable {
     
     /** @return (Keyboard): associated keyboard controller */
     Keyboard getKeyboard();
-    
-    // TODO gamepads
-        
+
     /** @return (boolean): whether the user tried to close the window */
     boolean isCloseRequested();
     
-    // TODO this may require delta time, e.g. for mouse interpolation
     void update();
     
     /** Destroys and closes the window */

@@ -139,7 +139,6 @@ public final class Polyline extends Shape {
 
     @Override
     public Path2D toPath() {
-        // TODO is it possible to cache this? need to check if SwingWindow modifies it...
         Path2D path = new Path2D.Float();
 		Vector point = points.get(0);
 		path.moveTo(point.x, point.y);

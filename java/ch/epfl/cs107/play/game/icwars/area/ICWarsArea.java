@@ -17,60 +17,6 @@ public abstract class ICWarsArea extends Area {
     private List<Unit> unitsList = new ArrayList<>();
 
 
-
-    @Override
-    public final float getCameraScaleFactor() {
-        return ICWars.CAMERA_SCALE_FACTOR;
-    }
-
-
-    public void registerUnit(Unit u) { unitsList.add(u); }
-
-
-
-    /**
-     * get the index of every units
-     *
-     * @param faction
-     * @return
-     */
-    public List<Integer> getIndex(ICWarsActor.Faction faction) {
-        List<Integer> indexList = new ArrayList<>(); // maybe at the top
-        for (Unit u : unitsList) {
-
-            if (!u.getFaction().equals(faction) && u.getRange().nodeExists(new DiscreteCoordinates((int) u.getPosition().x,
-                                                                                                   (int) u.getPosition().y))) {
-                //System.out.println(u.getPosition());
-                indexList.add(unitsList.indexOf(u));
-            }
-        }
-
-        return indexList;
-    }
-
-
-    /**
-     *  && (unitsList.get(i).getRange().nodeExists(new DiscreteCoordinates((int) unitsList.get(i).getPosition().x,
-     *                                                                                        (int) unitsList.get(i).getPosition().y )))); {
-     * @param indexOfAttack
-     */
-
-    public void centerCameraOnUnit(int indexOfAttack) {
-        unitsList.get(indexOfAttack).centerCamera();
-    }
-
-    public void doDamage(int indexOfAttack) {
-        System.out.println(indexOfAttack);
-        unitsList.get(indexOfAttack).makeDamage();
-    }
-
-
-    public abstract DiscreteCoordinates getPlayerSpawnPosition();
-
-    public abstract DiscreteCoordinates getEnemySpawnPosition();
-
-    protected abstract void createArea();
-
     @Override
     public boolean begin(Window window, FileSystem fileSystem) {
         if (super.begin(window, fileSystem)) {
@@ -81,6 +27,81 @@ public abstract class ICWarsArea extends Area {
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * Gets the indexes of target units, that are in the range of the attacker
+     * @param attacker (Unit)
+     * @return List of indexes (Integer)
+     */
+    public List<Integer> getTargetIndex(Unit attacker) {
+        ICWarsActor.Faction faction = attacker.getFaction();
+        List<Integer> indexList = new ArrayList<>(); // maybe at the top
+        for (Unit u : unitsList) {
+            if (!u.getFaction().equals(faction) && attacker.getRange().nodeExists(new DiscreteCoordinates((int) u.getPosition().x,
+                                                                                                          (int) u.getPosition().y))) {
+                //System.out.println(u.getPosition());
+                indexList.add(unitsList.indexOf(u));
+            }
+            /**
+            if (u.getHp() == 0) {
+                unitsList.remove(u);
+            }
+             */
+        }
+        return indexList;
+    }
+
+    /**
+     * Gets the index of any unit
+     * @param unit (Unit)
+     * @return Index (Integer)
+     */
+    public int getUnitIndex(Unit unit) {
+        return unitsList.indexOf(unit);
+    }
+
+    /**
+     * Makes the link between target and attacker, inflicting the damage through Area
+     * @param indexOfTarget (Integer)
+     * @param indexOfAttacker (Integer)
+     */
+    public void makeDamageLink(int indexOfTarget, int indexOfAttacker) {
+        int received_damage = unitsList.get(indexOfAttacker).getDamage();
+        unitsList.get(indexOfTarget).doDamage(received_damage);
+    }
+
+    /**
+     * Registers unit in the list of units
+     * @param u (Unit)
+     */
+    public void registerUnit(Unit u) { unitsList.add(u); }
+
+    /**
+     * Unregisters unit from the list of units
+     * @param u (Unit)
+     */
+    public void unregisterUnit (Unit u) { unitsList.remove(u); }
+
+    /**
+     * Centers the camera on target
+     * @param indexOfAttack (Integer)
+     */
+    public void centerCameraOnUnit(int indexOfAttack) {
+
+        unitsList.get(indexOfAttack%unitsList.size()).centerCamera();
+    }
+
+    public abstract DiscreteCoordinates getPlayerSpawnPosition();
+
+    public abstract DiscreteCoordinates getEnemySpawnPosition();
+
+    protected abstract void createArea();
+
+    @Override
+    public final float getCameraScaleFactor() {
+        return ICWars.CAMERA_SCALE_FACTOR;
     }
 
 }
