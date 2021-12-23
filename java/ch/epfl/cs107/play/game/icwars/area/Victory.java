@@ -3,7 +3,7 @@ package ch.epfl.cs107.play.game.icwars.area;
 import ch.epfl.cs107.play.game.areagame.actor.Background;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 
-public class GameOver extends ICWarsArea {
+public class Victory extends ICWarsArea {
 
 
     protected void createArea() {
@@ -15,7 +15,7 @@ public class GameOver extends ICWarsArea {
 
     @Override
     public String getTitle() {
-        return "icwars/GAMEOVER";
+        return "icwars/VICTORY";
     }
 
     public DiscreteCoordinates getPlayerSpawnPosition() {

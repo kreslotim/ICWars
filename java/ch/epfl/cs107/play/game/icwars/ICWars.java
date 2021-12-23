@@ -6,9 +6,7 @@ import ch.epfl.cs107.play.game.icwars.actor.Soldier;
 import ch.epfl.cs107.play.game.icwars.actor.Tank;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.actor.players.RealPlayer;
-import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
-import ch.epfl.cs107.play.game.icwars.area.Level0;
-import ch.epfl.cs107.play.game.icwars.area.Level1;
+import ch.epfl.cs107.play.game.icwars.area.*;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Keyboard;
@@ -22,6 +20,8 @@ public class ICWars extends AreaGame {
 
     public final static float CAMERA_SCALE_FACTOR = 10.f;
     private final String[] areas = {"icwars/Level0", "icwars/Level1"};
+    private final String[] areasResult = {"icwars/GAMEOVER", "icwars/VICTORY"};
+    private boolean won = true;
 
     private List<RealPlayer> icWarsPlayerList = new ArrayList<>();
     private List<RealPlayer> currentRound = new ArrayList<>();
@@ -73,6 +73,9 @@ public class ICWars extends AreaGame {
 
         addArea(new Level0());
         addArea(new Level1());
+
+        addArea(new Victory());
+        addArea(new GameOver());
 
     }
 
@@ -221,7 +224,11 @@ public class ICWars extends AreaGame {
                 break;
             case END:
                 if ((getCurrentArea().getTitle().equals("icwars/Level0"))) switchArea();
-                else end();
+                else {
+                    if (nextRound.get(0).getFaction().equals(ICWarsActor.Faction.ENEMY)) won = false;
+                    else if (nextRound.get(0).getFaction().equals(ICWarsActor.Faction.ALLY)) won = true;
+                    end();
+                }
                 break;
         }
     }
@@ -292,7 +299,18 @@ public class ICWars extends AreaGame {
     @Override
     public void end() {
         System.out.println("Game Over");
-        System.exit(0);
+
+        if (won == true) {
+            setCurrentArea(areasResult[1], false);
+            icWarsPlayerList.clear();
+
+
+        } else {
+            setCurrentArea(areasResult[0], false);
+            icWarsPlayerList.clear();
+
+        }
+        //System.exit(0);
         //switchArea(); // If need to restart game after final level
     }
 
