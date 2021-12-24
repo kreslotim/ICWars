@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-
 public abstract class Unit extends ICWarsActor implements Interactor {
 
     private String unitName;
@@ -33,16 +32,14 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     protected final List<Action> actionsList = new ArrayList<>();
 
-
-
-
-
     /**
      * Default Unit constructor
+     * 
      * @param area     (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      */
-    Unit(ICWarsArea area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction, String unitName) {
+    Unit(ICWarsArea area, DiscreteCoordinates position, int radius, int damage, int maxHp, Faction faction,
+            String unitName) {
         super(area, position, faction);
         this.unitName = unitName;
         this.maxHp = maxHp;
@@ -53,7 +50,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         // Draws the range, around a unit
         addEdge(getCurrentMainCellCoordinates());
 
-        //Builds the image of each unit, on the grid
+        // Builds the image of each unit, on the grid
         Sprite sprite = new Sprite(unitName, 1.5f, 1.5f, this, null, new Vector(-0.25f, -0.25f));
         this.sprite = sprite;
         setOwnerArea(area);
@@ -61,6 +58,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * draws the unit
+     * 
      * @param canvas target, not null
      */
     @Override
@@ -69,11 +67,14 @@ public abstract class Unit extends ICWarsActor implements Interactor {
     }
 
     /******************************************************************************************************************
-     *                                            DRAWING RANGE
+     * DRAWING RANGE
      ******************************************************************************************************************/
     /**
-     * Main method determining the edges of a unit's range, based on four booleans, defining if each side has an edge
-     * @param from (Discrete Coordinates). Center of the range, positioned on the selected unit (origin)
+     * Main method determining the edges of a unit's range, based on four booleans,
+     * defining if each side has an edge
+     * 
+     * @param from (Discrete Coordinates). Center of the range, positioned on the
+     *             selected unit (origin)
      */
     private void addEdge(DiscreteCoordinates from) {
 
@@ -99,6 +100,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * Draw the unit's range and a path from the unit position to destination
+     * 
      * @param destination path destination
      * @param canvas      canvas
      */
@@ -106,16 +108,19 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         range.draw(canvas);
         Queue<Orientation> path = range.shortestPath(getCurrentMainCellCoordinates(), destination);
 
-        //Draw path only if it exists (destination inside the range)
+        // Draw path only if it exists (destination inside the range)
         if (path != null) {
             new Path(getCurrentMainCellCoordinates().toVector(), path).draw(canvas);
         }
     }
 
     /**
-     * Changes a unit's position, inside of it's range, calculating it's new range after moving
+     * Changes a unit's position, inside of it's range, calculating it's new range
+     * after moving
+     * 
      * @param newPosition (DiscreteCoordinates)
-     * @return (Boolean) true if new position is in bounds, and is different from it's initial position
+     * @return (Boolean) true if new position is in bounds, and is different from
+     *         it's initial position
      */
     @Override
     public boolean changePosition(DiscreteCoordinates newPosition) {
@@ -129,14 +134,14 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         return true;
     }
 
-
     /******************************************************************************************************************
-                                             GETTERS   &   SETTERS
+     * GETTERS & SETTERS
      *****************************************************************************************************************/
     /** GETTERS */
 
     /**
      * Gets list of actions of a unit
+     * 
      * @return actionsList (List)
      */
     public List<Action> getAction() {
@@ -145,6 +150,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * Gets the name of a unit
+     * 
      * @return unitName (String)
      */
     public String getName() {
@@ -153,6 +159,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * Gets the range of a unit
+     * 
      * @return range (ICWarsRange)
      */
     public ICWarsRange getRange() {
@@ -161,6 +168,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * Checks if a unit has been used
+     * 
      * @return usedUnit (Boolean)
      */
     public boolean isUsed() {
@@ -169,23 +177,27 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * Gets the hp (HP) of a unit
+     * 
      * @return hp (Integer)
      */
-    public int getHp() { return hp;}
+    public int getHp() {
+        return hp;
+    }
 
     /**
      * Gets the damage (DMG) of a unit
+     * 
      * @return damage (Integer)
      */
     public int getDamage() {
         return damage;
     }
 
-
     /** SETTERS */
 
     /**
      * Sets the unit as used, adjusting transparency
+     * 
      * @param used (Boolean)
      */
     public void setIsUsedUnit(boolean used) {
@@ -195,6 +207,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
 
     /**
      * Sets new hp to the unit, after receiving damage
+     * 
      * @param received_damage (Integer)
      */
     public void doDamage(int received_damage) {
@@ -203,7 +216,7 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         if (hp == 0) {
             this.leaveArea();
             // Remove from unitsList (ICWarsArea) unit if hp == 0
-            ((ICWarsArea)getOwnerArea()).unregisterUnit(this);
+            ((ICWarsArea) getOwnerArea()).unregisterUnit(this);
         }
     }
 
@@ -213,10 +226,8 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         this.hp = Math.min(newHp, maxHp);
     }
 
-
-
     /******************************************************************************************************************
-     ****************************************    INTERACTIONS    ******************************************************
+     **************************************** INTERACTIONS ******************************************************
      ******************************************************************************************************************/
 
     /**
@@ -224,7 +235,9 @@ public abstract class Unit extends ICWarsActor implements Interactor {
      */
     private class ICWarsPlayerInteractionHandler implements ICWarsInteractionVisitor {
         /**
-         * InteractWith method redefined in the Interface ICWarsInteractionVisitor, setting the defense stars
+         * InteractWith method redefined in the Interface ICWarsInteractionVisitor,
+         * setting the defense stars
+         * 
          * @param cell
          */
         @Override
@@ -233,11 +246,11 @@ public abstract class Unit extends ICWarsActor implements Interactor {
         }
     }
 
-
     @Override
     public void acceptInteraction(AreaInteractionVisitor v) {
         ((ICWarsInteractionVisitor) v).interactWith(this);
-    } // A unit must accept interactions requested from an Interactor (player), casted to an ICWarsInteractionVisitor
+    } // A unit must accept interactions requested from an Interactor (player), casted
+      // to an ICWarsInteractionVisitor
 
     @Override
     public boolean isCellInteractable() {

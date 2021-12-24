@@ -1,21 +1,21 @@
 
 package ch.epfl.cs107.play.game.icwars.gui;
 
+import java.awt.Color;
+import java.util.List;
+
 import ch.epfl.cs107.play.game.actor.Graphics;
 import ch.epfl.cs107.play.game.actor.ShapeGraphics;
 import ch.epfl.cs107.play.game.actor.TextGraphics;
-//import ch.epfl.cs107.play.game.icwars.actor.unit.Unit;
-//import ch.epfl.cs107.play.game.icwars.actor.unit.action.Action;
-//import ch.epfl.cs107.play.game.icwars.area.ICWarsBehavior;
+
 import ch.epfl.cs107.play.game.icwars.actor.unit.action.Action;
-import ch.epfl.cs107.play.math.*;
+
 import ch.epfl.cs107.play.math.Polygon;
 import ch.epfl.cs107.play.math.Shape;
+import ch.epfl.cs107.play.math.TextAlign;
+import ch.epfl.cs107.play.math.Transform;
+import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
-
-import java.awt.*;
-import java.util.List;
-
 
 public class ICWarsActionsPanel implements Graphics {
 
@@ -44,7 +44,8 @@ public class ICWarsActionsPanel implements Graphics {
     private void createActionsText() {
         actionsText = new TextGraphics[actions.size()];
         for (int i = 0; i < actions.size(); ++i) {
-            TextGraphics text = new TextGraphics(actions.get(i).getNameOfAction(), fontSize, Color.YELLOW, Color.red, 0.01f,
+            TextGraphics text = new TextGraphics(actions.get(i).getNameOfAction(), fontSize, Color.YELLOW, Color.red,
+                    0.01f,
                     true, false, new Vector(0, -i * 1.25f * fontSize - 0.35f),
                     TextAlign.Horizontal.LEFT, TextAlign.Vertical.TOP, 1.0f, 3001f);
 

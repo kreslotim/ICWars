@@ -6,9 +6,7 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 public class Level1 extends ICWarsArea {
 
     protected void createArea() {
-        // Base
         registerActor(new Background(this));
-        //registerActor(player);
     }
 
     @Override

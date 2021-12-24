@@ -41,7 +41,6 @@ public abstract class ICWarsArea extends Area {
         for (Unit u : unitsList) {
             if (!u.getFaction().equals(faction) && attacker.getRange().nodeExists(new DiscreteCoordinates((int) u.getPosition().x,
                                                                                                           (int) u.getPosition().y))) {
-                //System.out.println(u.getPosition());
                 indexList.add(unitsList.indexOf(u));
             }
             /**
@@ -91,6 +90,13 @@ public abstract class ICWarsArea extends Area {
     public void centerCameraOnUnit(int indexOfAttack) {
 
         unitsList.get(indexOfAttack%unitsList.size()).centerCamera();
+    }
+
+    public DiscreteCoordinates getClosetEnemy(DiscreteCoordinates position, ICWarsActor.Faction faction, int radius) {
+        for (Unit u : unitsList) {
+            DiscreteCoordinates.distanceBetween(position, u.getCurrentCells().get(0));
+        }
+        return position;
     }
 
     public abstract DiscreteCoordinates getPlayerSpawnPosition();

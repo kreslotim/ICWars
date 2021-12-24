@@ -6,10 +6,7 @@ import ch.epfl.cs107.play.game.icwars.actor.players.ICWarsPlayer;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.window.Keyboard;
 
-
-
 public abstract class Action implements Graphics {
-
 
     private int key;
     private String nameOfAction;

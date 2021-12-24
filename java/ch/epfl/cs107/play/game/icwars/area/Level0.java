@@ -7,10 +7,7 @@ public class Level0 extends ICWarsArea {
 
 
     protected void createArea() {
-        // Base
         registerActor(new Background(this));
-        //registerActor(player);  //enregistrement deux fois
-        //unregisterActor(player);
     }
 
     @Override

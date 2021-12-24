@@ -12,6 +12,7 @@ public class Wait extends Action {
 
     /**
      * Default Wait constructor
+     *
      * @param unit
      * @param area
      */
@@ -22,13 +23,13 @@ public class Wait extends Action {
 
     /**
      * Does nothing particular, keeps the unit (set as used) waiting for next round.
+     *
      * @param dt
      * @param player
      * @param keyboard
      */
     @Override
     public void doAction(float dt, ICWarsPlayer player, Keyboard keyboard) {
-        System.out.println("Waiting");
         myUnit.setIsUsedUnit(true);
         player.setPlayerState(RealPlayer.PlayerStates.NORMAL);
     }

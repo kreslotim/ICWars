@@ -9,9 +9,10 @@ import ch.epfl.cs107.play.math.DiscreteCoordinates;
 
 import java.util.List;
 
-public class Tank extends Unit {
+public class Rocket extends Unit {
 
-    private final static String[] factionImage = {"Good Tank", "Bad Tank"};
+    private final static String[] factionImage = {"Good Rocket", "Bad Rocket"};
+
 
     /**
      * Default Unit constructor
@@ -20,8 +21,10 @@ public class Tank extends Unit {
      * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-    public Tank(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
+
+    public Rocket(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
         super(area, position, 4, 7, 10, faction, factionImage[faction.ordinal()]);
+        // factionImage[0] = ...
 
         Action attack = new Attack(this, (ICWarsArea) getOwnerArea());
         Action wait = new Wait(this, (ICWarsArea) getOwnerArea());
@@ -29,6 +32,7 @@ public class Tank extends Unit {
         actionsList.add(wait);
 
     }
+
 
     @Override
     public List<DiscreteCoordinates> getFieldOfViewCells() {
@@ -47,6 +51,5 @@ public class Tank extends Unit {
 
     @Override
     public void interactWith(Interactable other) {
-
     }
 }

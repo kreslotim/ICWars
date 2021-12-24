@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Soldier extends Unit {
 
-    private static final String[] factionImage = {"Good Guy", "Bad Boy"};
+    private static final String[] factionImage = { "Good Guy", "Bad Boy" };
 
     /**
      * Default Unit constructor
@@ -22,18 +22,14 @@ public class Soldier extends Unit {
      * @param position (Coordinate): Initial position of the entity. Not null
      */
 
-
     public Soldier(ICWarsArea area, DiscreteCoordinates position, Faction faction) {
         super(area, position, 2, 2, 5, faction, factionImage[faction.ordinal()]);
 
-        Action attack = new Attack(this,(ICWarsArea)getOwnerArea());
-        Action wait = new Wait(this,(ICWarsArea)getOwnerArea());
+        Action attack = new Attack(this, (ICWarsArea) getOwnerArea());
+        Action wait = new Wait(this, (ICWarsArea) getOwnerArea());
         actionsList.add(attack);
         actionsList.add(wait);
     }
-
-
-
 
     @Override
     public List<DiscreteCoordinates> getFieldOfViewCells() {

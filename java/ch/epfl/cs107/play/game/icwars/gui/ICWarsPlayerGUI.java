@@ -28,14 +28,13 @@ public class ICWarsPlayerGUI implements Graphics {
         this.selectedUnit = selectedUnit;
     }
 
-    public void setCurrentCell(ICWarsBehavior.ICWarsCellType cell) { myCell = cell;}
+    public void setCurrentCell(ICWarsBehavior.ICWarsCellType cell) {
+        myCell = cell;
+    }
 
     public void setPanelOfInfoForUnit(Unit infoPanelUnit) {
         this.infoPanelUnit = infoPanelUnit;
     }
-
-
-
 
 
     /**
@@ -51,7 +50,6 @@ public class ICWarsPlayerGUI implements Graphics {
         panelOfInfo.setUnit(infoPanelUnit);
 
 
-
         if (player.getPlayerState().equals(ICWarsPlayer.PlayerStates.NORMAL) || player.getPlayerState().equals(ICWarsPlayer.PlayerStates.SELECT_CELL)) {
             panelOfInfo.draw(canvas);
         }
@@ -63,10 +61,8 @@ public class ICWarsPlayerGUI implements Graphics {
 
         if (player.getPlayerState().equals(ICWarsPlayer.PlayerStates.MOVE_UNIT)) {
             selectedUnit.drawRangeAndPathTo(new DiscreteCoordinates((int) player.getPosition().x,
-                                                                    (int) player.getPosition().y), canvas);
+                    (int) player.getPosition().y), canvas);
         }
-
-
 
 
     }

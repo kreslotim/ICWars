@@ -7,9 +7,9 @@ import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
 
-
 /**
- * Area Entities are assigned to at least one Area Cell which make them Interactable
+ * Area Entities are assigned to at least one Area Cell which make them
+ * Interactable
  */
 public abstract class AreaEntity extends Entity implements Interactable {
 
@@ -22,15 +22,18 @@ public abstract class AreaEntity extends Entity implements Interactable {
 
     /**
      * Default AreaEntity constructor
-     * @param area (Area): Owner area. Not null
-     * @param orientation (Orientation): Initial orientation of the entity in the Area. Not null
-     * @param position (DiscreteCoordinate): Initial position of the entity in the Area. Not null
+     * 
+     * @param area        (Area): Owner area. Not null
+     * @param orientation (Orientation): Initial orientation of the entity in the
+     *                    Area. Not null
+     * @param position    (DiscreteCoordinate): Initial position of the entity in
+     *                    the Area. Not null
      */
     public AreaEntity(Area area, Orientation orientation, DiscreteCoordinates position) {
 
         super(position.toVector());
 
-        if(area == null){
+        if (area == null) {
             throw new NullPointerException();
         }
 
@@ -41,6 +44,7 @@ public abstract class AreaEntity extends Entity implements Interactable {
 
     /**
      * Getter for the owner area
+     * 
      * @return (Area)
      */
     protected Area getOwnerArea() {
@@ -49,6 +53,7 @@ public abstract class AreaEntity extends Entity implements Interactable {
 
     /**
      * Set the owner area with new value
+     * 
      * @param newArea (Area): the new value. Not null
      */
     protected void setOwnerArea(Area newArea) {
@@ -57,6 +62,7 @@ public abstract class AreaEntity extends Entity implements Interactable {
 
     /**
      * Getter for the orientation
+     * 
      * @return (Orientation): current orientation
      */
     public Orientation getOrientation() {
@@ -65,6 +71,7 @@ public abstract class AreaEntity extends Entity implements Interactable {
 
     /**
      * Orientate the AreaEntity to a new orientation
+     * 
      * @param orientation (Orientation): The new orientation. Not null
      * @return (boolean): if the orientation change happens, by default always true
      */
@@ -75,33 +82,36 @@ public abstract class AreaEntity extends Entity implements Interactable {
 
     /**
      * Getter for the coordinates of the main cell occupied by the AreaEntity
+     * 
      * @return (DiscreteCoordinates)
      */
-    protected DiscreteCoordinates getCurrentMainCellCoordinates(){
+    protected DiscreteCoordinates getCurrentMainCellCoordinates() {
         return currentMainCellCoordinates;
     }
-    
+
     /**
      * Tell if the mouse is over any of the currentCells of the entity
+     * 
      * @return (boolean)
      */
     protected boolean isMouseOver() {
-    	List<DiscreteCoordinates>cells = getCurrentCells();
-    	DiscreteCoordinates mouseCoordinate = ownerArea.getRelativeMouseCoordinates();
-    	for(DiscreteCoordinates cell : cells) {
-    		if(cell.equals(mouseCoordinate)) {
-    			return true;
-    		}
-    	}
-    	return false;
+        List<DiscreteCoordinates> cells = getCurrentCells();
+        DiscreteCoordinates mouseCoordinate = ownerArea.getRelativeMouseCoordinates();
+        for (DiscreteCoordinates cell : cells) {
+            if (cell.equals(mouseCoordinate)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// AreaEntity extends Entity
 
     @Override
-    protected void setCurrentPosition(Vector v){
-        // When updating the current position, also check if we need to update the main cell coordinates
-        if(DiscreteCoordinates.isCoordinates(v)){
+    protected void setCurrentPosition(Vector v) {
+        // When updating the current position, also check if we need to update the main
+        // cell coordinates
+        if (DiscreteCoordinates.isCoordinates(v)) {
             this.currentMainCellCoordinates = new DiscreteCoordinates(Math.round(v.x), Math.round(v.y));
             v = v.round();
         }
@@ -109,8 +119,10 @@ public abstract class AreaEntity extends Entity implements Interactable {
     }
 
     @Override
-    public void onLeaving(List<DiscreteCoordinates> coordinates) {}
+    public void onLeaving(List<DiscreteCoordinates> coordinates) {
+    }
 
     @Override
-    public void onEntering(List<DiscreteCoordinates> coordinates) {}
+    public void onEntering(List<DiscreteCoordinates> coordinates) {
+    }
 }

@@ -17,7 +17,6 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     private List<Unit> ICUnitsList = new ArrayList<>();
     private PlayerStates playerState;
 
-
     /**
      * Default ICWarsActor constructor
      *
@@ -31,6 +30,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     /**
      * update
+     * 
      * @param deltaTime
      */
     @Override
@@ -40,6 +40,7 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
 
     /**
      * Method adding the new actors (players and units) on the grid
+     * 
      * @param area     (Area): initial area, not null
      * @param position (DiscreteCoordinates): initial position, not null
      */
@@ -55,10 +56,9 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
      * Method allowing to a player to start his round
      */
     public void startTurn() {
-        setPlayerState(PlayerStates.NORMAL);
+        this.setPlayerState(PlayerStates.NORMAL); // who?
         this.centerCamera();
     }
-
 
     /**
      * Sets all units of a player available
@@ -70,20 +70,24 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
     }
 
     /**
-     * Tests if a player is defeated, depending if it's list of usable units is empty or not
+     * Tests if a player is defeated, depending if it's list of usable units is
+     * empty or not
      *
      * @return defeated (Boolean)
      */
     public boolean isDefeated() {
-        boolean defeated = false;
-        if (ICUnitsList.isEmpty()) {
-            defeated = true;
+        boolean defeated = true;
+
+        for (Unit unit : getICUnitsList()) {
+            if (unit.getHp() != 0) defeated = false;
         }
+
         return defeated;
     }
 
     /**
      * gets the list of memorized (selected) units
+     * 
      * @return memorizedUnits (List)
      */
     public List<Unit> getMemorisedUnits() {
@@ -111,18 +115,19 @@ abstract public class ICWarsPlayer extends ICWarsActor implements Interactable, 
         return playerState;
     }
 
-
     /**
      * sets the playerState of the player
+     * 
      * @param playerState
      */
     public void setPlayerState(PlayerStates playerState) {
         this.playerState = playerState;
     }
 
-
     /**
      * Enumeration of all States of player, used in RealPlayer, and ICWars
      */
-    public enum PlayerStates {IDLE, NORMAL, SELECT_CELL, MOVE_UNIT, ACTION_SELECTION, ACTION;}
+    public enum PlayerStates {
+        IDLE, NORMAL, SELECT_CELL, MOVE_UNIT, ACTION_SELECTION, ACTION;
+    }
 }

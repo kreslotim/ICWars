@@ -1,28 +1,29 @@
 package ch.epfl.cs107.play.game.icwars.actor.players;
 
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.icwars.actor.Unit;
 import ch.epfl.cs107.play.game.icwars.actor.unit.action.Action;
 import ch.epfl.cs107.play.game.icwars.area.ICWarsArea;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AIPlayer extends ICWarsPlayer {
-    private List<Unit> aiPlayerUnitList; // un joueur AI // a deux units comme RealPlayer
+    private List<Unit> aiPlayerUnitList;
     private List<Unit> attackableUnits;
+    private final String[] cursors = new String[]{"icwars/allyCursor", "icwars/enemyCursor"};
 
-
+    private Sprite sprite;
     private Unit selectedUnit;
     private Action action;
     private int countIndex;
     private boolean counting;
     private float counter;
-
 
     /**
      * Default ICWarsActor constructor
@@ -32,62 +33,59 @@ public class AIPlayer extends ICWarsPlayer {
      * @param units
      */
     public AIPlayer(ICWarsArea area, DiscreteCoordinates position, Faction faction, Unit... units) {
-        super(area, position, Faction.ENEMY); // je hardcode faction de ICWarsPlayer Ã  Faction.ENEMY
+        super(area, position, Faction.ENEMY);
         faction = Faction.ENEMY;
+        for (Unit unit : units) {
+            area.registerActor(unit);
+            area.registerUnit(unit);
+            aiPlayerUnitList = new ArrayList<>(List.of(units));
+        }
+
+        String cursorName = cursors[1];
+        Sprite sprite = new Sprite(cursorName, 1f, 1f, this, null, new Vector(0f, 0f));
+        this.sprite = sprite;
+
+        this.setPlayerState(PlayerStates.IDLE);
+
 
         /**
          * une for loop pour mettre toutes les CHAQUE unit
          *
-        for (Unit u : units) { // select each of its units, in sequence
-            if (u != null && u.getFaction().equals(Faction.ENEMY) && waitFor(1, 1) && action!=null) {
-                // set dt = 1
-                aiPlayerUnitList.add(u);
-                action.doAutoAction(1,this);
-            }
-
-        }
+         * for (Unit u : units) { // select each of its units, in sequence
+         * if (u != null && u.getFaction().equals(Faction.ENEMY) && waitFor(1, 1) &&
+         * action!=null) {
+         * // set dt = 1
+         * aiPlayerUnitList.add(u);
+         * action.doAutoAction(1,this);
+         * }
+         *
+         * }
          */
 
-//                unit.getRange().nodeExists(newPositionSelectedUnit())
-//            if (unit.getRange() && move(getCurrentCells().indexOf(unit))) { // ?
-        // creer une methode qui determine la nouvelle position de l'unite selectionnee
-        // trouve la plus proche distance
-
-        // AIPlayer a deux units aussi.
-
-        //DiscreteCoordinates.distanceBetween(area.getPlayerSpawnPosition(), area.getEnemySpawnPosition());
-
-
-        aiPlayerUnitList = new ArrayList<>(List.of(units));
-        System.out.println(aiPlayerUnitList.size());
-
     }
-
 
     /**
      * determine la nouvelle position de l'unite selectionnee
      */
     public void newPositionSelectedUnit() {
         // position entre ennemie et unite selectionnee
-        DiscreteCoordinates positionEnemy = new DiscreteCoordinates(getCurrentMainCellCoordinates().x, getCurrentMainCellCoordinates().y);
+        DiscreteCoordinates positionEnemy = new DiscreteCoordinates(getCurrentMainCellCoordinates().x,
+                getCurrentMainCellCoordinates().y);
 
     }
-
 
     public DiscreteCoordinates findTarget(Unit selectedUnit) {
-        return new DiscreteCoordinates((int) selectedUnit.getPosition().x,(int) selectedUnit.getPosition().y);
+        return new DiscreteCoordinates((int) selectedUnit.getPosition().x, (int) selectedUnit.getPosition().y);
     }
-
 
     /**
      * @param deltaTime
      */
     @Override
     public void update(float deltaTime) {
-        updateAIPlayerStates(deltaTime);
         super.update(deltaTime);
+        updateAIPlayerStates(deltaTime);
     }
-
 
     /**
      * Automaton that changes the behaviour of the AIPlayer
@@ -104,8 +102,7 @@ public class AIPlayer extends ICWarsPlayer {
             case NORMAL:
                 selectedUnit = null;
                 action = null;
-                setPlayerState(PlayerStates.SELECT_CELL);
-                System.out.println("State: SELECT_CELL");
+                this.setPlayerState(PlayerStates.SELECT_CELL);
 
                 break;
             case SELECT_CELL:
@@ -113,60 +110,57 @@ public class AIPlayer extends ICWarsPlayer {
                     selectedUnit = aiPlayerUnitList.get(countIndex);
                     changePosition(selectedUnit.getCurrentCells().get(0));
                     countIndex++;
-                    setPlayerState(PlayerStates.MOVE_UNIT);
-                    System.out.println("State: MOVE_UNIT");
-                }
+                    this.setPlayerState(PlayerStates.MOVE_UNIT);
 
-                else if (waitFor(1,deltaTime)) {
-                    setPlayerState(PlayerStates.IDLE); // needed?
+                } else if (waitFor(1, deltaTime)) {
+                    this.setPlayerState(PlayerStates.IDLE);
                 }
 
                 break;
 
             case MOVE_UNIT:
-                if (waitFor(1,deltaTime)) {
+                if (waitFor(1, deltaTime)) {
                     ((ICWarsArea) getOwnerArea()).centerCameraOnUnit(aiPlayerUnitList.indexOf(selectedUnit));
                     DiscreteCoordinates newPosition;
                     newPosition = findTarget(selectedUnit);
 
-                    // Todo
-
                     selectedUnit.changePosition(newPosition);
 
-                    setPlayerState(PlayerStates.ACTION_SELECTION);
-                    System.out.println("State: ACTION_SELECTION");
+                    this.setPlayerState(PlayerStates.ACTION_SELECTION);
                 }
                 break;
 
             case ACTION_SELECTION:
 
                 for (Action act : selectedUnit.getAction()) {
-                        action = act;
-                        setPlayerState(PlayerStates.ACTION);
-                        System.out.println("State: ACTION");
+                    action = act;
+                    this.setPlayerState(PlayerStates.ACTION);
 
-                        //selectedUnit = null;
+
                 }
                 break;
             case ACTION:
-                if (action != null) action.doAutoAction(deltaTime, this);
+                if (action != null)
+                    action.doAutoAction(deltaTime, this);
                 break;
         }
     }
 
-
     @Override
     public void draw(Canvas canvas) {
-    }
+        if (!getPlayerState().equals(PlayerStates.IDLE))
+            sprite.draw(canvas);
 
-    @Override
-    public List<DiscreteCoordinates> getCurrentCells() {
-        return null;
+        if (getPlayerState().equals(PlayerStates.ACTION)) {
+            if (action != null) {
+                action.draw(canvas);
+            }
+        }
     }
 
     @Override
     public boolean takeCellSpace() {
-        return false;
+        return true;
     }
 
     @Override
@@ -192,8 +186,6 @@ public class AIPlayer extends ICWarsPlayer {
     @Override
     public void interactWith(Interactable other) {
     }
-
-
 
     /**
      * Ensures that value time elapsed before returning true
