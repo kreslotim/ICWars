@@ -1,5 +1,3 @@
-/// README /// UTF8
-
 LAUNCH:
 Exécuter Play.java
 
