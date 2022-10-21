@@ -1,2 +1,0 @@
-getEnemySpawnPosition dans Level1
-addEdge
