@@ -2,6 +2,7 @@
 Exécuter Play.java
 
 ### DEPLACEMENT:
+
 • Flèches directionnelles pour le déplacement du curseur. 
 • Le curseur blanc pour sélectionner une unité à l’aide de la touche Enter.
 • appui sur N : passer au niveau suivant ou décréter la fin de partie "Game Over" si le tour du dernier niveau est terminé.
@@ -11,12 +12,15 @@ Exécuter Play.java
 • appui sur A : (Attack) attaquer une unité adverse.
 • appui sur W : (Wait) attendre le prochain tour.
 • appui sur les touches LEFT, RIGHT, UP, DOWN : naviguer vers la gauche resp. vers la droite resp. vers le haut resp. vers le bas.
+
 N.B. Nous ne pouvons pas sélectionner d’autres choses.
 
 ### PERSONNAGES :
+
 • Nous : Un tank, un soldat et une fusée bleus
 • Ennemies : Un tank, un soldat et une fusée rouges
 		(les fusées sont des extensions)
+		
 
 ### COMMENT JOUER :
 Le but du jeu est de jouer contre les adversaires : AIPlayer, en éliminant toutes les unités ennemies. Une fois qu'un des joueur n'a plus d'unités disponibles, il est défait. En ayant gagné la partie, on passe au niveau suivant. S'il n'y plus de niveaux, le jeu est terminé.
