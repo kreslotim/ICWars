@@ -2,20 +2,20 @@
 Exécuter Play.java
 
 ### DEPLACEMENT:
-Flèches directionnelles pour le déplacement du curseur 
-Le curseur blanc pour sélectionner une unité à l’aide de la touche Enter
-appui sur N : passer au niveau suivant ou décréter la fin de partie "Game Over" si le tour du dernier niveau est terminé
-appui sur R : réinitialiser (« reset ») le jeu, en restant sur la même aire de jeu
-appui sur Enter : sélectionner l’unité (appuyer une fois) ; confirmer sa position finale choisie par le joueur (appuyer une seconde fois) ; passer à l’action (Wait ou Attack)
-appui sur Tab : indiquer la fin du tour du joueur courant et passer à l’autre joueur (shortcut ; le processus est automatisé)
-appui sur A : (Attack) attaquer une unité adverse
-appui sur W : (Wait) attendre le prochain tour
-appui sur les touches LEFT, RIGHT, UP, DOWN : naviguer vers la gauche resp. vers la droite resp. vers le haut resp. vers le bas
+• Flèches directionnelles pour le déplacement du curseur. 
+• Le curseur blanc pour sélectionner une unité à l’aide de la touche Enter.
+• appui sur N : passer au niveau suivant ou décréter la fin de partie "Game Over" si le tour du dernier niveau est terminé.
+• appui sur R : réinitialiser (« reset ») le jeu, en restant sur la même aire de jeu.
+• appui sur Enter : sélectionner l’unité (appuyer une fois) ; confirmer sa position finale choisie par le joueur (appuyer une seconde fois) ; passer à l’action (Wait ou Attack).
+• appui sur Tab : indiquer la fin du tour du joueur courant et passer à l’autre joueur (shortcut ; le processus est automatisé).
+• appui sur A : (Attack) attaquer une unité adverse.
+• appui sur W : (Wait) attendre le prochain tour.
+• appui sur les touches LEFT, RIGHT, UP, DOWN : naviguer vers la gauche resp. vers la droite resp. vers le haut resp. vers le bas.
 N.B. Nous ne pouvons pas sélectionner d’autres choses.
 
 ### PERSONNAGES :
-Nous : Un tank, un soldat et une fusée bleus
-Ennemies : Un tank, un soldat et une fusée rouges
+• Nous : Un tank, un soldat et une fusée bleus
+• Ennemies : Un tank, un soldat et une fusée rouges
 		(les fusées sont des extensions)
 
 ### COMMENT JOUER :
